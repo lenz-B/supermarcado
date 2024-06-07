@@ -131,7 +131,7 @@ const updateCart = async (req, res) => {
     console.error('Error updating cart:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};
+};  zfsghrjdfjx cnm
 
 //remove product from the cart
 const removeProduct = async (req, res) => {
