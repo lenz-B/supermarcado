@@ -1,0 +1,138 @@
+<%- include('../layout/adminHeadder.ejs') %>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Categories</h2>
+        </div>
+        <div>
+            <a href="add-category" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+    <header class="card card-body mb-4">
+        <div class="row gx-3">
+            <div class="col-lg-4 col-md-6 me-auto">
+                <input type="text" placeholder="Search..." class="form-control" />
+            </div>
+            <div class="col-lg-2 col-6 col-md-3">
+                <select class="form-select">
+                    <option>All category</option>
+                    <option>Electronics</option>
+                    <option>Clothings</option>
+                    <option>Something else</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-6 col-md-3">
+                <select class="form-select">
+                    <option>Latest added</option>
+                    <option>Cheap first</option>
+                    <option>Most viewed</option>
+                </select>
+            </div>
+        </div>
+    </header>
+    <!-- card-header end// -->
+    <div class="row">
+        <% if (Categories !== "undefined") { %>
+          <% Categories.forEach(element => { %>
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+              <div class="card card-product-grid">
+                <a href="edit-category?catId=<%= element._id %>" class="img-wrap">
+                  <div class="img-ratio">
+                    <img src="/categoryImage/<%= element.img %>" alt="Product" class="img-fluid" />
+                  </div>
+                </a>
+                <div class="info-wrap">
+                  <div class="dropdown float-end">
+                    <% if (element.status) { %>
+                      <button 
+                        id="block-btn-<%=element._id %>"
+                        class="btn btn-sm btn-brand font-sm mt-15"
+                        onclick="updateStatus('<%=element._id %>', true)">
+                        <i class="material-icons md-check_circle"></i>
+                        Listed
+                      </button>
+                    <% } else { %>
+                      <button
+                        id="block-btn-<%=element._id %>"
+                        class="btn btn-sm btn-outline-danger font-sm mt-15" 
+                        onclick="updateStatus('<%=element._id %>', false)">
+                        <i class="material-icons md-block"></i>
+                        Unlisted
+                      </button>                      
+                    <% } %>
+                  </div>                  
+                  <div class="price mt-1"><a href="edit-category?catId=<%= element._id %>" class="title"><%= element.name %></a></div>
+                  <div class=" mt-1"><p><%= element.description %></p></div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+    <!-- row.// -->
+    <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<!-- content-main end// -->
+
+<style>
+  .img-ratio {
+    width: 300px; 
+    height: 200px;
+    overflow: hidden; 
+    position: relative;
+  }
+  .img-ratio img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+  }
+</style>
+
+<script>
+  function updateStatus(catId, status) {
+    console.log('category id: ' + catId);
+    axios.post(`/admin/categories/${catId}`)
+    .then(res => {
+      if (res.data.success) {
+        console.log('data.success: ' + res.data.success);
+
+        let button = document.getElementById(`block-btn-${catId}`);
+        if (!status) {
+          button.classList.remove('btn-outline-danger');
+          button.classList.add('btn-brand');
+          button.innerHTML = '<i class="material-icons md-check_circle"></i> Listed';
+          button.setAttribute('onclick', `updateStatus('${catId}', true)`);
+        } else {
+          button.classList.remove('btn-brand');
+          button.classList.add('btn-outline-danger');
+          button.innerHTML = '<i class="material-icons md-block"></i> Unlisted';
+          button.setAttribute('onclick', `updateStatus('${catId}', false)`);
+        }
+      } else {
+        alert("An error occurred while updating the status");
+      }
+    })
+    .catch(error => {
+      console.log("Error in updating status", error);
+    });
+  }
+</script>
+
+
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

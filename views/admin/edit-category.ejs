@@ -1,0 +1,185 @@
+<%- include('../layout/adminHeadder.ejs') %>
+
+<style>
+    .preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        margin-top: 10px;
+        width: 300px; 
+        height: 200px;
+        overflow: hidden; 
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+    }
+</style>
+
+<section class="content-main">
+    <form method="post" action="/admin/edit-category?catId=<%= Category._id %>" enctype="multipart/form-data" id="categoryForm">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Edit Category</h2>
+                    <div>
+                        <button class="btn btn-md rounded font-sm hover-up" onclick="validateForm(event)">Save</button>
+                    </div>
+                </div>
+                <div id="message-container"></div>
+                </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="category_name" class="form-label">Category title</label>
+                            <input type="text" id="name" name="name" value="<%= Category.name %>" class="form-control"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea placeholder="Type here" id="description" name="description" class="form-control" rows="4"><%= Category.description %></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="image-preview">
+                            <img src="/categoryImage/<%= Category.img %>" id="existing-image" class="preview-image" />
+                        </div>
+                        <input accept="image/*" name="img" id="img" class="form-control" type="file" onchange="previewImage(event)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<!-- content-main end// -->
+
+<script>
+    function validateForm(event) {
+        console.log('validateForm....');
+
+        event.preventDefault();
+
+        const form = document.getElementById('categoryForm');
+        const messageContainer = document.getElementById('message-container');
+
+
+        const nameInput = document.getElementById('name');
+        const descriptionInput = document.getElementById('description')
+        const imgInput = document.getElementById('img');
+        const existingImage = document.getElementById('existing-image');
+
+        console.log(nameInput, imgInput);
+
+        const name = nameInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const img = imgInput.files[0];
+
+
+
+        messageContainer.innerHTML = '';
+
+        // Validation
+        if (name.length < 3) {
+            showMessage('Name must be at least 3 characters long', 'error');
+            return;
+        }
+
+        if (description.length < 4) {
+            showMessage('Description must be at least 4 characters long', 'error');
+            return;
+        }
+
+        if (!img && !existingImage.src) {
+            showMessage('Please select an image', 'error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        if (img) {
+            formData.append('img', img);
+        }
+
+
+        fetch('/admin/edit-category?catId=<%= Category._id %>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                if (data.save) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonColor: '#28a745' // green
+                    }).then((result) => {
+                        window.location.href = '/admin/categories';
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/admin/categories';
+                    }, 3000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('An error occurred while adding the category', 'error');
+        });
+
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            messageContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+        }
+
+        document.getElementById('categoryForm').addEventListener('submit', validateForm);
+    }
+</script>
+
+<!-- image preview -->       
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('image-preview');
+        const existingImage = document.getElementById('existing-image');
+
+        // Check if any file is selected
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            // Set up the reader to load image file
+            reader.onload = function(e) {
+                if (existingImage) {
+                    existingImage.src = e.target.result;
+                } else {
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.classList.add('preview-image');
+                    preview.appendChild(image);
+                }
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Brocoli Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.png" />
+        <!-- Template CSS -->
+        <link href="assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+
+    <body>
+        <main>
+            <header class="main-header style-2 navbar">
+                <div class="col-brand">
+                    <a href="/admin/" class="brand-wrap">
+                        <img src="assets/imgs/theme/logo.png" class="logo" alt="Nest Dashboard" />
+                    </a>
+                </div>
+            </header>
+            <section class="content-main mt-80 mb-80">
+                <div class="card mx-auto card-login">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Sign in</h4>
+                        <form method="post" id="loginForm" action="login">
+                            <div id="message" class="alert d-none"></div>
+                            <div class="mb-3">
+                                <input class="form-control" id="email" name="email" placeholder="Email" type="text" required value="boss@gmail.com"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <input class="form-control" id="password" name="password" placeholder="Password" type="password" required value="Qwe@123"/>
+                            </div>
+                          
+                            <div class="mb-3">
+                                <a href="#" class="float-end font-sm text-muted">Forgot password?</a>
+                            </div>
+
+                            <div class="mb-4">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <script>
+                document.getElementById('loginForm').addEventListener('submit', async function(event) {
+                  event.preventDefault();
+              
+                  const email = document.getElementById('email').value;
+                  const password = document.getElementById('password').value;
+                  const messageDiv = document.getElementById('message');
+              
+                  messageDiv.classList.add('d-none');
+                  messageDiv.classList.remove('alert-success', 'alert-danger');
+                  messageDiv.textContent = '';
+              
+                  if (!validateEmail(email)) {
+                    showMessage('Please enter a valid email address.', 'danger');
+                    return;
+                  }
+              
+                  if (password.length < 6) {
+                    showMessage('Password must be at least 6 characters long.', 'danger');
+                    return;
+                  }
+              
+                  try {
+                    const response = await axios.post('/admin/login', { email, password });
+                    if (response.data.success) {
+                      showMessage('Login successful', 'success');
+                      window.location.href = '/admin';
+                    } else {
+                      showMessage('Login failed: ' + response.data.message, 'danger');
+                    }
+                  } catch (error) {
+                    console.error('There was an error!', error);
+                    showMessage('An error occurred during login. Please try again.', 'danger');
+                  }
+                });
+              
+                function validateEmail(email) {
+                  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  return re.test(String(email).toLowerCase());
+                }
+              
+                function showMessage(message, type) {
+                  const messageDiv = document.getElementById('message');
+                  messageDiv.textContent = message;
+                  messageDiv.classList.add('alert-' + type);
+                  messageDiv.classList.remove('d-none');
+                }
+              </script>
+              
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

@@ -1,0 +1,283 @@
+<%- include('../layout/adminHeadder.ejs') %>
+
+<style>
+    .preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        margin-top: 10px;
+        width: 300px; 
+        height: 200px;
+        overflow: hidden; 
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+    }
+</style>
+
+<section class="content-main">
+    <form method="post" id="productForm" action="edit-product?proId=<%= productData._id %>" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Edit Product</h2>
+                    <div>
+                        <button class="btn btn-md rounded font-sm hover-up" type="submit" onclick="validateForm(event)">Save</button>
+                    </div>
+                </div>
+                <div id="message-container"></div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Product title</label>
+                            <input type="text" name="name" placeholder="Type here" value="<%= productData.name %>" class="form-control" id="name" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea id="description" name="description" placeholder="Type here" class="form-control" rows="4" required><%= productData.description %></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Regular price</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="$" id="price" value="<%= productData.price %>" name="price" type="number" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Promotional price</label>
+                                    <input placeholder="$" id="promoPrice" value="<%= productData.promoPrice %>" name="promoPrice" type="number" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Stock</label>
+                                    <input placeholder="Stock" id="stock" value="<%= productData.stock %>" name="stock" type="number" class="form-control" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_tags" class="form-label">Tags</label>
+                            <input type="text" id="tags" value="<%= productData.tags %>" name="tags" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% if (messages.error) { %>
+                <div class="alert alert-danger"><%= messages.error %></div>
+              <% } %>
+            <% if (messages.success) { %>
+                <div class="alert alert-success"><%= messages.success %></div>
+              <% } %>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="image-preview">
+                            <% productData.img.forEach(function(img) { %>
+                                <img src="/productImage/<%= img %>" id="existing-image" class="preview-image" />
+                            <% }); %>
+                        </div>
+                        <input accept="image/*" name="img" id="img" class="form-control" type="file" multiple onchange="previewImages(event)" />
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Organization</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="category_id" name="category_id">
+                                    <% category.forEach(element => { %>
+                                        <option value="<%= element._id %>"><%= element.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+<!-- <div class="col-sm-6 mb-3">
+    <label class="form-label">Brand</label>
+    <select class="form-select">
+        <option>Nissan</option>
+        <option>Honda</option>
+        <option>Mercedes</option>
+        <option>Chevrolet</option>
+    </select>
+</div> -->
+
+<script>
+    function validateForm(event) {
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.innerHTML = '';
+        
+        event.preventDefault();
+        const form = document.getElementById('productForm');
+        
+        const nameInput = document.getElementById('name');
+        const descriptionInput = document.getElementById('description');
+        const priceInput = document.getElementById('price')
+        const promoPriceInput = document.getElementById('promoPrice')
+        const stockInput = document.getElementById('stock')
+        const imgInput = document.getElementById('img');
+        const existingImages = Array.from(document.getElementsByClassName('existing-image'));
+        const categoryInput = document.getElementById('category_id')
+
+
+        //frontend validation
+        if (nameInput.value.trim().length < 3) {
+            showMessage('Name should be at least 3 characters long.', 'danger');
+            return;
+        }
+
+        if (descriptionInput.value.trim().length < 4) {
+            showMessage('Description should be at least 4 characters long.', 'danger');
+            return;
+        }
+
+        const price = parseFloat(priceInput.value);
+        if (isNaN(price) || price <= 0) {
+            showMessage('Price should be a positive number.', 'danger');
+            return;
+        }
+
+        const promoPriceValue = promoPriceInput.value.trim();
+        if (promoPriceValue !== '' && (isNaN(promoPriceValue) || parseFloat(promoPriceValue) < 0)) {
+            showMessage('Promotional price should be a positive number.', 'danger');
+            return;
+        }
+
+        const stock = parseFloat(stockInput.value);
+        if (isNaN(stock) || stock <= 0) {
+            showMessage('Stock should be a positive number.', 'danger');
+            return;
+        }
+
+        const images = imgInput.files;
+        const totalImages = images.length + existingImages.length;
+
+        // if (totalImages < 2) {
+        //     showMessage('Please upload at least 2 images.', 'danger');
+        //     return;
+        // }
+
+        for (let i = 0; i < images.length; i++) {
+            const img = images[i];
+            const imgType = img.type.split('/')[0];
+            if (imgType !== 'image') {
+                showMessage('Only image files are allowed.', 'danger');
+                return;
+            }
+        }
+
+        if (!categoryInput.value) {
+            showMessage('Please select a category.', 'danger');
+            return;
+        }
+
+        const formData = new FormData();
+            formData.append('name', nameInput.value.trim());
+        formData.append('description', descriptionInput.value.trim());
+        formData.append('price', parseFloat(priceInput.value));
+        formData.append('promoPrice', parseFloat(promoPriceInput.value));
+        formData.append('stock', parseFloat(stockInput.value));
+        formData.append('category_id', categoryInput.value);
+
+        // existing images
+        existingImages.forEach(image => {
+            formData.append('existingImages', image.src);
+        });
+
+        // new images
+        for (let i = 0; i < images.length; i++) {
+            formData.append('img', images[i]);
+        }
+
+        //fetch
+        fetch('/admin/edit-product?proId=<%= productData._id %>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                if (data.save) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonColor: '#28a745' // green
+                    }).then((result) => {
+                        window.location.href = '/admin/products';
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/admin/products';
+                    }, 3000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('An error occurred while adding the product', 'error');
+        });
+
+        
+
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            messageContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+        }
+    }
+</script>
+
+<!-- image preview -->          
+<script>
+    function previewImages(event) {
+        const input = event.target;
+        const preview = document.getElementById('image-preview');
+
+        // Clear previous previews
+        preview.innerHTML = '';
+
+        // Check if any file is selected
+        if (input.files && input.files.length > 0) {
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // Create image element for each file
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.classList.add('preview-image');
+                    preview.appendChild(image);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+</script>
+
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>
