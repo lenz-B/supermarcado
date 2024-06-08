@@ -169,13 +169,15 @@ const shop = async (req, res) => {
   }
 }
 
+//product details
 const productDetails = async (req, res) => {
   try {
     const { user_id } = req.session;
-    const productData = await productDB.findById(req.query.proId)
+    const productData = await productDB.findById(req.query.proId);
     const categoryData = await getHeaderData();
+    const stockLeft = productData.stock < 5;
 
-    res.render('user/product-details', {user_id, productData, categoryData})
+    res.render('user/product-details', { user_id, productData, categoryData, stockLeft });
   } catch (error) {
     console.log(error.message);
   }

@@ -1,6 +1,7 @@
 const categoryDB = require('../models/category');
 const productDB = require('../models/products');
 const cartDB = require('../models/cart')
+const orderDB = require('../models/orders')
 const { productSchema } = require('../models/joi');
 
 
@@ -18,6 +19,42 @@ const getHeaderData = async () => {
   return categoryData;
 };
 
+async function calculateCartTotals(userId, session) {
+  try {
+    const cart = await cartDB.findOne({ user_id: userId }).populate('products.product_id');
+
+    if (!cart) {
+      throw new Error('Cart not found');
+    }
+
+    let orderTotal = 0;
+    const shipping = 15;
+    const vat = 0;
+
+    cart.products.forEach(product => {
+      const subTotal = product.product_id.price * product.quantity;
+      product.subTotal = subTotal;
+      orderTotal += subTotal;
+    });
+
+    orderTotal += shipping + vat;
+
+    session.cartTotals = {
+      subTotals: cart.products.map(product => ({
+        productId: product.product_id._id,
+        subTotal: product.subTotal
+      })),
+      orderTotal: orderTotal,
+      shipping: shipping,
+      vat: vat
+    };
+
+    console.log('Cart totals calculated and stored in session:', session.cartTotals);
+  } catch (error) {
+    console.error('Error calculating cart totals:', error);
+  }
+}
+
 
 // page render
 const cart = async (req, res) => {
@@ -30,14 +67,17 @@ const cart = async (req, res) => {
     const productData = await productDB.find();
     const cartData = await cartDB.findOne({ user_id: user_id }).populate('products.product_id');
 
+
     if (!cartData) {
       console.log('Cart data not found for user:', user_id);
     }
 
+    
+
     res.render('user/cart', { user_id, categoryData, productData, cartData });
   } catch (error) {
-    // console.error('Error in cart controller:', error);
-    // res.status(500).send('Internal Server Error');
+    console.error('Error in cart controller:', error);
+    res.status(500).send('Internal Server Error');
   }
 };
 
@@ -51,30 +91,34 @@ const addToCart = async (req, res) => {
       console.log('user id illa');
       return res.json({ success: false, message: 'Please log in to add items to your cart.', redirectTo: '/login' });
     }
+
     const { productId, quantity } = req.body;
 
-   // Check if the cart already exists for the user
+    const product = await productDB.findById(productId);
+
+    if (quantity > product.stock) {
+      return res.json({ success: false, message: 'Quantity exceeds available stock.' });
+    }
+
     let cart = await cartDB.findOne({ user_id });
 
     if (!cart) {
-      // If no cart exists, create a new one with the product
       await cartDB.create({
         user_id,
         products: [{ product_id: productId, quantity }]
       });
     } else {
-      // If cart exists, update or add the product
-      const productIndex = cart.products.findIndex(product => product.product_id.toString() === productId);
+      const productIndex = cart.products.findIndex(prod => prod.product_id.toString() === productId);
 
       if (productIndex !== -1) {
-        // If the product is already in the cart, update its quantity
+        if (cart.products[productIndex].quantity + quantity > product.stock) {
+          return res.json({ success: false, message: 'Quantity exceeds available stock.' });
+        }
         cart.products[productIndex].quantity += quantity;
       } else {
-        // If the product is not already in the cart, add it
         cart.products.push({ product_id: productId, quantity });
       }
 
-      // Save the updated cart
       await cart.save();
     }
 
@@ -91,30 +135,25 @@ const updateCart = async (req, res) => {
     console.log('update cart');
     const { product_id, quantity } = req.body;
 
-    // Validate product ID
     if (!product_id) {
         return res.status(400).json({ error: 'Product ID is required' });
     }
 
-    // Validate quantity
     if (!quantity || quantity <= 0) {
         return res.status(400).json({ error: 'Invalid quantity' });
     }
 
-    // Check if product exists
     const product = await productDB.findById(product_id);
     if (!product) {
         return res.status(404).json({ error: 'Product not found' });
     }
 
-    // Update cart
     const { user_id } = req.session;
     const filter = { user_id: user_id, 'products.product_id': product_id };
     const update = { $set: { 'products.$.quantity': quantity } };
     const options = { new: true }; 
     let updatedCart = await cartDB.findOneAndUpdate(filter, update, options);
 
-    // If product is not already in cart, add it
     if (!updatedCart) {
         updatedCart = await cartDB.findOneAndUpdate(
             { user_id: user_id },
@@ -123,7 +162,6 @@ const updateCart = async (req, res) => {
         );
     }
 
-    // Calculate subtotal
     const subtotal = product.price * quantity;
 
     res.json({ subtotal });
@@ -131,19 +169,17 @@ const updateCart = async (req, res) => {
     console.error('Error updating cart:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-};  zfsghrjdfjx cnm
+};
 
 //remove product from the cart
 const removeProduct = async (req, res) => {
   try {
     const { product_id } = req.body;
 
-    // Validate product ID
     if (!product_id) {
       return res.status(400).json({ error: 'Product ID is required' });
     }
 
-    // Update cart
     const { user_id } = req.session;
     const filter = { user_id: user_id };
     const update = { $pull: { products: { product_id: product_id } } };

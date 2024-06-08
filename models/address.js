@@ -10,12 +10,9 @@ const addressSchema = new mongoose.Schema({
         email: { type: String, required: true },
         mobile: { type: Number, required: true },
         pin: { type: Number, required: true },
-        // locality: { type: String, required: true },
         address: { type: String, required: true },
         city: { type: String, required: true },
         state: { type: String, required: true },
-        // landmark: { type: String },
-        // alternatePhone: { type: String },
         is_Home: { type: Boolean, default: false },
         is_Work: { type: Boolean, default: false }
     }]

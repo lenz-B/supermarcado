@@ -43,7 +43,8 @@
                                 <a href="edit-product?proId=<%=element._id %>" class="img-wrap img-ratio"> <img src="/productImage/<%= element.img[0] %>" class="img-fluid" alt="Product" /> </a>
                                 <div class="info-wrap">
                                     <a href="#" class="title text-truncate"><%= element.name %></a>
-                                    <div class="price mb-2"><%= element.price %></div>
+                                    <div class="price mb-2">$<%= element.price %></div>
+                                    <div class="price mb-2">Stock: <%= element.stock %></div>
                                     <!-- price.// -->
                                     <!-- <a href="edit-product?proId=<%=element._id %>" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a> -->
                                     <% if (element.status) { %>

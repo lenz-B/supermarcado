@@ -1,3 +1,62 @@
+const placeOrder = async (req, res) => {
+    try {
+      console.log('place order');
+      console.log('req.body:', req.body);
+  
+      const { name, email, mobile, address, city, state, pin, selectedAddressIndex } = req.body;
+  
+      let orderAddress;
+  
+      if (selectedAddressIndex !== undefined && selectedAddressIndex !== '') {
+        // Fetch the user's addresses from the database
+        const userAddresses = await UserAddress.findOne({ user_id: req.user._id }); // Assuming req.user._id contains the user ID
+  
+        if (userAddresses && userAddresses.user_address[selectedAddressIndex]) {
+          // Get the selected address
+          orderAddress = userAddresses.user_address[selectedAddressIndex];
+        } else {
+          return res.status(400).json({ status: false, message: 'Invalid address selected' });
+        }
+      } else {
+        // Use the address details from the request body
+        orderAddress = {
+          name,
+          email,
+          mobile,
+          address,
+          city,
+          state,
+          pin,
+          is_Home: false,
+          is_Work: false
+        };
+      }
+  
+      // Create the order
+      const newOrder = new orderDB({
+        user_id: req.user._id,
+        paymentMethod: req.body.paymentMethod,
+        address: orderAddress
+      });
+  
+      // Save the order to the database
+      await newOrder.save();
+  
+      // Send a response back to the client
+      res.json({ status: true, message: 'Order placed successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: false, message: 'Order placement failed' });
+    }
+  };
+
+
+
+
+
+
+
+
 const addToCart = async (req, res) => {
     try {
       console.log('add to cart');
@@ -35,16 +94,6 @@ const addToCart = async (req, res) => {
       res.json({ success: false, message: 'Failed to add product to your cart.' });
     }
   };
-
-
-
-
-
-
-
-
-
-
 
 
 

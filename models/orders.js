@@ -19,18 +19,15 @@ const orderSchema = new mongoose.Schema({
     email: { type: String, required: true },
     mobile: { type: Number, required: true },
     pin: { type: Number, required: true },
-    // locality: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    // landmark: { type: String },
-    // alternatePhone: { type: String },
     is_Home: { type: Boolean, default: false },
     is_Work: { type: Boolean, default: false }
   },
   totalAmount: {type: Number, required: true},
   payment: {type: Number},
-  orderStatus: { type: String, enum: ['Pending', 'Processing', 'Shipped', 'Delivered',"placed"], default: 'Pending' },
+  orderStatus: { type: String, enum: ['Pending', 'Processing', 'Shipped', 'Delivered', "Placed", "Cancelled"], default: 'Pending' },
   date: {type: Date, required: true},
 
 });

@@ -44,6 +44,9 @@ router.post('/add-to-cart',userAuthantication.login, cartController.addToCart)
 router.post('/update-cart',userAuthantication.login, cartController.updateCart)
 router.post('/remove-product',userAuthantication.login, cartController.removeProduct);
 
-router.get('/checkout', orderController.checkoutPage)
+router.get('/checkout',userAuthantication.login, orderController.checkoutPage)
+router.post('/checkout', orderController.placeOrder)
+router.post('/add-order', orderController.addOrder)
+router.post('/cancel-order', orderController.cancelOrder)
 
 module.exports = router;

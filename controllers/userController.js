@@ -5,7 +5,9 @@ const User = require('../models/users')
 const otpDb =require('../models/otp')
 const productDB = require('../models/products');
 const categoryDB = require('../models/category')
+const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
+const orderDB = require('../models/orders')
 const { joiRegSchema, addressValidationSchema} = require('../models/joi');
 const flash = require('flash');
 
@@ -22,6 +24,44 @@ const getHeaderData = async () => {
 
   return categoryData;
 };
+
+//calculation
+async function calculateCartTotals(userId, session) {
+  try {
+    const cart = await cartDB.findOne({ user_id: userId }).populate('products.product_id');
+
+    if (!cart) {
+      throw new Error('Cart not found');
+    }
+
+    let orderTotal = 0;
+    const shipping = 15;
+    const vat = 0;
+
+    cart.products.forEach(product => {
+      const subTotal = product.product_id.price * product.quantity;
+      product.subTotal = subTotal;
+      orderTotal += subTotal;
+    });
+
+    orderTotal += shipping + vat;
+
+    session.cartTotals = {
+      subTotals: cart.products.map(product => ({
+        productId: product.product_id._id,
+        subTotal: product.subTotal,
+        quantity: product.quantity 
+      })),
+      orderTotal: orderTotal,
+      shipping: shipping,
+      vat: vat
+    };
+
+    console.log('Cart totals calculated and stored in session:', session.cartTotals);
+  } catch (error) {
+    console.error('Error calculating cart totals:', error);
+  }
+}
 
 
 const home = async (req, res) => {
@@ -431,10 +471,21 @@ const myAccount = async (req, res) => {
     const user = await User.findById(user_id)
     const categoryData = await getHeaderData();
     const addressData = await addressDB.findOne({user_id: user_id})
+    const orderData = await orderDB.find({ user_id: user_id }).populate('orderedItems.product_id');
+
+    if (!orderData) {
+      console.log('Order data not found for user:', user_id);
+    }
+
+    await calculateCartTotals(user_id, req.session);
+    // console.log(req.session.cartTotals);
+    const {orderTotal, subTotals} = req.session.cartTotals
+    // console.log('subtotals',subTotals);
 
     // console.log('address: ', addressData);
 
-    res.render('user/account', {user, user_id, categoryData, addressData})
+    res.render('user/account', {user, user_id, categoryData,
+      addressData, orderData, orderTotal, subTotals})
   } catch (error) {
     
   }
