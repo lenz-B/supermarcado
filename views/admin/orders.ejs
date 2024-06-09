@@ -66,7 +66,7 @@
                                         </td>
                                         <td><%= order.Date %></td>
                                         <td class="text-end">
-                                            <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                            <a href="/admin/order-details?order_id=<%= order.id %>" class="btn btn-md rounded font-sm">Detail</a>
                                             <div class="dropdown">
                                                 <a href="#" data-bs-toggle="dropdown" class=""></a>
                                                 <select class="form-select status-select" onchange="updateOrderStatus(this)">
@@ -103,47 +103,8 @@
                 </div>
             </section>
             <!-- content-main end// -->
-
-            <!-- <script>
-                document.querySelectorAll('.status-select').forEach(select => {
-                    select.addEventListener('change', function() {
-                        const orderIdElement = this.closest('tr').querySelector('.order-id');
-                        
-                        // Check if orderIdElement exists
-                        if (orderIdElement) {
-                            const orderId = orderIdElement.innerText;
-                            const newStatus = this.value;
-                            
-                            // Log the selected status and order ID
-                            console.log('Selected status:', newStatus);
-                            console.log('Order ID:', orderId);
             
-                            fetch('/update-order-status', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ orderId, newStatus }),
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Update frontend if status update successful
-                                    console.log('Status updated successfully');
-                                } else {
-                                    console.error('Failed to update status');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error updating status:', error);
-                            });
-                        } else {
-                            console.error('.order-id element not found');
-                        }
-                    });
-                });
-            </script> -->
-            
+            <!-- status change -->
             <script>
                 // Function to handle status change
                 const handleStatusChange = (selectElement) => {
@@ -195,46 +156,6 @@
                 
                 
             </script>
-            
-            <!-- <script>
-                 function updateOrderStatus(selectElement) {
-          const orderId = selectElement.getAttribute('data-order-id');
-          const newStatus = selectElement.value;
-
-
-          fetch('/admin/update-order-status', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ orderId, newStatus })
-          })
-          .then(response => response.json())
-          .then(data => {
-        if (data.success) {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Order status updated successfully',
-                showConfirmButton: false,
-                timer: 1200
-            }).then((result) => {
-                location.reload(); 
-            });
-        } else {
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Failed to update order status',
-                showConfirmButton: true  
-            });
-        }
-          })
-          .catch(error => {
-              console.error('Error updating order status:', error);
-          });
-      }
-            </script> -->
              
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>

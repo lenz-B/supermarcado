@@ -285,11 +285,42 @@ const updateOrderStatus = async (req, res) => {
 //order details page
 const orderDetails = async (req, res) => {
   try {
-    res.render('admin/order-details')
+    const order_id = req.query.order_id;
+    if (!order_id) {
+      return res.status(400).send('Order ID is required');
+    }
+
+    const order = await orderDB.findById(order_id)
+      .populate('user_id', 'username email')
+      .populate('orderedItems.product_id', 'name price');
+
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    const formattedOrder = {
+      id: order._id,
+      Name: order.user_id.username,
+      Email: order.user_id.email,
+      Total: order.totalAmount,
+      Status: order.orderStatus,
+      Date: order.date.toLocaleDateString(),
+      Products: order.orderedItems.map(item => ({
+        productName: item.product_id.name,
+        productPrice: item.product_id.price,
+        quantity: item.quantity,
+        subTotal: item.subTotal,
+        productStatus: item.productStatus
+      }))
+    };
+
+    res.render('admin/order-details', { order: formattedOrder });
   } catch (error) {
-    
+    console.error(error);
+    res.status(500).send('Server error');
   }
-}
+};
+
 
 
 
