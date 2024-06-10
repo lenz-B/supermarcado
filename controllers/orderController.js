@@ -4,10 +4,17 @@ const productDB = require('../models/products');
 const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
 const orderDB = require('../models/orders')
+const Razorpay = require('razorpay')
 const {addressValidationSchema} = require('../models/joi');
 
 
 
+
+// razorpay instance 
+var razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_ID_KEY,
+  key_secret: process.env.RAZORPAY_SECRET_KEY
+});
 
 //category data
 const getHeaderData = async () => {
@@ -97,13 +104,13 @@ const addOrder = async (req, res) => {
 
     console.log('req.body: ', req.body);
 
-    const { error } = addressValidationSchema.validate(req.body);
+    const { error } = addressValidationSchema.validate(req.body.user_address);
     if (error) {
       return res.status(400).json({ status: false, message: error.details[0].message });
     }
 
-    const user_address = req.body;
-    console.log(user_address);
+    const {user_address, paymentMethod} = req.body;
+    console.log('pay: ', paymentMethod, 'user_address: ', user_address);
 
     await addressDB.findOneAndUpdate(
       { user_id },
@@ -117,6 +124,7 @@ const addOrder = async (req, res) => {
 
     const { subTotals, orderTotal, shipping, vat } = req.session.cartTotals;
 
+
     const newOrder = new orderDB({
       user_id,
       orderedItems: subTotals.map(subTotal => ({
@@ -125,7 +133,7 @@ const addOrder = async (req, res) => {
         subTotal: subTotal.subTotal,
         productStatus: 'Pending'
       })),
-      paymentMethod: 'Cash on Delivery', 
+      paymentMethod: paymentMethod, 
       address: user_address,
       totalAmount: orderTotal,
       payment: 0, 
@@ -134,6 +142,30 @@ const addOrder = async (req, res) => {
     });
 
     await newOrder.save();
+
+    if (paymentMethod == 'Razorpay') {
+      const razorpayOrder = await razorpayInstance.orders.create({
+        amount: orderTotal * 100,
+        currency: 'INR', 
+        receipt: `receipt_order_${newOrder._id}`,
+        payment_capture: '1'
+      })
+      newOrder.razorpay_id = razorpayOrder._id
+      await newOrder.save()
+
+      //res
+      return res.json({
+        status: true, 
+        message: 'Razorpay order created and ready for payment.',
+        order_id: newOrder._id,
+        razorpay_id: razorpayOrder._id,
+        amount: newOrder.totalAmount * 100,
+        key_id: process.env.RAZORPAY_ID_KEY
+      })
+    } else {
+      newOrder.orderStatus = "Processing"
+      await newOrder.save()
+    }
 
     await cartDB.updateOne({ user_id: user_id }, { products: [] });
 

@@ -123,9 +123,6 @@ const addressValidationSchema = Joi.object({
       'any.required': 'PIN code is required.',
       'number.base': 'Invalid PIN code.'
   }),
-  // locality: Joi.string().required().messages({
-  //     'any.required': 'Locality is required.'
-  // }),
   address: Joi.string().required().messages({
       'any.required': 'Address is required.'
   }),
@@ -135,8 +132,6 @@ const addressValidationSchema = Joi.object({
   state: Joi.string().required().messages({
       'any.required': 'State is required.'
   }),
-  // landmark: Joi.string().allow('').optional(),
-  // alternatePhone: Joi.string().allow('').optional(),
   is_Home: Joi.boolean().default(false),
   is_Work: Joi.boolean().default(false)
 });

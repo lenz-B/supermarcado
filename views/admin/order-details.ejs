@@ -97,72 +97,35 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <% order.Products.forEach(product => { %>
                                 <tr>
                                     <td>
                                         <a class="itemside" href="#">
                                             <div class="left">
-                                                <img src="assets/imgs/items/1.jpg" width="40" height="40" class="img-xs" alt="Item" />
+                                                <img src="assets/imgs/items/placeholder.jpg" width="40" height="40" class="img-xs" alt="Item" />
                                             </div>
-                                            <div class="info">Haagen-Dazs Caramel Cone Ice</div>
+                                            <div class="info"><%= product.productName %></div>
                                         </a>
                                     </td>
-                                    <td>$44.25</td>
-                                    <td>2</td>
-                                    <td class="text-end">$99.50</td>
+                                    <td>$<%= product.productPrice.toFixed(2) %></td>
+                                    <td><%= product.quantity %></td>
+                                    <td class="text-end">$<%= (product.productPrice * product.quantity).toFixed(2) %></td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <a class="itemside" href="#">
-                                            <div class="left">
-                                                <img src="assets/imgs/items/2.jpg" width="40" height="40" class="img-xs" alt="Item" />
-                                            </div>
-                                            <div class="info">Seeds of Change Organic</div>
-                                        </a>
-                                    </td>
-                                    <td>$7.50</td>
-                                    <td>2</td>
-                                    <td class="text-end">$15.00</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="itemside" href="#">
-                                            <div class="left">
-                                                <img src="assets/imgs/items/3.jpg" width="40" height="40" class="img-xs" alt="Item" />
-                                            </div>
-                                            <div class="info">All Natural Italian-Style</div>
-                                        </a>
-                                    </td>
-                                    <td>$43.50</td>
-                                    <td>2</td>
-                                    <td class="text-end">$102.04</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="itemside" href="#">
-                                            <div class="left">
-                                                <img src="assets/imgs/items/4.jpg" width="40" height="40" class="img-xs" alt="Item" />
-                                            </div>
-                                            <div class="info">Sweet & Salty Kettle Corn</div>
-                                        </a>
-                                    </td>
-                                    <td>$99.00</td>
-                                    <td>3</td>
-                                    <td class="text-end">$297.00</td>
-                                </tr>
+                                <% }); %>
                                 <tr>
                                     <td colspan="4">
                                         <article class="float-end">
                                             <dl class="dlist">
                                                 <dt>Subtotal:</dt>
-                                                <dd>$973.35</dd>
+                                                <dd>$<%= (order.Total - 15).toFixed(2) %></dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Shipping cost:</dt>
-                                                <dd>$10.00</dd>
+                                                <dd>$15.00</dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Grand total:</dt>
-                                                <dd><b class="h5">$983.00</b></dd>
+                                                <dd><b class="h5">$<%= order.Total.toFixed(2) %></b></dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt class="text-muted">Status:</dt>
@@ -199,6 +162,7 @@
                 </div>
                 <!-- col// -->
             </div>
+            <!-- row end// -->
         </div>
         <!-- card-body end// -->
     </div>

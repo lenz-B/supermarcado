@@ -213,27 +213,11 @@
                         <div id="checkout_accordion_1">
                             <!-- card -->
                             <div class="card">
-                                <h5 class="collapsed ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-1" aria-expanded="false">
-                                    Check payments
-                                    <input type="radio" id="check_payments" name="payment_method" value="check_payments">
-                                    <label for="check_payments">
-                                        Check payments
-                                    </label>
-                                </h5>
-                                <div id="faq-item-2-1" class="collapse" data-parent="#checkout_accordion_1">
-                                    <div class="card-body">
-                                        <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- card -->
-                            <div class="card">
                                 <h5 class="ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-2" aria-expanded="false"> 
-                                    Cash on delivery  <img src="img/icons/cash.png" alt="#">
                                     <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery">
-        <label for="cash_on_delivery">
-            Cash on delivery <img src="img/icons/cash.png" alt="#">
-        </label>
+                                    <label for="cash_on_delivery">
+                                    Cash on delivery <img src="img/icons/cash.png" alt="#">
+                                    </label>
                                 </h5>
                                 <div id="faq-item-2-2" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
@@ -244,30 +228,14 @@
                             <!-- card -->
                             <div class="card">
                                 <h5 class="collapsed ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-3" aria-expanded="false" >
-                                    ApplePay  <img src="img/icons/applepay.png" alt="#">
                                     <input type="radio" id="applepay" name="payment_method" value="applepay">
-        <label for="applepay">
-            ApplePay <img src="img/icons/applepay.png" alt="#">
-        </label>
+                                    <label for="applepay">
+                                        Razorpay <img src="img/icons/razorpay_logo.png" alt="#">
+                                    </label>
                                 </h5>
                                 <div id="faq-item-2-3" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
-                                        <p>Apple Pay is the modern way to pay.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- card -->
-                            <div class="card">
-                                <h5 class="collapsed ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-4" aria-expanded="false" >
-                                    PayPal <img src="img/icons/payment-3.png" alt="#">
-                                    <input type="radio" id="paypal" name="payment_method" value="paypal">
-        <label for="paypal">
-            PayPal <img src="img/icons/payment-3.png" alt="#">
-        </label>
-                                </h5>
-                                <div id="faq-item-2-4" class="collapse" data-parent="#checkout_accordion_1">
-                                    <div class="card-body">
-                                        <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
+                                        <p>Razor Pay is the modern way to pay.</p>
                                     </div>
                                 </div>
                             </div>
@@ -386,6 +354,7 @@
     <script src="js/plugins.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- form validation  -->
     <script>
         document.getElementById('placeOrderButton').addEventListener('click', async function(event) {
@@ -490,7 +459,24 @@
             }
     
             if (isValid) {
-                const formData = {
+                // Function to get the selected payment method
+                function getSelectedPaymentMethod() {
+                    const paymentMethods = document.getElementsByName('payment_method');
+                    for (let method of paymentMethods) {
+                        if (method.checked) {
+                            return method.value === 'cash_on_delivery' ? 'Cash on delivery' : 'Razorpay';
+                        }
+                    }
+                    return null;
+                }
+
+                const paymentMethod = getSelectedPaymentMethod();
+                if (!paymentMethod) {
+                    alert('Please select a payment method.');
+                    return;
+                }
+
+                const user_address = {
                     name,
                     email,
                     mobile,
@@ -499,7 +485,7 @@
                     city,
                     state,
                 };
-                console.log(formData);
+                console.log(user_address);
     
                 try {
                     fetch('/add-order', {
@@ -507,7 +493,7 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(formData)
+                        body: JSON.stringify({user_address, paymentMethod})
                     })
                     .then(response => response.json())
                     .then(data => {

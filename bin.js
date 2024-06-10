@@ -1,3 +1,191 @@
+if (paymentMethod === "Razorpay") {
+    const razorpayOrder = await razorpayInstance.orders.create({
+        amount: newOrder.totalAmount * 100,
+        currency: "INR",
+        receipt: `receipt_order_${newOrder._id}`,
+        payment_capture: '1'
+    });
+
+    newOrder.razorpayOrderId = razorpayOrder.id;
+    await newOrder.save();
+
+
+
+
+document.getElementById('placeOrderButton').addEventListener('click', async function(event) {
+    event.preventDefault();
+    let isValid = true;
+
+    const isCheckboxChecked = document.getElementById('agree').checked;
+    const checkboxError = document.getElementById('agreeError');
+    if (!isCheckboxChecked) {
+        return;
+    } else {
+        checkboxError.textContent = '';
+    }
+
+    function hasConsecutiveSpaces(str) {
+        return /\s{2,}/.test(str);
+    }
+
+    function isAlphabetic(str) {
+        return /^[a-zA-Z\s]+$/.test(str);
+    }
+
+    const requiredFields = ['name', 'email', 'mobile', 'address', 'city', 'state', 'pin'];
+    requiredFields.forEach(field => {
+        const element = document.getElementById(field);
+        const errorElement = document.getElementById(`${field}Error`);
+        const value = element.value.trim();
+        if (!value) {
+            isValid = false;
+            element.classList.add('invalid');
+            errorElement.textContent = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+        } else if (hasConsecutiveSpaces(value)) {
+            isValid = false;
+            element.classList.add('invalid');
+            errorElement.textContent = `${field.charAt(0).toUpperCase() + field.slice(1)} cannot have consecutive spaces.`;
+        } else {
+            element.classList.remove('invalid');
+            errorElement.textContent = '';
+        }
+    });
+
+    const name = document.getElementById('name').value.trim();
+    const nameError = document.getElementById('nameError');
+    if (name.length < 3) {
+        isValid = false;
+        document.getElementById('name').classList.add('invalid');
+        nameError.textContent = 'Name must be at least 3 characters long.';
+    }
+
+    const pin = document.getElementById('pin').value.trim();
+    const pinError = document.getElementById('pinError');
+    if (!/^\d{6}$/.test(pin)) {
+        isValid = false;
+        document.getElementById('pin').classList.add('invalid');
+        pinError.textContent = 'Invalid pin code.';
+    }
+
+    const state = document.getElementById('state').value.trim();
+    const stateError = document.getElementById('stateError');
+    if (!isAlphabetic(state)) {
+        isValid = false;
+        document.getElementById('state').classList.add('invalid');
+        stateError.textContent = 'State name must contain only letters and spaces.';
+    }
+
+    const isHomeChecked = document.getElementById('isHome').checked;
+    const isWorkChecked = document.getElementById('isWork').checked;
+    const addressTypeError = document.getElementById('addressTypeError');
+    if (!isHomeChecked && !isWorkChecked) {
+        isValid = false;
+        addressTypeError.textContent = 'Please select an address type.';
+    } else {
+        addressTypeError.textContent = '';
+    }
+
+    const email = document.getElementById('email').value;
+    const emailError = document.getElementById('emailError');
+    const emailPattern = /^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,4}$/;
+    if (!emailPattern.test(email)) {
+        isValid = false;
+        document.getElementById('email').classList.add('invalid');
+        emailError.textContent = 'Invalid email address.';
+    } else {
+        document.getElementById('email').classList.remove('invalid');
+        emailError.textContent = '';
+    }
+
+    const mobile = document.getElementById('mobile').value;
+    const mobileError = document.getElementById('mobileError');
+    const phonePattern = /^(?!.*(\d)\1{9})\d{10}$/;
+    if (!phonePattern.test(mobile)) {
+        isValid = false;
+        document.getElementById('mobile').classList.add('invalid');
+        mobileError.textContent = 'Invalid phone number.';
+    } else {
+        document.getElementById('mobile').classList.remove('invalid');
+        mobileError.textContent = '';
+    }
+
+    if (isValid) {
+        // Function to get the selected payment method
+        function getSelectedPaymentMethod() {
+            const paymentMethods = document.getElementsByName('payment_method');
+            for (let method of paymentMethods) {
+                if (method.checked) {
+                    return method.value === 'cash_on_delivery' ? 'Cash on delivery' : 'Razorpay';
+                }
+            }
+            return null;
+        }
+
+        const paymentMethod = getSelectedPaymentMethod();
+        if (!paymentMethod) {
+            alert('Please select a payment method.');
+            return;
+        }
+
+        const formData = {
+            name,
+            email,
+            mobile,
+            pin,
+            address,
+            city,
+            state,
+            paymentMethod // Add the selected payment method to the formData object
+        };
+        console.log(formData);
+
+        try {
+            fetch('/add-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Swal.fire({
+                        title: 'Updated Successfully!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonColor: '#28a745' // green
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Update Failed',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonColor: '#d33' // red
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.showValidationMessage(error.message);
+                return false;
+            });
+        } catch (error) {
+            console.error('Error occurred:', error);
+            alert('An error occurred while processing your request. Please try again later.');
+        }
+    } else {
+        event.preventDefault();
+    }
+});
+
+
+
+
+
+
+
 const placeOrder = async (req, res) => {
     try {
       console.log('place order');
