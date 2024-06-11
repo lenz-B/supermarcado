@@ -51,10 +51,10 @@
                                                     <button class="remove-product-btn" data-product-id="<%= product.product_id._id %>">x</button>
                                                 </td>
                                                 <td class="cart-product-image">
-                                                    <a href="product-details.html"><img src="/productImage/<%= product.product_id.img[0] %>" alt="#"></a>
+                                                    <a href="/product-details?proId=<%= product.product_id._id %>"><img src="/productImage/<%= product.product_id.img[0] %>" alt="#"></a>
                                                 </td>
                                                 <td class="cart-product-info">
-                                                    <h4><a href="product-details.html"><%= product.product_id.name %></a></h4>
+                                                    <h4><a href="/product-details?proId=<%= product.product_id._id %>"><%= product.product_id.name %></a></h4>
                                                 </td>
                                                 <td class="cart-product-price">$<%= product.product_id.price %></td>
                                                 <td class="cart-product-quantity">
@@ -295,7 +295,7 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ product_id })
+                        body: JSON.stringify({ product_id, wishlist: false })
                     });
 
                     if (response.ok) {
@@ -324,7 +324,6 @@
                 button.addEventListener('click', function() {
                     const product_id = this.getAttribute('data-product-id');
                     removeProduct(product_id);
-                    // Reload the page after removing the product
                     location.reload();
                 });
             });
@@ -355,7 +354,5 @@
     
         
 </body>
-
-<!-- Mirrored from tunatheme.com/tf/html/broccoli-preview/broccoli//cart by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 29 Apr 2024 13:40:46 GMT -->
 </html>
 

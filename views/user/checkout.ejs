@@ -81,7 +81,7 @@
                         <div class="ltn__checkout-single-content mt-50">
                             <p>
                                 <label class="input-info-save mb-0">
-                                    <input type="checkbox" name="selectAddress" id="selectAddress" onclick="handleCheckbox(this)"> Pick existing address?
+                                    <input type="checkbox" name="selectAddress" id="selectAddress" onclick="handleCheckbox(this)"> Select an address
                                 </label>
                                 <span class="error-message" id="agreeError"></span>
                             </p>
@@ -202,6 +202,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div>
+                                        <button class="btn theme-btn-1 btn-effect-1 text-uppercase" id="placeOrderButton" type="submit">Add Address</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -228,14 +231,27 @@
                             <!-- card -->
                             <div class="card">
                                 <h5 class="collapsed ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-3" aria-expanded="false" >
-                                    <input type="radio" id="applepay" name="payment_method" value="applepay">
-                                    <label for="applepay">
+                                    <input type="radio" id="razorpay" name="payment_method" value="razorpay">
+                                    <label for="razorpay">
                                         Razorpay <img src="img/icons/razorpay_logo.png" alt="#">
                                     </label>
                                 </h5>
                                 <div id="faq-item-2-3" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
-                                        <p>Razor Pay is the modern way to pay.</p>
+                                        <p>Pay via Razorpay; you can pay with your credit card if you don’t have a PayPal account.</p>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- card -->
+                             <div class="card">
+                                <h5 class="collapsed ltn__card-title" data-bs-toggle="collapse" data-bs-target="#faq-item-2-4" aria-expanded="false" >
+                                    <input type="radio" id="wallet" name="payment_method" value="wallet">
+                                    <label for="wallet">
+                                        Wallet <img src="img/icons/wallet.png" alt="#">
+                                    </label>                                </h5>
+                                <div id="faq-item-2-4" class="collapse" data-parent="#checkout_accordion_1">
+                                    <div class="card-body">
+                                        <p>wallet is the modern way to pay.</p>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +259,7 @@
                         <div class="ltn__payment-note mt-30 mb-30">
                             <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
                         </div>
-                        <button class="btn theme-btn-1 btn-effect-1 text-uppercase" id="placeOrderButton" type="submit">Place order</button>
+                        <button class="btn theme-btn-1 btn-effect-1 text-uppercase" id="paymentBtn" type="submit">Place order</button>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -349,13 +365,15 @@
     <!-- FOOTER AREA END -->
 </div>
 <!-- Body main wrapper end -->
+ 
+<!--================End Checkout Area =================-->
 
     <!-- All JS Plugins -->
     <script src="js/plugins.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <!-- form validation  -->
+    <!-- form validation and add address  -->
     <script>
         document.getElementById('placeOrderButton').addEventListener('click', async function(event) {
             event.preventDefault();
@@ -459,6 +477,269 @@
             }
     
             if (isValid) {
+                const user_address = {
+                    name,
+                    email,
+                    mobile,
+                    pin,
+                    address,
+                    city,
+                    state,
+                };
+                console.log(user_address);
+
+                try {
+                    fetch('/add-address', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user_address)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status) {
+                            Swal.fire({
+                                title: 'Updated Successfully!',
+                                text: data.message,
+                                icon: 'success',
+                                timer: 3000,
+                                showConfirmButton: true,
+                                confirmButtonColor: '#28a745' // green
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Update Failed',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonColor: '#d33' // red
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(error.message);
+                        return false;
+                    });                    
+                } catch (error) {
+                    console.error('Error occurred:', error);
+                    alert('An error occurred while processing your request. Please try again later.');
+                }
+    
+                // try {
+                //     fetch('/add-order', {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },
+                //         body: JSON.stringify({user_address, paymentMethod})
+                //     })
+                //     .then(response => response.json())
+                //     .then(data => {
+                //         if (data.status) {
+                //             Swal.fire({
+                //                 title: 'Updated Successfully!',
+                //                 text: data.message,
+                //                 icon: 'success',
+                //                 timer: 3000,
+                //                 showConfirmButton: true,
+                //                 confirmButtonColor: '#28a745' // green
+                //             });
+                //         } else {
+                //             Swal.fire({
+                //                 title: 'Update Failed',
+                //                 text: data.message,
+                //                 icon: 'error',
+                //                 confirmButtonColor: '#d33' // red
+                //             });
+                //         }
+                //     })
+                //     .catch(error => {
+                //         Swal.showValidationMessage(error.message);
+                //         return false;
+                //     });
+                // } catch (error) {
+                //     console.error('Error occurred:', error);
+                //     alert('An error occurred while processing your request. Please try again later.');
+                // }
+            } else {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <!-- place order -->
+    <script>
+        document.getElementById('paymentBtn').addEventListener('click', function(event) {
+    event.preventDefault(); 
+
+    const selectAddressCheckbox = document.getElementById('selectAddress');
+    const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
+
+    if (selectAddressCheckbox.checked && selectedAddress) {
+        const addressIndex = selectedAddress.value;
+
+        // Function to get the selected payment method
+        function getSelectedPaymentMethod() {
+            const paymentMethods = document.getElementsByName('payment_method');
+            for (let method of paymentMethods) {
+                if (method.checked) {
+                    switch (method.value) {
+                        case 'cash_on_delivery':
+                            return 'Cash on delivery';
+                        case 'razorpay':
+                            return 'Razorpay';
+                        case 'wallet':
+                            return 'Wallet';
+                        default:
+                            return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+        const paymentMethod = getSelectedPaymentMethod();
+        if (!paymentMethod) {
+            alert('Please select a payment method.');
+            return;
+        }
+
+        fetch('/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ addressIndex, paymentMethod })
+        })
+        .then(response => response.json())
+        .then(async data => {
+            if (data.status) {
+                if (paymentMethod === 'Razorpay') {
+                    // Proceed with Razorpay payment
+                    const options = {
+                    key: data.key_id, // Razorpay key ID
+                    amount: data.amount, // Amount in paise
+                    currency: 'INR',
+                    name: 'Supermarcado',
+                    description: 'Order Payment',
+                    order_id: data.razorpay_id, // Razorpay order ID
+                    handler: async function (response) {
+                        // Ensure response has the necessary fields
+                        if (!response.razorpay_payment_id || !response.razorpay_order_id || !response.razorpay_signature) {
+                        alert('Missing necessary payment response fields.');
+                        return;
+                        }
+
+                        // Handle successful payment
+                        const captureResponse = await fetch('/capture-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                        }),
+                        });
+
+                        const captureResult = await captureResponse.json();
+
+                        if (captureResult.status) {
+                        console.log('Capture Result: ', captureResult.status);
+                        alert('Payment successful and order updated!');
+                        // Redirect to a success page or update the UI
+                        window.location.href = '/';
+                        } else {
+                        alert('Payment verification failed. Please contact support.');
+                        }
+                    },
+                    prefill: {
+                        // Prefill customer details if available
+                        name: data.user_address?.name || '',
+                        email: data.user_address?.email || '',
+                        contact: data.user_address?.phone || '',
+                    },
+                    theme: {
+                        color: '#3399cc',
+                    },
+                    };
+
+
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                } else if (paymentMethod === 'Wallet') {
+                    // Handle Wallet payment method
+                    Swal.fire({
+                        title: 'Order Placed Successfully!',
+                        text: 'Payment via Wallet has been successfully processed.',
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonColor: '#28a745' // green
+                    }).then((result) => {
+                        window.location.href = '/';
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 3000);
+                } else {
+                    Swal.fire({
+                        title: 'Order Placed Successfully!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: true,
+                        confirmButtonColor: '#28a745' // green
+                    }).then((result) => {
+                        window.location.href = '/';
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 3000);
+                }
+            } else {
+                Swal.fire({
+                    title: 'Order Creation Failed',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonColor: '#d33' // red
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonColor: '#d33' // red
+            });
+        });
+    } else {
+        Swal.fire({
+            title: 'No Address Selected',
+            text: 'Please select an address.',
+            icon: 'warning',
+            confirmButtonColor: '#ffc107' // yellow
+        });
+    }
+});
+
+    </script>
+
+    <!-- <script>
+        document.getElementById('paymentBtn').addEventListener('click', function(event) {
+            event.preventDefault(); 
+        
+            const selectAddressCheckbox = document.getElementById('selectAddress');
+            const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
+        
+            if (selectAddressCheckbox.checked && selectedAddress) {
+                const addressIndex = selectedAddress.value;
+
                 // Function to get the selected payment method
                 function getSelectedPaymentMethod() {
                     const paymentMethods = document.getElementsByName('payment_method');
@@ -475,222 +756,34 @@
                     alert('Please select a payment method.');
                     return;
                 }
-
-                const user_address = {
-                    name,
-                    email,
-                    mobile,
-                    pin,
-                    address,
-                    city,
-                    state,
-                };
-                console.log(user_address);
-    
-                try {
-                    fetch('/add-order', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({user_address, paymentMethod})
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status) {
-                            Swal.fire({
-                                title: 'Updated Successfully!',
-                                text: data.message,
-                                icon: 'success',
-                                timer: 3000,
-                                showConfirmButton: true,
-                                confirmButtonColor: '#28a745' // green
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Update Failed',
-                                text: data.message,
-                                icon: 'error',
-                                confirmButtonColor: '#d33' // red
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        Swal.showValidationMessage(error.message);
-                        return false;
-                    });
-                } catch (error) {
-                    console.error('Error occurred:', error);
-                    alert('An error occurred while processing your request. Please try again later.');
-                }
-            } else {
-                event.preventDefault();
-            }
-        });
-    </script>
-
-<script>
-    document.getElementById('placeOrderButton').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent the default form submission
-  
-      const selectAddressCheckbox = document.getElementById('selectAddress');
-      const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
-  
-      if (selectAddressCheckbox.checked && selectedAddress) {
-        const addressIndex = selectedAddress.value;
-  
-        fetch('/checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ addressIndex: addressIndex })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status) {
-            Swal.fire({
-              title: 'Address Selected Successfully!',
-              text: data.message,
-              icon: 'success',
-              timer: 3000,
-              showConfirmButton: true,
-              confirmButtonColor: '#28a745' // green
-            }).then((result) => {
-                        window.location.href = '/';
-                    });
-
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 3000);
-          } else {
-            Swal.fire({
-              title: 'Address Selection Failed',
-              text: data.message,
-              icon: 'error',
-              confirmButtonColor: '#d33' // red
-            });
-          }
-        })
-        .catch(error => {
-          Swal.fire({
-            title: 'Error',
-            text: error.message,
-            icon: 'error',
-            confirmButtonColor: '#d33' // red
-          });
-        });
-      } else {
-        Swal.fire({
-          title: 'No Address Selected',
-          text: 'Please select an address.',
-          icon: 'warning',
-          confirmButtonColor: '#ffc107' // yellow
-        });
-      }
-    });
-  </script>
-  
-
-    <!-- checkbox hide -->
-    <script>
-        var agreeCheckbox = document.getElementById('agree');
-        var formContainer = document.getElementById('addressFormContainer');
-        agreeCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                formContainer.style.display = 'block';
-            } else {
-                formContainer.style.display = 'none';
-            }
-        });
-    
-        var selectAddressCheckbox = document.getElementById('selectAddress');
-        var addressCardsContainer = document.getElementById('addressCardsContainer');
-        selectAddressCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                addressCardsContainer.style.display = 'block';
-            } else {
-                addressCardsContainer.style.display = 'none';
-            }
-        });
-    
-        function handleCheckbox(checkbox) {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(function(cb) {
-                if (cb !== checkbox) {
-                    cb.checked = false;
-                    if (cb.id === 'agree') {
-                        formContainer.style.display = 'none';
-                    } else if (cb.id === 'selectAddress') {
-                        addressCardsContainer.style.display = 'none';
-                    }
-                }
-            });
-        }
-    </script>
-    
-    
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('orderForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                console.log('hoyyyyyy');
-                
-                const selectAddressCheckbox = document.getElementById('selectAddress');
-                const agreeCheckbox = document.getElementById('agree');
-                const formData = new FormData(document.getElementById('orderForm'));
-                console.log('form data: ', formData);
-                
-                if (selectAddressCheckbox.checked) {
-                    // If selectAddress checkbox is checked, get the selected address index
-                    const selectedAddressIndex = document.querySelector('input[name="selectedAddress"]:checked');
-                    if (selectedAddressIndex) {
-                        formData.append('addressIndex', selectedAddressIndex.value);
-                        console.log('Selected address index:', selectedAddress.value);
-                    } else {
-                        console.error('No address selected');
-                        return;
-                    }
-                } else if (agreeCheckbox.checked) {
-                    // If agree checkbox is checked, get the form data
-                    formData.append('name', document.getElementById('name').value);
-                    formData.append('email', document.getElementById('email').value);
-                    formData.append('mobile', document.getElementById('mobile').value);
-                    formData.append('company', document.getElementById('company').value);
-                    formData.append('address', document.getElementById('address').value);
-                    formData.append('apartment', document.getElementById('apartment').value);
-                    formData.append('city', document.getElementById('city').value);
-                    formData.append('state', document.getElementById('state').value);
-                    formData.append('pin', document.getElementById('pin').value);
-                    formData.append('addressType', document.querySelector('input[name="addressType"]:checked').value);
-                    // You can append additional data to formData if needed
-                } else {
-                    console.error('Neither selectAddress nor agree checkbox is checked');
-                    return;
-                }
-
-
+        
                 fetch('/checkout', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify({ addressIndex, paymentMethod })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status) {
                         Swal.fire({
-                            title: 'Updated Successfully!',
+                            title: 'Address Selected Successfully!',
                             text: data.message,
                             icon: 'success',
                             timer: 3000,
                             showConfirmButton: true,
                             confirmButtonColor: '#28a745' // green
+                        }).then((result) => {
+                            window.location.href = '/';
                         });
+        
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 3000);
                     } else {
                         Swal.fire({
-                            title: 'Update Failed',
+                            title: 'Address Selection Failed',
                             text: data.message,
                             icon: 'error',
                             confirmButtonColor: '#d33' // red
@@ -698,14 +791,70 @@
                     }
                 })
                 .catch(error => {
-                    Swal.showValidationMessage(error.message);
-                    return false;
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.message,
+                        icon: 'error',
+                        confirmButtonColor: '#d33' // red
+                    });
                 });
-            });
-        });
+            } else {
+                Swal.fire({
+                    title: 'No Address Selected',
+                    text: 'Please select an address.',
+                    icon: 'warning',
+                    confirmButtonColor: '#ffc107' // yellow
+                });
+            }
 
+            
+            
+        });
     </script> -->
+    
   
+
+    <!-- checkbox hide -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var agreeCheckbox = document.getElementById('agree');
+            var formContainer = document.getElementById('addressFormContainer');
+            agreeCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    formContainer.style.display = 'block';
+                } else {
+                    formContainer.style.display = 'none';
+                }
+            });
+    
+            var selectAddressCheckbox = document.getElementById('selectAddress');
+            var addressCardsContainer = document.getElementById('addressCardsContainer');
+            selectAddressCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    addressCardsContainer.style.display = 'block';
+                } else {
+                    addressCardsContainer.style.display = 'none';
+                }
+            });
+    
+            function handleCheckbox(checkbox) {
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(cb) {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                        if (cb.id === 'agree') {
+                            formContainer.style.display = 'none';
+                        } else if (cb.id === 'selectAddress') {
+                            addressCardsContainer.style.display = 'none';
+                        }
+                    }
+                });
+            }
+    
+            window.handleCheckbox = handleCheckbox;
+        });
+    </script>
+    
 </body>
 
 </html>

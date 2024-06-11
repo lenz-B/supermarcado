@@ -1,6 +1,7 @@
 const categoryDB = require('../models/category');
 const productDB = require('../models/products');
 const cartDB = require('../models/cart')
+const wishlistDB = require('../models/wishlist')
 const orderDB = require('../models/orders')
 const { productSchema } = require('../models/joi');
 
@@ -59,20 +60,18 @@ async function calculateCartTotals(userId, session) {
 // page render
 const cart = async (req, res) => {
   try {
-      const { user_id } = req.session;
-      if (!user_id) {
-        throw new Error('User ID not found in session');
-      }
+    const { user_id } = req.session;
+    if (!user_id) {
+      throw new Error('User ID not found in session');
+    }
+
     const categoryData = await getHeaderData();
     const productData = await productDB.find();
     const cartData = await cartDB.findOne({ user_id: user_id }).populate('products.product_id');
 
-
     if (!cartData) {
       console.log('Cart data not found for user:', user_id);
     }
-
-    
 
     res.render('user/cart', { user_id, categoryData, productData, cartData });
   } catch (error) {
@@ -174,21 +173,78 @@ const updateCart = async (req, res) => {
 //remove product from the cart
 const removeProduct = async (req, res) => {
   try {
-    const { product_id } = req.body;
+    console.log('remove product' );
+    const { product_id, wishlist } = req.body;
 
     if (!product_id) {
       return res.status(400).json({ error: 'Product ID is required' });
     }
-
     const { user_id } = req.session;
-    const filter = { user_id: user_id };
-    const update = { $pull: { products: { product_id: product_id } } };
-    await cartDB.updateOne(filter, update);
+    const filter = { user_id};
+    
+    if (!wishlist) {
+      const update = { $pull: { products: { product_id } } };
+      await cartDB.updateOne(filter, update);
+    } else {
+      console.log('huuiuiu');
+      update = { $pull: { products: product_id }};
+      await wishlistDB.updateOne(filter, update);
+    }
+    
+    res.status(200).json({ message: 'Product removed successfully' });
 
-    res.status(200).json({ message: 'Product removed successfully' });    
   } catch (error) {
     console.error('Error removing product:', error);
     res.status(500).json({ error: 'Internal server error' });    
+  }
+}
+
+//wishlist
+const wishlist = async (req, res) => {
+  try {
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+    const allProducts = await productDB.find();
+    const wishlistData = await wishlistDB.findOne({ user_id: user_id }).populate('products');
+
+    res.render('user/wishlist', { user_id, categoryData, allProducts, wishlistData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+//add to wishlist
+const addToWishlist = async (req, res) => {
+  try {
+    console.log('add to wishlist');
+    const { user_id } = req.session;
+    if (!user_id) {
+      console.log('user id missing');
+      return res.json({ success: false, message: 'Please log in to add items to your cart.', redirectTo: '/login' });
+    }
+    const { product_id } = req.body;
+    console.log('pro id: ', product_id);
+
+    let wishlist = await wishlistDB.findOne({ user_id });
+
+    if (!wishlist) {
+      await wishlistDB.create({
+        user_id,
+        products: [product_id]
+      });
+    } else {
+      if (!wishlist.products.includes(product_id)) {
+        wishlist.products.push(product_id);
+        await wishlist.save();
+      }
+    }
+
+    // Respond with success
+    res.json({ status: true, message: 'Product successfully added to wishlist' });
+  } catch (error) {
+    console.error('Error adding to wishlist:', error);
+    res.json({ status: false, message: 'Failed to add product to wishlist' });
   }
 }
 
@@ -196,6 +252,6 @@ const removeProduct = async (req, res) => {
 
 
 module.exports = { cart, addToCart, updateCart,
-  removeProduct, 
+  removeProduct, wishlist, addToWishlist, 
 
 }

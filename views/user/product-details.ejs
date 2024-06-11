@@ -112,7 +112,12 @@
                                     <div class="ltn__product-details-menu-3">
                                         <ul>
                                             <li>
-                                                <a href="#" class="" title="Wishlist" data-bs-toggle="modal" data-bs-target="#liton_wishlist_modal">
+                                                <a href="#" 
+                                                    class="add-to-wishlist-btn" 
+                                                    title="Wishlist" 
+                                                    data-product-id="<%= productData.id %>" 
+                                                    data-product-img="/productImage/<%= productData.img[0] %>" 
+                                                    data-product-name="<%= productData.name %>">
                                                     <i class="far fa-heart"></i>
                                                     <span>Add to Wishlist</span>
                                                 </a>
@@ -726,7 +731,7 @@
                             <div class="footer-menu">
                                 <ul>
                                     <li><a href="order-tracking.html">Order tracking</a></li>
-                                    <li><a href="wishlist.html">Wish List</a></li>
+                                    <li><a href="/wishlist">Wish List</a></li>
                                     <li><a href="login.html">Login</a></li>
                                     <li><a href="account.html">My account</a></li>
                                     <li><a href="about.html">Terms & Conditions</a></li>
@@ -742,7 +747,7 @@
                                 <ul>
                                     <li><a href="login.html">Login</a></li>
                                     <li><a href="account.html">My account</a></li>
-                                    <li><a href="wishlist.html">Wish List</a></li>
+                                    <li><a href="/wishlist">Wish List</a></li>
                                     <li><a href="order-tracking.html">Order tracking</a></li>
                                     <li><a href="faq.html">FAQ</a></li>
                                     <li><a href="contact.html">Contact us</a></li>
@@ -952,31 +957,32 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                         <div class="ltn__quick-view-modal-inner">
-                             <div class="modal-product-item">
+                        <div class="ltn__quick-view-modal-inner">
+                            <div class="modal-product-item">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="modal-product-img">
                                             <img src="img/product/7.png" alt="#">
                                         </div>
-                                         <div class="modal-product-info">
+                                        <div class="modal-product-info">
                                             <h5><a href="product-details.html">Vegetables Juices</a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Wishlist</p>
+                                            <p class="backend-message"></p> <!-- Add this line for backend message -->
                                             <div class="btn-wrapper">
-                                                <a href="wishlist.html" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>
+                                                <a href="/wishlist" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>
                                             </div>
-                                         </div>
-                                         <!-- additional-info -->
-                                         <div class="additional-info d-none">
+                                        </div>
+                                        <!-- additional-info -->
+                                        <div class="additional-info d-none">
                                             <p>We want to give you <b>10% discount</b> for your first order, <br>  Use discount code at checkout</p>
                                             <div class="payment-method">
                                                 <img src="img/icons/payment.png" alt="#">
                                             </div>
-                                         </div>
+                                        </div>
                                     </div>
                                 </div>
-                             </div>
-                         </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1005,7 +1011,6 @@
                     const productImg = this.getAttribute('data-product-img');
                     const quantity = parseInt(this.closest('.ltn__product-details-menu-2').querySelector('.cart-plus-minus-box').value);
         
-                    // Send data to backend
                     fetch('/add-to-cart', {
                         method: 'POST',
                         headers: {
@@ -1019,7 +1024,6 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.redirectTo) {
-                            // Redirect to login page if user is not logged in
                             window.location.href = data.redirectTo;
                             return;
                         }
@@ -1041,7 +1045,6 @@
                             modalButtons.classList.add('d-none');
                         }
         
-                        // Show the modal
                         const addCartModal = new bootstrap.Modal(document.getElementById('add_to_cart_modal'));
                         addCartModal.show();
                     })
@@ -1051,7 +1054,6 @@
                 });
             });
         
-            // Ensure the modal backdrop is removed correctly
             const modalElement = document.getElementById('add_to_cart_modal');
             modalElement.addEventListener('hidden.bs.modal', function (event) {
                 document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
@@ -1061,13 +1063,62 @@
                 document.body.style.paddingRight = '';
             });
 
-            // scrolling
             const addCartModal = document.getElementById('add_to_cart_modal');
             addCartModal.addEventListener('hidden.bs.modal', function () {
                 document.body.style.overflow = 'auto';
             });
         });
     </script>
+    <!-- add to wishlist -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlistButtons = document.querySelectorAll('.add-to-wishlist-btn');
+            const wishlistModal = document.getElementById('liton_wishlist_modal');
+            const productImg = wishlistModal.querySelector('.modal-product-img img');
+            const productName = wishlistModal.querySelector('.modal-product-info h5 a');
+            const addedCartMessage = wishlistModal.querySelector('.added-cart');
+        
+            wishlistButtons.forEach(wishlistButton => {
+                wishlistButton.addEventListener('click', function(event) {
+                    event.preventDefault();
+        
+                    const product_id = wishlistButton.getAttribute('data-product-id');
+                    const productImgSrc = wishlistButton.getAttribute('data-product-img');
+                    const productNameText = wishlistButton.getAttribute('data-product-name');
+        
+                    fetch('/add-to-wishlist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ product_id })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.redirectTo) {
+                            window.location.href = data.redirectTo;
+                            return;
+                        }
+                        if (data.status) {
+                            // Update modal content
+                            productImg.src = productImgSrc;
+                            productName.textContent = productNameText;
+                            addedCartMessage.innerHTML = '<i class="fa fa-check-circle"></i> Successfully added to your Wishlist';
+        
+                            // Show modal
+                            $(wishlistModal).modal('show');
+                        } else {
+                            alert('Failed to add product to wishlist: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while adding to wishlist.');
+                    });
+                });
+            });
+        });
+        </script>
      
   
         
@@ -1077,6 +1128,5 @@
   
 </body>
 
-<!-- Mirrored from tunatheme.com/tf/html/broccoli-preview/broccoli/product-details-no-sidebar.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 29 Apr 2024 13:40:46 GMT -->
 </html>
 

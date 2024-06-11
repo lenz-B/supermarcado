@@ -43,10 +43,14 @@ router.get('/cart',userAuthantication.login, cartController.cart)
 router.post('/add-to-cart',userAuthantication.login, cartController.addToCart)
 router.post('/update-cart',userAuthantication.login, cartController.updateCart)
 router.post('/remove-product',userAuthantication.login, cartController.removeProduct);
+router.get('/wishlist', userAuthantication.login, cartController.wishlist)
+router.post('/add-to-wishlist', cartController.addToWishlist)
 
 router.get('/checkout',userAuthantication.login, orderController.checkoutPage)
 router.post('/checkout', orderController.placeOrder)
 router.post('/add-order', orderController.addOrder)
 router.post('/cancel-order', orderController.cancelOrder)
+router.post('/capture-payment', orderController.captureRazorpayPayment);
+router.post('/webhook', orderController.razorpayWebhook);
 
 module.exports = router;
