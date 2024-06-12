@@ -1,0 +1,59 @@
+<!-- header -->
+<%- include('../layout/adminHeadder.ejs') %>
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Coupon</h2>
+                <div>
+                    <button class="btn btn-md rounded font-sm hover-up">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label for="coupen_code" class="form-label">Coupon Code</label>
+                        <input type="text" placeholder="Enter Copen Code" class="form-control" id="coupen_code" name="coupen_code" />
+                    </div>
+                    <div class="row gx-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                            <input type="number" placeholder="Enter Discount Percentage" class="form-control" id="discountPercentage" name="discountPercentage" min="1" max="99"/>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="minPurchaseAmount" class="form-label">Min Purchase Amount</label>
+                            <input type="number" placeholder="Minimum Parchase Amount" class="form-control" id="minPurchaseAmount" name="minPurchaseAmount"/>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="maxRedimabelAmount" class="form-label">Max Amount</label>
+                            <input type="number" placeholder="Max Redimabel Amount" class="form-control" id="maxRedimabelAmount" name="maxRedimabelAmount"/>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="expiredDate" class="form-label">Expiry Date</label>
+                        <input type="date" placeholder="Type here" class="form-control" id="expiredDate" name="expiredDate"/>
+                    </div>
+                </div>
+            </div>
+            <!-- card end// -->
+        </div>
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label class="form-label">Status</label>
+                        <select class="form-select">
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- card end// -->
+        </div>
+    </div>
+</section>
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

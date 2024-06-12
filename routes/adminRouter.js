@@ -4,6 +4,7 @@ const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
 const orderController = require('../controllers/orderController')
+const couponController = require('../controllers/couponController')
 const adminAuthentication = require('../middlewares/adminAuth')
 const uploadCat = require('../middlewares/multer')
 const uploadPro = require('../middlewares/productMulter')
@@ -32,5 +33,8 @@ router.post('/edit-product', uploadPro.array('img', 4), productController.editin
 router.get('/orders',adminAuthentication.logIn, orderController.orders )
 router.post('/update-order-status', orderController.updateOrderStatus);
 router.get('/order-details', orderController.orderDetails)
+
+router.get('/coupons', adminAuthentication.logIn, couponController.coupons )
+router.get('/add-coupon', adminAuthentication.logIn, couponController.addCoupon)
 
 module.exports = router;
