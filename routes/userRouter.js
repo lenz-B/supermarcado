@@ -5,6 +5,7 @@ const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
 const cartController = require('../controllers/cartController')
 const orderController = require('../controllers/orderController')
+const couponController = require('../controllers/couponController')
 const userAuthantication = require('../middlewares/userAuth')
 const passport = require('passport')
 
@@ -52,5 +53,7 @@ router.post('/add-order', orderController.addOrder)
 router.post('/cancel-order', orderController.cancelOrder)
 router.post('/capture-payment', orderController.captureRazorpayPayment);
 router.post('/webhook', orderController.razorpayWebhook);
+
+router.post('/apply-coupon', couponController.applyCoupon)
 
 module.exports = router;

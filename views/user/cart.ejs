@@ -71,12 +71,12 @@
                                         </tr>
                                     <% } %>
                                     <tr class="cart-coupon-row">
-                                        <td colspan="6">
+                                        <!-- <td colspan="6">
                                             <div class="cart-coupon">
                                                 <input type="text" name="cart-coupon" placeholder="Coupon code">
                                                 <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
                                             </div>
-                                        </td>
+                                        </td> -->
                                         <td>
                                             <button type="submit" id="submitButton" class="btn theme-btn-2 btn-effect-2 btn-update-cart">Update Cart</button>
                                         </td>
@@ -271,15 +271,15 @@
                         subtotalCell.textContent = `$${cartData.subtotal}`;
                         updateCartButton.removeAttribute('disabled');
                         updateCartButton.classList.remove('disabled');
-                        Swal.fire({
-                            title: 'Updated!',
-                            text: 'Cart updated successfully',
-                            icon: 'success',
-                            timer: 3000,
-                            showConfirmButton: false,
-                            timerProgressBar: true,
-                            confirmButtonColor: '#28a745'
-                        });
+                        // Swal.fire({
+                        //     title: 'Updated!',
+                        //     text: 'Cart updated successfully',
+                        //     icon: 'success',
+                        //     timer: 3000,
+                        //     showConfirmButton: false,
+                        //     timerProgressBar: true,
+                        //     confirmButtonColor: '#28a745'
+                        // });
                     } else {
                         console.error('Failed to update cart');
                     }

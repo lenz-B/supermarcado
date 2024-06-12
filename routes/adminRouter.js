@@ -36,5 +36,7 @@ router.get('/order-details', orderController.orderDetails)
 
 router.get('/coupons', adminAuthentication.logIn, couponController.coupons )
 router.get('/add-coupon', adminAuthentication.logIn, couponController.addCoupon)
+router.post('/add-coupon', adminAuthentication.logIn, couponController.addingCoupon)
+router.post('/coupons/:id/toggle-status', couponController.updateCouponStatus)
 
 module.exports = router;

@@ -6,7 +6,7 @@
             <div class="content-header">
                 <h2 class="content-title">Add New Coupon</h2>
                 <div>
-                    <button class="btn btn-md rounded font-sm hover-up">Save</button>
+                    <button id="saveButton" class="btn btn-md rounded font-sm hover-up">Save</button>
                 </div>
             </div>
         </div>
@@ -14,8 +14,8 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <label for="coupen_code" class="form-label">Coupon Code</label>
-                        <input type="text" placeholder="Enter Copen Code" class="form-control" id="coupen_code" name="coupen_code" />
+                        <label for="coupon_code" class="form-label">Coupon Code</label>
+                        <input type="text" placeholder="Enter Coupon Code" class="form-control" id="coupon_code" name="coupon_code" />
                     </div>
                     <div class="row gx-3">
                         <div class="col-md-4 mb-3">
@@ -24,36 +24,100 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="minPurchaseAmount" class="form-label">Min Purchase Amount</label>
-                            <input type="number" placeholder="Minimum Parchase Amount" class="form-control" id="minPurchaseAmount" name="minPurchaseAmount"/>
+                            <input type="number" placeholder="Minimum Purchase Amount" class="form-control" id="minPurchaseAmount" name="minPurchaseAmount" min="1"/>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="maxRedimabelAmount" class="form-label">Max Amount</label>
-                            <input type="number" placeholder="Max Redimabel Amount" class="form-control" id="maxRedimabelAmount" name="maxRedimabelAmount"/>
+                            <label for="maxRedeemableAmount" class="form-label">Max Amount</label>
+                            <input type="number" placeholder="Max Redeemable Amount" class="form-control" id="maxRedeemableAmount" name="maxRedeemableAmount" min="1"/>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label for="expiredDate" class="form-label">Expiry Date</label>
-                        <input type="date" placeholder="Type here" class="form-control" id="expiredDate" name="expiredDate"/>
-                    </div>
-                </div>
-            </div>
-            <!-- card end// -->
-        </div>
-        <div class="col-lg-3">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <label class="form-label">Status</label>
-                        <select class="form-select">
-                            <option>Active</option>
-                            <option>Inactive</option>
-                        </select>
+                        <label for="expiryDate" class="form-label">Expiry Date</label>
+                        <input type="date" placeholder="Type here" class="form-control" id="expiryDate" name="expiryDate"/>
                     </div>
                 </div>
             </div>
             <!-- card end// -->
         </div>
     </div>
+    <div id="message"></div>   
 </section>
+
+<!-- form validation and fetch -->
+<script>
+    document.getElementById('saveButton').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const couponCode = document.getElementById('coupon_code').value;
+        const discountPercentage = document.getElementById('discountPercentage').value;
+        const minPurchaseAmount = document.getElementById('minPurchaseAmount').value;
+        const maxRedeemableAmount = document.getElementById('maxRedeemableAmount').value;
+        const expiryDate = document.getElementById('expiryDate').value;
+
+        const couponCodeRegex = /^[a-zA-Z0-9]+$/;
+
+        const isValidDate = dateString => {
+            const currentDate = new Date();
+            const inputDate = new Date(dateString);
+            return !isNaN(inputDate) && inputDate > currentDate;
+        };
+
+        if (!couponCode || !discountPercentage || !minPurchaseAmount || !maxRedeemableAmount || !expiryDate ) {
+            showMessage('All fields are required', false);
+            return;
+        }
+
+        if (!couponCodeRegex.test(couponCode)) {
+            showMessage('Coupon code should contain only alphabets and numbers', false);
+            return;
+        }
+
+        if (!isValidDate(expiryDate)) {
+            showMessage('Expiry date should be at least one day ahead from the current time', false);
+            return;
+        }
+
+        const data = {
+            coupon_code: couponCode,
+            discount_percentage: discountPercentage,
+            min_purchase_amount: minPurchaseAmount,
+            max_redeemable_amount: maxRedeemableAmount,
+            expiry_date: expiryDate
+        };
+
+        // Send data to backend using fetch
+        fetch('add-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status) {
+                showMessage('Coupon added successfully!', true);
+                setTimeout(() => {
+                    window.location.href = '/admin/coupons';
+                }, 3000);
+            } else {
+                showMessage(data.message, false);
+            }
+        })
+        .catch(error => {
+            showMessage('An error occurred: ' + error.message, false);
+        });
+    });
+
+    function showMessage(message, isSuccess) {
+        Swal.fire({
+            icon: isSuccess ? 'success' : 'error',
+            title: isSuccess ? 'Success' : 'Error',
+            text: message
+        });
+    }
+</script>
+    
+
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>

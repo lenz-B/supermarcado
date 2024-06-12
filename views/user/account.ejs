@@ -84,75 +84,85 @@
                                             <div class="ltn__myaccount-tab-content-inner">
                                                 <div class="table-responsive">
                                                     <table class="table">
-                                                      <thead>
-                                                        <tr>
-                                                          <th>Order</th>
-                                                          <th>Date</th>
-                                                          <th>Status</th>
-                                                          <th>Total</th>
-                                                          <th>Action</th>
-                                                        </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                        <% 
-                                                          // Sort orders by date in descending order
-                                                          const sortedOrders = orderData.sort((a, b) => new Date(b.date) - new Date(a.date)); 
-                                                          sortedOrders.forEach((order, index) => { 
-                                                        %>
-                                                          <tr>
-                                                            <td><%= index + 1 %></td>
-                                                            <td><%= new Date(order.date).toLocaleDateString() %></td>
-                                                            <td><%= order.orderStatus %></td>
-                                                            <td>$<%= order.totalAmount.toFixed(2) %></td>
-                                                            <td><a href="javascript:void(0);" onclick="showOrderDetails('<%= order._id %>')">View</a></td>
-                                                          </tr>
-                                                          <tr id="order-details-<%= order._id %>" style="display: none;">
-                                                            <td colspan="5">
-                                                              <div class="table-responsive">
-                                                                <table class="table">
-                                                                  <tbody>
-                                                                    <% order.orderedItems.forEach(item => { %>
-                                                                      <tr>
-                                                                        <td><%= item.product_id.name %> <strong>× <%= item.quantity %></strong></td>
-                                                                        <td>$<%= (item.product_id.price * item.quantity).toFixed(2) %></td>
-                                                                      </tr>
-                                                                    <% }); %>
-                                                                    <tr>
-                                                                      <td>Shipping and Handling</td>
-                                                                      <td>$15.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <td>Vat</td>
-                                                                      <td>$0.00</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <td><strong>Order Total</strong></td>
-                                                                      <td><strong>$<%= order.totalAmount.toFixed(2) %></strong></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <td><strong>Status</strong></td>
-                                                                      <td><%= order.orderStatus %></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                      <td colspan="2">
-                                                                        <% if (order.orderStatus !== 'Cancelled') { %>
-                                                                          <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-                                                                        <% } else { %>
-                                                                          <strong>Order Cancelled</strong>
-                                                                        <% } %>
-                                                                      </td>
-                                                                    </tr>
-                                                                  </tbody>
-                                                                </table>
-                                                              </div>
-                                                            </td>
-                                                          </tr>
-                                                        <% }); %>
-                                                      </tbody>                                                      
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Order</th>
+                                                                <th>Date</th>
+                                                                <th>Status</th>
+                                                                <th>Total</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% 
+                                                            const sortedOrders = orderData.sort((a, b) => new Date(b.date) - new Date(a.date)); 
+                                                            sortedOrders.forEach((order, index) => { 
+                                                            %>
+                                                            <tr>
+                                                                <td><%= index + 1 %></td>
+                                                                <td><%= new Date(order.date).toLocaleDateString() %></td>
+                                                                <td><%= order.orderStatus %></td>
+                                                                <td>$<%= order.totalAmount.toFixed(2) %></td>
+                                                                <td><a href="javascript:void(0);" onclick="showOrderDetails('<%= order._id %>')">View</a></td>
+                                                            </tr>
+                                                            <tr id="order-details-<%= order._id %>" style="display: none;">
+                                                                <td colspan="6"> <!-- Increased colspan to accommodate new columns -->
+                                                                    <div class="table-responsive">
+                                                                        <table class="table">
+                                                                            <tbody>
+                                                                                <% order.orderedItems.forEach(item => { %>
+                                                                                <tr>
+                                                                                    <td><%= item.product_id.name %> <strong>× <%= item.quantity %></strong></td>
+                                                                                    <td>$<%= (item.product_id.price * item.quantity).toFixed(2) %></td>
+                                                                                </tr>
+                                                                                <% }); %>
+                                                                                <tr>
+                                                                                    <td>Shipping and Handling</td>
+                                                                                    <td>$15.00</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>Vat</td>
+                                                                                    <td>$0.00</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><strong>Order Total</strong></td>
+                                                                                    <td><strong>$<%= order.totalAmount.toFixed(2) %></strong></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><strong>Status</strong></td>
+                                                                                    <td><%= order.orderStatus %></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><strong>Payment Method</strong></td>
+                                                                                    <td><%= order.paymentMethod %></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td><strong>Order Address</strong></td>
+                                                                                    <td><%= order.address.name %><br>
+                                                                                        <%= order.address.mobile %><br>
+                                                                                        <%= order.address.address %> <br>
+                                                                                        <%= order.address.city %>, <%= order.address.state %>, <%= order.address.pin %> </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2">
+                                                                                        <% if (order.orderStatus !== 'Cancelled') { %>
+                                                                                        <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                                                        <% } else { %>
+                                                                                        <strong>Order Cancelled</strong>
+                                                                                        <% } %>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <% }); %>
+                                                        </tbody>                                                     
                                                     </table>
-                                                  </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </div>                                        
                                         <script>
                                             function showOrderDetails(orderId) {
                                               var detailsRow = document.getElementById('order-details-' + orderId);
@@ -164,56 +174,56 @@
                                             }
                                           
                                             function cancelOrder(orderId) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#28a745',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cancel it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch('/cancel-order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ orderId: orderId })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            Swal.fire({
-              title: 'Cancelled!',
-              text: 'Your order has been cancelled.',
-              icon: 'success',
-              confirmButtonColor: '#28a745'
-            }).then(() => {
-              location.reload(); // Reload the page to reflect changes
-            });
-          } else {
-            Swal.fire({
-              title: 'Error!',
-              text: 'Failed to cancel the order.',
-              icon: 'error',
-              confirmButtonColor: '#28a745'
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Error cancelling order:', error);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Failed to cancel the order.',
-            icon: 'error',
-            confirmButtonColor: '#28a745'
-          });
-        });
-      }
-    });
-  }
-                                          </script>
+                                                Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "You won't be able to revert this!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#28a745',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, cancel it!'
+                                                }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    fetch('/cancel-order', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body: JSON.stringify({ orderId: orderId })
+                                                    })
+                                                    .then(response => response.json())
+                                                    .then(data => {
+                                                    if (data.success) {
+                                                        Swal.fire({
+                                                        title: 'Cancelled!',
+                                                        text: 'Your order has been cancelled.',
+                                                        icon: 'success',
+                                                        confirmButtonColor: '#28a745'
+                                                        }).then(() => {
+                                                        location.reload(); // Reload the page to reflect changes
+                                                        });
+                                                    } else {
+                                                        Swal.fire({
+                                                        title: 'Error!',
+                                                        text: 'Failed to cancel the order.',
+                                                        icon: 'error',
+                                                        confirmButtonColor: '#28a745'
+                                                        });
+                                                    }
+                                                    })
+                                                    .catch(error => {
+                                                    console.error('Error cancelling order:', error);
+                                                    Swal.fire({
+                                                        title: 'Error!',
+                                                        text: 'Failed to cancel the order.',
+                                                        icon: 'error',
+                                                        confirmButtonColor: '#28a745'
+                                                    });
+                                                    });
+                                                }
+                                                });
+                                            }
+                                        </script>
                                         <div class="tab-pane fade" id="liton_tab_1_4">
                                             <div class="ltn__myaccount-tab-content-inner">
                                                 <p>The following addresses will be used on the checkout page by default.</p>
@@ -895,6 +905,7 @@
 
     </script>
     <!-- delete address -->
+
     <script>
         function deleteAddress(addressIndex) {
             fetch('/delete-address', {

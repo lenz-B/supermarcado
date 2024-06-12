@@ -1,4 +1,53 @@
 <%- include('../layout/adminHeadder.ejs') %>
+<style>
+    body {
+      background-color: #f0f0f0; /* Light gray background */
+      font-family: 'Times New Roman', Times, serif; /* Vintage-style font */
+    }
+    .card-product-grid {
+      background-color: #fff; /* White background */
+      border: 1px solid #ccc; /* Light gray border */
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      margin-bottom: 20px;
+    }
+    .card-header {
+      background-color: #f8f5b5; /* Tan color for card header */
+      border-bottom: 1px solid #ccc;
+      border-radius: 10px 10px 0 0;
+      padding: 15px;
+      text-align: center;
+    }
+    .card-body {
+      padding: 15px;
+    }
+    .table {
+      margin-bottom: 0;
+    }
+    .table th,
+    .table td {
+      border: none; /* Remove default table borders */
+      padding: 8px 10px;
+      font-size: 0.9em;
+    }
+    .title {
+      font-size: 1.2em;
+      color: #333; /* Dark text color */
+      text-decoration: none;
+    }
+    .status {
+      font-size: 0.9em;
+      font-style: italic;
+    }
+    .btn-brand.active {
+      background-color: #32cb85; /* Green button for active status */
+      color: #fff;
+    }
+    .btn-brand.inactive {
+      background-color: rgb(203, 69, 69); /* Red button for inactive status */
+      color: #fff;
+    }
+  </style>
 
 <section class="content-main">
     <div class="content-header">
@@ -15,177 +64,58 @@
             <div class="col-lg-4 col-md-6 me-auto">
                 <input type="text" placeholder="Search..." class="form-control" />
             </div>
-            <div class="col-lg-2 col-6 col-md-3">
-                <select class="form-select">
-                    <option>All category</option>
-                    <option>Electronics</option>
-                    <option>Clothings</option>
-                    <option>Something else</option>
-                </select>
-            </div>
-            <div class="col-lg-2 col-6 col-md-3">
-                <select class="form-select">
-                    <option>Latest added</option>
-                    <option>Cheap first</option>
-                    <option>Most viewed</option>
-                </select>
-            </div>
         </div>
     </header>
     <!-- card-header end// -->
     <div class="row">
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/1.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
+        <% couponData.forEach(function(coupon) { %>
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card card-product-grid">
+                    <div class="card-header">
+                        <h4>
+                            <%= coupon.coupon_code %>
+                        </h4>
                     </div>
-                    <a href="#" class="title">Haagen-Dazs Caramel Cone Ice</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
+                <div class="card-body">
+                    <table class="table">
+                    <tr>
+                        <th>Discount</th>
+                        <td><%= coupon.discount_percentage %> %</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td class="status <%= coupon.status ? 'active' : 'inactive' %>">
+                        <%= coupon.status ? 'Active' : 'Inactive' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Expiry Date</th>
+                        <td><%= new Date(coupon.expiry_date).toLocaleDateString() %></td>
+                    </tr>
+                    <tr>
+                        <th>Min Purchase Amount</th>
+                        <td>$<%= coupon.min_purchase_amount.toFixed(2) %></td>
+                    </tr>
+                    <tr>
+                        <th>Max Redeemable Amount</th>
+                        <td>$<%= coupon.max_redeemable_amount.toFixed(2) %></td>
+                    </tr>
+                    <tr>
+                        <th>Created Date</th>
+                        <td><%= new Date(coupon.created_date).toLocaleDateString() %></td>
+                    </tr>
+                    </table>
+                    <form action="/admin/coupons/<%= coupon._id %>/toggle-status" method="POST">
+                    <button type="submit" class="btn btn-sm btn-brand mt-2 <%= coupon.status ? 'active' : 'inactive' %>">
+                        <%= coupon.status ? 'Deactivate' : 'Activate' %>
+                    </button>
+                    </form>
                 </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/2.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Seeds of Change Organic Quinoa</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
                 </div>
+                <!-- card-product end// -->
             </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/3.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">All Natural Italian-Style</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/4.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Boomchick apop Sweet & Salty</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/5.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Haagen-Dazs Caramel Cone Ice</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/6.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Haagen-Dazs Caramel Cone Ice</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/7.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Haagen-Dazs Caramel Cone Ice</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
-        <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="card card-product-grid">
-                <a href="#" class="img-wrap"> <img src="assets/imgs/items/8.jpg" alt="Product" /> </a>
-                <div class="info-wrap">
-                    <div class="dropdown float-end">
-                        <a href="#" class="btn btn-sm btn-brand rounded"> <i class="material-icons md-edit mr-5"></i>Edit </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Edit info</a>
-                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                        </div>
-                    </div>
-                    <a href="#" class="title">Apple Airpods CB-133</a>
-                    <div class="price mt-1">$179.00</div>
-                    <!-- price-wrap.// -->
-                </div>
-            </div>
-            <!-- card-product  end// -->
-        </div>
-        <!-- col.// -->
+            <!-- col end// -->
+        <% }); %>
     </div>
     <!-- row.// -->
     <div class="pagination-area mt-15 mb-50">
@@ -204,6 +134,8 @@
     </div>
 </section>
 <!-- content-main end// -->
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>

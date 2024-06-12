@@ -213,18 +213,30 @@ const placeOrder = async (req, res) => {
       if (!product) {
         console.error(`Product with id ${subTotal.productId} not found`);
         res.status(500).json({ status: false, message: `Order placement failed: Product with id ${subTotal.productId} not found` });
-        return;  // Exit the function or loop
+        return; 
       }
     
       if (subTotal.quantity > product.stock) {
         console.error(`Product with id ${subTotal.productId} is out of stock`);
         res.status(400).json({ status: false, message: `Order placement failed: Some of the products are out of stock` });
-        return;  // Exit the function or loop
+        return;  
       }
     
       product.stock -= subTotal.quantity;
       await product.save();
-    }    
+    }
+    let total_amount; 
+
+    let discountedAmount = req.session.discountedAmount
+    
+    if (discountedAmount) {
+      total_amount = orderTotal - discountedAmount;
+      console.log('total: with: ', total_amount);
+    } else {
+      total_amount = orderTotal;
+      console.log('total: ', total_amount);
+    }
+    console.log('fianal total', total_amount);
     
     const newOrder = new orderDB({
       user_id,
@@ -236,7 +248,7 @@ const placeOrder = async (req, res) => {
         })),
       paymentMethod: paymentMethod, 
       address: orderAddress,
-      totalAmount: orderTotal,
+      totalAmount: total_amount,
       payment: 0, 
       orderStatus: 'Pending',
       date: new Date()
@@ -269,6 +281,8 @@ const placeOrder = async (req, res) => {
       newOrder.orderStatus = "Processing"
       await newOrder.save()
     }
+
+    delete req.session.discountedAmount
 
     await cartDB.updateOne({ user_id: user_id }, { products: [] });
     
