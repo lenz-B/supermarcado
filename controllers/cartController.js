@@ -7,6 +7,7 @@ const { productSchema } = require('../models/joi');
 
 
 
+//___________________________________________________functions___________________________________________________
 
 const getHeaderData = async () => {
   const categories = await categoryDB.find({ status: true }).lean();
@@ -54,10 +55,38 @@ async function calculateCartTotals(userId, session) {
   } catch (error) {
     console.error('Error calculating cart totals:', error);
   }
-}
+};
 
+const updatePromoPricesAndExtractDiscount = async (products) => {
+  try {
+    const updatedProducts = await Promise.all(products.map(async (product) => {
+      const activeOffers = product.offer.filter(offer => offer.status && new Date(offer.expiry_date) > new Date());
+      let discount = 0;
+      if (activeOffers.length > 0) {
+        const latestOffer = activeOffers[activeOffers.length - 1];
+        product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
+        discount = latestOffer.discount;
+      } // No need to set promoPrice if no active offers
+      return { ...product.toObject(), discount }; // Return product as plain JS object with discount
+    }));
+    return updatedProducts;
+  } catch (error) {
+    throw new Error(`Error updating promo prices: ${error.message}`);
+  }
+};
 
-// page render
+const updateAndCachePromoPrices = async (req, products) => {
+  const updatedProducts = await updatePromoPricesAndExtractDiscount(products);
+  req.session.promoPrices = updatedProducts.reduce((acc, product) => {
+    acc[product._id] = product.promoPrice;
+    return acc;
+  }, {});
+  return updatedProducts;
+};
+
+//___________________________________________________user side___________________________________________________
+
+//rendering cart
 const cart = async (req, res) => {
   try {
     const { user_id } = req.session;
@@ -66,14 +95,23 @@ const cart = async (req, res) => {
     }
 
     const categoryData = await getHeaderData();
-    const productData = await productDB.find();
-    const cartData = await cartDB.findOne({ user_id: user_id }).populate('products.product_id');
+    let cartData = await cartDB.findOne({ user_id: user_id }).populate('products.product_id');
 
     if (!cartData) {
       console.log('Cart data not found for user:', user_id);
+      cartData = { products: [] };
+    } else {
+      const products = cartData.products.map(item => item.product_id);
+      const updatedProducts = await updateAndCachePromoPrices(req, products);
+
+      cartData.products.forEach(item => {
+        const updatedProduct = updatedProducts.find(p => p._id.toString() === item.product_id._id.toString());
+        item.product_id.promoPrice = updatedProduct.promoPrice;
+        item.product_id.discount = updatedProduct.discount;
+      });
     }
 
-    res.render('user/cart', { user_id, categoryData, productData, cartData });
+    res.render('user/cart', { user_id, categoryData, cartData });
   } catch (error) {
     console.error('Error in cart controller:', error);
     res.status(500).send('Internal Server Error');
@@ -102,7 +140,7 @@ const addToCart = async (req, res) => {
     let cart = await cartDB.findOne({ user_id });
 
     if (!cart) {
-      await cartDB.create({
+      cart = await cartDB.create({
         user_id,
         products: [{ product_id: productId, quantity }]
       });
@@ -121,12 +159,18 @@ const addToCart = async (req, res) => {
       await cart.save();
     }
 
-    return res.json({ success: true, message: 'Product added to cart successfully.' });
+    await cart.populate('products.product_id')
+
+    const products = cart.products.map(item => item.product_id);
+    await updatePromoPricesAndExtractDiscount(products);
+
+    return res.json({ success: true, message: 'Product added to cart successfully.', cart });
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: 'Failed to add product to your cart.' });
+    return res.json({ success: false, message: 'Failed to add product to your cart.' });
   }
 };
+
 
 //updating the cart
 const updateCart = async (req, res) => {
@@ -142,10 +186,17 @@ const updateCart = async (req, res) => {
         return res.status(400).json({ error: 'Invalid quantity' });
     }
 
-    const product = await productDB.findById(product_id);
+    const product = await productDB.findById(product_id).populate('offer');
     if (!product) {
         return res.status(404).json({ error: 'Product not found' });
     }
+
+    if (quantity > product.stock) {
+      return res.status(400).json({ error: 'Quantity exceeds available stock' });
+    }
+
+    console.log('Product:', product);
+    console.log('Offers:', product.offer);
 
     const { user_id } = req.session;
     const filter = { user_id: user_id, 'products.product_id': product_id };
@@ -161,7 +212,23 @@ const updateCart = async (req, res) => {
         );
     }
 
-    const subtotal = product.price * quantity;
+    const activeOffers = product.offer.filter(offer => {
+      console.log('Checking offer:', offer);
+      return offer.status && new Date(offer.expiry_date) > new Date();
+    });
+
+    console.log('Active Offers:', activeOffers);
+
+    let subtotal;
+    if (activeOffers.length > 0) {
+        const latestOffer = activeOffers[activeOffers.length - 1];
+        const offerPrice = product.price - (product.price * latestOffer.discount) / 100;
+        subtotal = offerPrice * quantity;
+        console.log('Promo subtotal:', subtotal);
+    } else {
+        subtotal = product.price * quantity;
+        console.log('Regular subtotal:', subtotal);
+    }
 
     res.json({ subtotal });
   } catch (error) {
@@ -240,7 +307,6 @@ const addToWishlist = async (req, res) => {
       }
     }
 
-    // Respond with success
     res.json({ status: true, message: 'Product successfully added to wishlist' });
   } catch (error) {
     console.error('Error adding to wishlist:', error);

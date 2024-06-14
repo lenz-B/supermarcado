@@ -44,32 +44,45 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if (cartData && cartData.products) { %>
+                                    <% if (cartData && cartData.products && cartData.products.length > 0) { %>
                                         <% cartData.products.forEach(product => { %>
-                                            <tr data-product-id="<%= product.product_id._id %>">
-                                                <td class="cart-product-remove">
-                                                    <button class="remove-product-btn" data-product-id="<%= product.product_id._id %>">x</button>
-                                                </td>
-                                                <td class="cart-product-image">
-                                                    <a href="/product-details?proId=<%= product.product_id._id %>"><img src="/productImage/<%= product.product_id.img[0] %>" alt="#"></a>
-                                                </td>
-                                                <td class="cart-product-info">
-                                                    <h4><a href="/product-details?proId=<%= product.product_id._id %>"><%= product.product_id.name %></a></h4>
-                                                </td>
-                                                <td class="cart-product-price">$<%= product.product_id.price %></td>
-                                                <td class="cart-product-quantity">
-                                                    <div class="cart-plus-minus">
-                                                        <input type="number" value="<%= product.quantity %>" class="cart-plus-minus-box quantity-input" data-product-id="<%= product.product_id._id %>">
-                                                    </div>
-                                                </td>
-                                                <td class="cart-product-subtotal"><span class="cart-subtotal">$<%= product.product_id.price * product.quantity %></span></td>
-                                            </tr>
+                                          <tr data-product-id="<%= product.product_id._id %>">
+                                            <td class="cart-product-remove">
+                                              <button class="remove-product-btn" data-product-id="<%= product.product_id._id %>">x</button>
+                                            </td>
+                                            <td class="cart-product-image">
+                                              <a href="/product-details?proId=<%= product.product_id._id %>"><img src="/productImage/<%= product.product_id.img[0] %>" alt="#"></a>
+                                            </td>
+                                            <td class="cart-product-info">
+                                              <h4><a href="/product-details?proId=<%= product.product_id._id %>"><%= product.product_id.name %></a></h4>
+                                            </td>
+                                            <td class="cart-product-price">
+                                              <% if (product.product_id.promoPrice > 0) { %>
+                                                $<%= product.product_id.promoPrice %>
+                                              <% } else { %>
+                                                $<%= product.product_id.price %>
+                                              <% } %>
+                                            </td>
+                                            <td class="cart-product-quantity">
+                                              <div class="cart-plus-minus">
+                                                <input type="number" value="<%= product.quantity %>" class="cart-plus-minus-box quantity-input" data-product-id="<%= product.product_id._id %>">
+                                              </div>
+                                            </td>
+                                            <td class="cart-product-subtotal">
+                                              <% if (product.product_id.promoPrice > 0) { %>
+                                                <span class="cart-subtotal">$<%= product.product_id.promoPrice * product.quantity %></span>
+                                              <% } else { %>
+                                                <span class="cart-subtotal">$<%= product.product_id.price * product.quantity %></span>
+                                              <% } %>
+                                            </td>
+                                          </tr>
                                         <% }); %>
-                                    <% } else { %>
+                                      <% } else { %>
                                         <tr>
-                                            <td colspan="6">No products in the cart.</td>
+                                          <td colspan="6">No products in the cart.</td>
                                         </tr>
-                                    <% } %>
+                                      <% } %>
+                                      
                                     <tr class="cart-coupon-row">
                                         <!-- <td colspan="6">
                                             <div class="cart-coupon">
@@ -91,9 +104,10 @@
                                 <tbody>
                                     <% let cartSubtotal = 0; %>
                                     <% if (cartData && cartData.products) { %>
-                                        <% cartData.products.forEach(product => { %>
-                                            <% cartSubtotal += product.product_id.price * product.quantity; %>
-                                        <% }); %>
+                                    <% cartData.products.forEach(product => { %>
+                                        <% const productPrice = product.product_id.promoPrice > 0 ? product.product_id.promoPrice : product.product_id.price; %>
+                                        <% cartSubtotal += productPrice * product.quantity; %>
+                                    <% }); %>
                                     <% } %>
                                     <tr>
                                         <td>Cart Subtotal</td>
@@ -199,39 +213,6 @@
     <script src="js/plugins.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
-        <!-- quantity update -->
-        <!-- <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const quantityInputs = document.querySelectorAll('.cart-quantity-input');
-        
-                quantityInputs.forEach(input => {
-                    input.addEventListener('change', async function (event) {
-                        const productId = event.target.dataset.productId;
-                        const newQuantity = event.target.value;
-        
-                        try {
-                            const response = await fetch(`/update-quantity/${productId}`, {
-                                method: 'PATCH',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ quantity: newQuantity })
-                            });
-        
-                            const data = await response.json();
-                            if (data.success) {
-                                const subtotalElement = document.querySelector(`.cart-product-subtotal[data-product-id="${productId}"] .subtotal`);
-                                subtotalElement.textContent = `$${data.subtotal}`;
-                            } else {
-                                console.error(data.error);
-                            }
-                        } catch (error) {
-                            console.error('Error updating quantity:', error);
-                        }
-                    });
-                });
-            });
-        </script> -->
     <!-- update cart-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -265,23 +246,48 @@
                     });
 
                     if (response.ok) {
-                        const cartData = await response.json();
-                        const productRow = document.querySelector(`.quantity-input[data-product-id="${product_id}"]`).closest('tr');
-                        const subtotalCell = productRow.querySelector('.cart-subtotal');
-                        subtotalCell.textContent = `$${cartData.subtotal}`;
-                        updateCartButton.removeAttribute('disabled');
-                        updateCartButton.classList.remove('disabled');
-                        // Swal.fire({
-                        //     title: 'Updated!',
-                        //     text: 'Cart updated successfully',
-                        //     icon: 'success',
-                        //     timer: 3000,
-                        //     showConfirmButton: false,
-                        //     timerProgressBar: true,
-                        //     confirmButtonColor: '#28a745'
-                        // });
+                        try {
+                            const cartData = await response.json();
+                            const productRow = document.querySelector(`.quantity-input[data-product-id="${product_id}"]`).closest('tr');
+                            const subtotalCell = productRow.querySelector('.cart-subtotal');
+                            subtotalCell.textContent = `$${cartData.subtotal}`;
+                            updateCartButton.removeAttribute('disabled');
+                            updateCartButton.classList.remove('disabled');
+                            // Swal.fire({
+                            //     title: 'Updated!',
+                            //     text: 'Cart updated successfully',
+                            //     icon: 'success',
+                            //     timer: 3000,
+                            //     showConfirmButton: false,
+                            //     timerProgressBar: true,
+                            //     confirmButtonColor: '#28a745'
+                            // })
+                        } catch (error) {
+                            console.error('Failed to parse response:', error);
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'There was an error updating the cart',
+                                icon: 'error',
+                                timer: 3000,
+                                showConfirmButton: false,
+                                timerProgressBar: true,
+                                confirmButtonColor: '#dc3545'
+                            });
+                        }
                     } else {
                         console.error('Failed to update cart');
+                        Swal.fire({
+                            title: 'Failed!',
+                            text: 'Cart update failed',
+                            icon: 'error',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            confirmButtonColor: '#dc3545'
+                        })
+                        .then(() => {
+                            window.location.reload();
+                        })
                     }
                 } catch (error) {
                     console.error('Error updating cart:', error);
@@ -346,6 +352,51 @@
             }
         });
     </script>
+    <!-- reload page -->
+    <script>
+        function reloadPage() {
+            window.location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('submitButton').addEventListener('click', reloadPage);
+        });
+    </script>
+
+
+    <!-- quantity update -->
+        <!-- <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const quantityInputs = document.querySelectorAll('.cart-quantity-input');
+        
+                quantityInputs.forEach(input => {
+                    input.addEventListener('change', async function (event) {
+                        const productId = event.target.dataset.productId;
+                        const newQuantity = event.target.value;
+        
+                        try {
+                            const response = await fetch(`/update-quantity/${productId}`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ quantity: newQuantity })
+                            });
+        
+                            const data = await response.json();
+                            if (data.success) {
+                                const subtotalElement = document.querySelector(`.cart-product-subtotal[data-product-id="${productId}"] .subtotal`);
+                                subtotalElement.textContent = `$${data.subtotal}`;
+                            } else {
+                                console.error(data.error);
+                            }
+                        } catch (error) {
+                            console.error('Error updating quantity:', error);
+                        }
+                    });
+                });
+            });
+        </script> -->
     
     
     

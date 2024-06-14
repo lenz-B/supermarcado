@@ -119,8 +119,12 @@
                                                 </div>
                                                 <h2 class="product-title"><a href="/product-details?proId=<%=element._id %>"><%= element.name %></a></h2>
                                                 <div class="product-price">
-                                                    <span>$<%= element.promoPrice %></span>
-                                                    <del>$<%= element.price %></del>
+                                                    <% if (element.promoPrice > 0) { %>
+                                                      <span>$<%= element.promoPrice %></span>
+                                                      <del>$<%= element.price %></del>
+                                                    <% } else { %>
+                                                      <span>$<%= element.price %></span>
+                                                    <% } %>
                                                 </div>
                                             </div>
                                         </div>

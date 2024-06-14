@@ -8,14 +8,14 @@ const bodyParser = require('body-parser');
 const passport = require('./config/passport')
 
 
-connectDB.connect('mongodb://localhost:27017/eCom')
+connectDB.connect(process.env.MONGODB_URI)
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(noCache())
 app.use(session({
-  secret: 'myScecret',
+  secret: 'mySecret',
   resave: false,
   saveUninitialized: true
 }))
@@ -31,7 +31,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 const morgan = require('morgan')
-// app.use(morgan('dev'))
+app.use(morgan('dev'))
 
 require('dotenv').config()
 const {PORT} = process.env

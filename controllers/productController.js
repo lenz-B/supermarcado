@@ -1,7 +1,11 @@
 const categoryDB = require('../models/category');
 const productDB = require('../models/products');
+const offerDB = require('../models/offer')
 const { productSchema } = require('../models/joi');
 
+
+
+//______________________________________________functions________________________________________________________
 
 const getHeaderData = async () => {
   const categories = await categoryDB.find({ status: true }).lean();
@@ -15,6 +19,35 @@ const getHeaderData = async () => {
   return categoryData;
 };
 
+const updatePromoPrices = async (products) => {
+  try {
+    const updatedProducts = await Promise.all(products.map(async (product) => {
+      const activeOffers = product.offer.filter(offer => offer.status && new Date(offer.expiry_date) > new Date());
+      if (activeOffers.length > 0) {
+        const latestOffer = activeOffers[activeOffers.length - 1];
+        product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
+      } else {
+        product.promoPrice = 0;
+      }
+      await product.save();
+      return product;
+    }));
+    return updatedProducts;
+  } catch (error) {
+    throw new Error(`Error updating promo prices: ${error.message}`);
+  }
+};
+
+const updateAndCachePromoPrices = async (req, products) => {
+  const updatedProducts = await updatePromoPrices(products);
+  req.session.promoPrices = updatedProducts.reduce((acc, product) => {
+    acc[product._id] = product.promoPrice;
+    return acc;
+  }, {});
+  return updatedProducts;
+};
+
+//__________________________________________________admin side__________________________________________________
 
 // product list
 const products = async (req, res) => {
@@ -156,16 +189,23 @@ const updateProStatus = async (req, res) => {
   }
 }
 
-const shop = async (req, res) => {
+//_______________________________________________user side_____________________________________________________
+
+//user side product list
+async function shop(req, res) {
   try {
     const { user_id } = req.session;
-    const productData = await productDB.find({ status: true })
+    let productData = await productDB.find({ status: true }).populate('offer');
+
+    // Update promo prices
+    productData = await updateAndCachePromoPrices(req, productData);
+
     const categoryData = await getHeaderData();
 
-
-    res.render('user/shop', {user_id, productData, categoryData})
+    res.render('user/shop', { user_id, productData, categoryData });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error");
   }
 }
 
@@ -173,15 +213,30 @@ const shop = async (req, res) => {
 const productDetails = async (req, res) => {
   try {
     const { user_id } = req.session;
-    const productData = await productDB.findById(req.query.proId);
-    const categoryData = await getHeaderData();
-    const stockLeft = productData.stock < 5;
+    const productData = await productDB.findById(req.query.proId).populate('offer');
 
-    res.render('user/product-details', { user_id, productData, categoryData, stockLeft });
+    let promoPrice = req.session.promoPrices ? req.session.promoPrices[productData._id] : null;
+
+    if (promoPrice === null) {
+      const updatedProductData = await updateAndCachePromoPrices(req, [productData]);
+      promoPrice = updatedProductData[0].promoPrice;
+    } else {
+      productData.promoPrice = promoPrice;
+    }
+
+    const categoryData = await getHeaderData();
+    const stockLeft = productData.stock < 6;
+    const stockOut = productData.stock < 1;
+
+    res.render('user/product-details', { 
+      user_id, productData, categoryData, stockLeft, stockOut
+    });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error");
   }
 }
+
 
 
 module.exports = {products, addProduct,

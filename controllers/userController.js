@@ -12,6 +12,7 @@ const { joiRegSchema, addressValidationSchema} = require('../models/joi');
 const flash = require('flash');
 
 
+//__________________________________________________functions__________________________________________________
 
 const getHeaderData = async () => {
   const categories = await categoryDB.find({ status: true }).lean();
@@ -31,7 +32,7 @@ async function calculateCartTotals(userId, session) {
     const cart = await cartDB.findOne({ user_id: userId }).populate('products.product_id');
 
     if (!cart) {
-      throw new Error('Cart not found');
+      return  new Error('Cart not found');
     }
 
     let orderTotal = 0;
@@ -63,12 +64,47 @@ async function calculateCartTotals(userId, session) {
   }
 }
 
+const updatePromoPricesAndExtractDiscount = async (products) => {
+  try {
+    const updatedProducts = await Promise.all(products.map(async (product) => {
+      const activeOffers = product.offer.filter(offer => offer.status && new Date(offer.expiry_date) > new Date());
+      let discount = 0;
+      if (activeOffers.length > 0) {
+        const latestOffer = activeOffers[activeOffers.length - 1];
+        product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
+        discount = latestOffer.discount;
+      } else {
+        product.promoPrice = 0;
+      }
+      await product.save(); 
+      return { ...product.toObject(), discount }; 
+    }));
+    return updatedProducts;
+  } catch (error) {
+    throw new Error(`Error updating promo prices: ${error.message}`);
+  }
+};
 
+const updateAndCachePromoPrices = async (req, products) => {
+  const updatedProducts = await updatePromoPricesAndExtractDiscount(products);
+  req.session.promoPrices = updatedProducts.reduce((acc, product) => {
+    acc[product._id] = product.promoPrice;
+    return acc;
+  }, {});
+  return updatedProducts;
+};
+
+
+//__________________________________________________user side__________________________________________________
+
+//home page
 const home = async (req, res) => {
   try {
   
     const categories = await categoryDB.find({ status: true }).lean();
-    const products = await productDB.find({ status: true }).populate('category_id').lean();
+    let products = await productDB.find({ status: true }).populate('category_id offer')
+
+    products = await updateAndCachePromoPrices(req, products);
 
     const categoryData = categories.map(category => {
       return {
@@ -472,17 +508,18 @@ const myAccount = async (req, res) => {
     const categoryData = await getHeaderData();
     const addressData = await addressDB.findOne({user_id: user_id})
     const orderData = await orderDB.find({ user_id: user_id }).populate('orderedItems.product_id');
+    const cart = await cartDB.findOne({ user_id}).populate('products.product_id');
 
     if (!orderData) {
       console.log('Order data not found for user:', user_id);
     }
-
-    await calculateCartTotals(user_id, req.session);
-    // console.log(req.session.cartTotals);
-    const {orderTotal, subTotals} = req.session.cartTotals
-    // console.log('subtotals',subTotals);
-
     // console.log('address: ', addressData);
+
+    if (cart) {
+      await calculateCartTotals(user_id, req.session);
+    }
+
+    const { orderTotal, subTotals } = req.session.cartTotals || { orderTotal: 0, subTotals: [] };
 
     res.render('user/account', {user, user_id, categoryData,
       addressData, orderData, orderTotal, subTotals})

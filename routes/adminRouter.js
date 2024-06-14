@@ -30,13 +30,18 @@ router.post('/add-product', uploadPro.array('img', 4), productController.addingP
 router.get('/edit-product',adminAuthentication.logIn, productController.editProduct)
 router.post('/edit-product', uploadPro.array('img', 4), productController.editingProduct)
 
-router.get('/orders',adminAuthentication.logIn, orderController.orders )
-router.post('/update-order-status', orderController.updateOrderStatus);
+router.get('/orders',adminAuthentication.logIn, orderController.orders)
+router.post('/update-order-status', orderController.updateOrderStatus)
 router.get('/order-details', orderController.orderDetails)
 
 router.get('/coupons', adminAuthentication.logIn, couponController.coupons )
+router.post('/coupons/:id/toggle-status', couponController.updateCouponStatus)
 router.get('/add-coupon', adminAuthentication.logIn, couponController.addCoupon)
 router.post('/add-coupon', adminAuthentication.logIn, couponController.addingCoupon)
-router.post('/coupons/:id/toggle-status', couponController.updateCouponStatus)
 
-module.exports = router;
+router.get('/offers', couponController.offers)
+router.post('/offers/:id/toggle-status', couponController.updateOfferStatus)
+router.get('/add-offer', adminAuthentication.logIn, couponController.addOffer)
+router.post('/add-offer', couponController.addingOffer)
+
+module.exports = router

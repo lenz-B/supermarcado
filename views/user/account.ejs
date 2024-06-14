@@ -228,94 +228,101 @@
                                             <div class="ltn__myaccount-tab-content-inner">
                                                 <p>The following addresses will be used on the checkout page by default.</p>
                                                 <div class="row">
-                                                    <% for (var i = 0; i < addressData.user_address.length; i++) { %>
-                                                        <div class="col-md-6 col-12 learts-mb-30">
-                                                            <h4>
-                                                                <%= i === 0 ? "Billing Address" : "Shipping Address" %>
-                                                            </h4>
-                                                            <address>
-                                                                <p><strong><%= addressData.user_address[i].name %></strong></p>
-                                                                <p>
-                                                                    <%= addressData.user_address[i].address %> <br>
-                                                                    <%= addressData.user_address[i].city %>, <%= addressData.user_address[i].state %> <br>
-                                                                    PIN: <%= addressData.user_address[i].pin %>
-                                                                </p>
-                                                                <p>Email: <%= addressData.user_address[i].email %> <br>
-                                                                    Mobile: <%= addressData.user_address[i].mobile %></p>
-                                                            </address>
-                                                            <div class="btn-wrapper nav">
-                                                                <p>
-                                                                    <a data-bs-toggle="tab" href="#liton_tab_1_3_<%= i %>"><i class="fas fa-edit"></i> Edit</a>
-                                                                    <a href="#" onclick="deleteAddress('<%= i %>')"><i class="fas fa-trash"></i> Delete</a>
-                                                                </p>
+                                                    <% if (addressData && addressData.user_address && addressData.user_address.length > 0) { %>
+                                                        <% for (var i = 0; i < addressData.user_address.length; i++) { %>
+                                                            <div class="col-md-6 col-12 learts-mb-30">
+                                                                <h4>
+                                                                    <%= i === 0 ? "Billing Address" : "Shipping Address" %>
+                                                                </h4>
+                                                                <address>
+                                                                    <p><strong><%= addressData.user_address[i].name %></strong></p>
+                                                                    <p>
+                                                                        <%= addressData.user_address[i].address %> <br>
+                                                                        <%= addressData.user_address[i].city %>, <%= addressData.user_address[i].state %> <br>
+                                                                        PIN: <%= addressData.user_address[i].pin %>
+                                                                    </p>
+                                                                    <p>Email: <%= addressData.user_address[i].email %> <br>
+                                                                        Mobile: <%= addressData.user_address[i].mobile %></p>
+                                                                </address>
+                                                                <div class="btn-wrapper nav">
+                                                                    <p>
+                                                                        <a data-bs-toggle="tab" href="#liton_tab_1_3_<%= i %>"><i class="fas fa-edit"></i> Edit</a>
+                                                                        <a href="#" onclick="deleteAddress('<%= i %>')"><i class="fas fa-trash"></i> Delete</a>
+                                                                    </p>
+                                                                </div>
                                                             </div>
+                                                        <% } %>
+                                                    <% } else { %>
+                                                        <div class="col-12 learts-mb-30">
+                                                            <h4>Address Not Available</h4>
+                                                            <p>Please add an address.</p>
                                                         </div>
                                                     <% } %>
                                                 </div>
                                                 <a href="#" class="add-address" onclick="showAddressForm()"><i class="fas fa-plus"></i> Add Address</a>
                                             </div>
-                                        </div>
-                                        
-                                        <% for (var i = 0; i < addressData.user_address.length; i++) { %>
-                                            <div class="tab-pane fade" id="liton_tab_1_3_<%= i %>">
-                                                <div class="ltn__myaccount-tab-content-inner">
-                                                    <div class="ltn__form-box">
-                                                        <form id="userForm_<%= i %>" action="#">
-                                                            <div class="row mb-50">
-                                                                <div id="message-container"></div>
-                                                                <div class="col-md-6">
-                                                                    <label>Name:</label>
-                                                                    <input type="text" id="name_<%= i %>" name="name" value="<%= addressData.user_address[i].name %>" required>
-                                                                    <span class="error" id="nameError_<%= i %>">Name must be at least 3 letters and only alphabets.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>Email:</label>
-                                                                    <input type="email" id="email_<%= i %>" name="email" value="<%= addressData.user_address[i].email %>" required>
-                                                                    <span class="error" id="emailError_<%= i %>">Enter a valid email address.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>Mobile:</label>
-                                                                    <input type="text" id="mobile_<%= i %>" name="mobile" value="<%= addressData.user_address[i].mobile %>" required>
-                                                                    <span class="error" id="mobileError_<%= i %>">Enter a valid phone number.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>Address:</label>
-                                                                    <textarea id="address_<%= i %>" name="address" rows="4" required><%= addressData.user_address[i].address %></textarea>
-                                                                    <span class="error" id="addressError_<%= i %>">Enter a valid address.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>City:</label>
-                                                                    <input type="text" id="city_<%= i %>" name="city" value="<%= addressData.user_address[i].city %>" required>
-                                                                    <span class="error" id="cityError_<%= i %>">Enter a valid city.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>State:</label>
-                                                                    <input type="text" id="state_<%= i %>" name="state" value="<%= addressData.user_address[i].state %>" required>
-                                                                    <span class="error" id="stateError_<%= i %>">Enter a valid state.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <label>PIN:</label>
-                                                                    <input type="text" id="pin_<%= i %>" name="pin" value="<%= addressData.user_address[i].pin %>" required>
-                                                                    <span class="error" id="pinError_<%= i %>">Enter a valid PIN number.</span>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div style="display: flex; gap: 10px;">
-                                                                        <label><input type="radio" name="addressType_<%= i %>" value="is_home" id="isHome_<%= i %>" required> Home</label>
-                                                                        <label><input type="radio" name="addressType_<%= i %>" value="is_work" id="isWork_<%= i %>" required> Work</label>
+                                        </div>                                        
+                                        <% if (addressData && addressData.user_address && addressData.user_address.length > 0) { %>
+                                            <% for (var i = 0; i < addressData.user_address.length; i++) { %>
+                                                <div class="tab-pane fade" id="liton_tab_1_3_<%= i %>">
+                                                    <div class="ltn__myaccount-tab-content-inner">
+                                                        <div class="ltn__form-box">
+                                                            <form id="userForm_<%= i %>" action="#">
+                                                                <div class="row mb-50">
+                                                                    <div id="message-container"></div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Name:</label>
+                                                                        <input type="text" id="name_<%= i %>" name="name" value="<%= addressData.user_address[i].name %>" required>
+                                                                        <span class="error" id="nameError_<%= i %>">Name must be at least 3 letters and only alphabets.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Email:</label>
+                                                                        <input type="email" id="email_<%= i %>" name="email" value="<%= addressData.user_address[i].email %>" required>
+                                                                        <span class="error" id="emailError_<%= i %>">Enter a valid email address.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Mobile:</label>
+                                                                        <input type="text" id="mobile_<%= i %>" name="mobile" value="<%= addressData.user_address[i].mobile %>" required>
+                                                                        <span class="error" id="mobileError_<%= i %>">Enter a valid phone number.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>Address:</label>
+                                                                        <textarea id="address_<%= i %>" name="address" rows="4" required><%= addressData.user_address[i].address %></textarea>
+                                                                        <span class="error" id="addressError_<%= i %>">Enter a valid address.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>City:</label>
+                                                                        <input type="text" id="city_<%= i %>" name="city" value="<%= addressData.user_address[i].city %>" required>
+                                                                        <span class="error" id="cityError_<%= i %>">Enter a valid city.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>State:</label>
+                                                                        <input type="text" id="state_<%= i %>" name="state" value="<%= addressData.user_address[i].state %>" required>
+                                                                        <span class="error" id="stateError_<%= i %>">Enter a valid state.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label>PIN:</label>
+                                                                        <input type="text" id="pin_<%= i %>" name="pin" value="<%= addressData.user_address[i].pin %>" required>
+                                                                        <span class="error" id="pinError_<%= i %>">Enter a valid PIN number.</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div style="display: flex; gap: 10px;">
+                                                                            <label><input type="radio" name="addressType_<%= i %>" value="is_home" id="isHome_<%= i %>" required> Home</label>
+                                                                            <label><input type="radio" name="addressType_<%= i %>" value="is_work" id="isWork_<%= i %>" required> Work</label>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="btn-wrapper">
-                                                                <button type="submit" id="submitButton_<%= i %>" class="btn theme-btn-1 btn-effect-1 text-uppercase">Save Changes</button>
-                                                                <!-- Cancel button -->
-                                                                <a data-bs-toggle="tab" href="#liton_tab_1_4" class="btn theme-btn-1 btn-effect-1 text-uppercase nav">Cancel</a>
-                                                            </div>
-                                                        </form>
+                                                                <div class="btn-wrapper">
+                                                                    <button type="submit" id="submitButton_<%= i %>" class="btn theme-btn-1 btn-effect-1 text-uppercase">Save Changes</button>
+                                                                    <!-- Cancel button -->
+                                                                    <a data-bs-toggle="tab" href="#liton_tab_1_4" class="btn theme-btn-1 btn-effect-1 text-uppercase nav">Cancel</a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <% } %>
-                                        
+                                            <% } %>
+                                        <% } %>                           
                                         <div class="tab-pane fade" id="liton_tab_1_5">
                                             <div class="ltn__myaccount-tab-content-inner">
                                                 <p>The following addresses will be used on the checkout page by default.</p>

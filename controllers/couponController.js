@@ -1,4 +1,7 @@
 const couponDB = require('../models/coupon')
+const offerDB = require('../models/offer')
+const categoryDB = require('../models/category')
+const productDB = require('../models/products')
 
 //coupon list
 const coupons = async (req, res) => {
@@ -119,7 +122,102 @@ const applyCoupon = async (req, res) => {
   }
 }
 
-module.exports = { coupons, addCoupon, 
-  addingCoupon, updateCouponStatus, applyCoupon
+//remove coupon
+const removeCoupon = async (req, res) => {
+  try {
+    console.log('remove coupon');
 
+    const totalAmount = req.session.totalAmount || 0;
+    
+    req.session.discountedAmount = 0;
+    
+    res.json({ status: true, message: 'Coupon discount removed successfully', totalAmount });
+  } catch (error) {
+    console.error('Error removing coupon discount:', error);
+    res.status(500).json({ status: false, message: 'Server error' });
+  }
+};
+
+// --------------------------------------------  offers  --------------------------------------------
+
+//offer list
+const offers = async (req, res) => {
+  try {
+    const offerData = await offerDB.find();
+    res.render('admin/offers', { offerData });
+  } catch (error) {
+    console.error('Error fetching offers:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+//offer page
+const addOffer = async (req, res) => {
+  try {
+    const categoryData = await categoryDB.find({status: true})
+    const productData = await productDB.find({status: true})
+
+    res.render('admin/add-offer', { categories: categoryData, products: productData });
+  } catch (error) {
+    res.status(500).send({ message: 'Error fetching categories and products' });
+  }
+};
+
+//creating offer
+const addingOffer = async (req, res) => {
+  try {
+    console.log('Received offer data:', req.body);
+    const {name, offer_type, category_name, product_name, discount, max_redeemable_amount, expiry_date} = req.body
+
+    const categoryData = await categoryDB.find({status: true})
+    const productData = await productDB.find({status: true})
+
+    let newOffer = new offerDB({
+      name, offer_type, discount, max_redeemable_amount, expiry_date
+    })
+
+    if (offer_type ==='Product') {
+      console.log('product anu kettaa');
+      newOffer.product_name = product_name
+      await newOffer.save()
+      const offer_id = newOffer._id
+      await productDB.findOneAndUpdate(
+        { name: product_name }, 
+        { $push: { offer: offer_id } },
+        { upsert: true, returnOriginal: false }
+      );
+    } else if (offer_type === 'Category') {
+      console.log('cate anuuuu');
+      newOffer.category_name = category_name
+      await newOffer.save()
+      const offer_id = newOffer._id
+      const product = await productDB.updateMany({ category_id: category_name }, { $push: { offer: offer_id } })
+    }
+
+    res.status(200).json({ status: true, message: 'Offer added successfully' });
+  } catch (error) {
+    console.error('Error adding offer:', error);
+    res.status(500).json({ status: false, message: 'Error adding offer' });
+  }
+}
+
+//update status
+const updateOfferStatus = async (req, res) => {
+  try {
+    const offer = await offerDB.findById(req.params.id);
+    if (offer) {
+      offer.status = !offer.status;
+      await offer.save();
+    }
+    res.redirect('/admin/offers');
+  } catch (error) {
+    console.error('Error toggling offer status:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+module.exports = { coupons, addCoupon, 
+  addingCoupon, updateCouponStatus, applyCoupon,
+  removeCoupon, offers, addOffer, addingOffer, 
+  updateOfferStatus,
 }

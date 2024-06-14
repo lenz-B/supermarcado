@@ -39,6 +39,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    <!-- apply coupon -->
                     <div class="ltn__checkout-inner">
                         <!-- <div class="ltn__checkout-single-content ltn__returning-customer-wrap">
                             <h5>Returning customer? <a class="ltn__secondary-color" href="#ltn__returning-customer-login" data-bs-toggle="collapse">Click here to login</a></h5>
@@ -74,6 +75,7 @@
                                         <input type="text" id="coupon-code" name="coupon-code" placeholder="Coupon code">
                                         <input type="hidden" id="order-total" name="order-total" value="<%= orderTotal %>">
                                         <button id="applyCouponBtn" class="btn theme-btn-2 btn-effect-2 text-uppercase">Apply Coupon</button>
+                                        <button id="removeCouponBtn" class="btn theme-btn-2 btn-effect-2 text-uppercase">Remove Coupon</button>
                                     </form>
                                 </div>
                             </div>
@@ -86,6 +88,7 @@
                                 </label>
                                 <span class="error-message" id="agreeError"></span>
                             </p>
+                            <!-- address list  -->
                             <div id="addressCardsContainer" style="display: none">
                                 <div class="row">
                                     <% for (var i = 0; i < addressData.user_address.length; i++) { %>
@@ -275,7 +278,7 @@
                                     <% cartData.products.forEach(cart => { %>
                                         <tr>
                                             <td><%= cart.product_id.name %> <strong>× <%= cart.quantity %></strong></td>
-                                            <td>$<%= cart.product_id.price * cart.quantity %></td>
+                                            <td>$<%= cart.product_id.promoPrice && cart.product_id.promoPrice > 0 ? cart.product_id.promoPrice * cart.quantity : cart.product_id.price * cart.quantity %></td>
                                         </tr>
                                     <% }); %>
                                 <% } %>
@@ -601,10 +604,11 @@
                             order_id: data.razorpay_id, // Razorpay order ID
                             handler: async function (response) {
                                 // Ensure response has the necessary fields
-                                if (!response.razorpay_payment_id || !response.razorpay_order_id || !response.razorpay_signature) {
-                                alert('Missing necessary payment response fields.');
-                                return;
-                                }
+                                // if (!response.razorpay_payment_id || !response.razorpay_order_id || !response.razorpay_signature) {
+                                // alert('Missing necessary payment response fields.');
+                                // return;
+                                // } 
+                                alert('success')
 
                                 // Handle successful payment
                                 const captureResponse = await fetch('/capture-payment', {
@@ -616,6 +620,7 @@
                                     razorpay_payment_id: response.razorpay_payment_id,
                                     razorpay_order_id: response.razorpay_order_id,
                                     razorpay_signature: response.razorpay_signature,
+                                    placed_order_id: data.order_id
                                 }),
                                 });
 
@@ -810,9 +815,62 @@
                 console.error('Error applying coupon:', error);
             });
         });
+    </script>
+    <!-- remove coupon  -->
+    <script>
+        document.getElementById("removeCouponBtn").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    fetch('/remove-coupon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to remove coupon');
+        }
+    })
+    .then(data => {
+        if (data.status) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Coupon Removed',
+                text: data.message,
+                confirmButtonColor: '#9fb500' // green
+            });
+
+            // Update discount and total after discount in the HTML
+            document.getElementById('discount-amount').innerText = '$0.00';
+            document.getElementById('total-after-discount').innerText = '$' + data.totalAmount.toFixed(2);
+
+            // Hide discount and total after discount rows
+            document.getElementById('discount-row').style.display = 'none';
+            document.getElementById('total-after-discount-row').style.display = 'none';
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Coupon Removal Failed',
+                text: data.message,
+                confirmButtonColor: '#9fb500' // green
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'There was an error removing the coupon. Please try again later.',
+            confirmButtonColor: '#9fb500' // green
+        });
+        console.error('Error removing coupon:', error);
+    });
+});
 
     </script>
-
     
 </body>
 

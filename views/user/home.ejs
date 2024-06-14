@@ -888,7 +888,9 @@
                                                         <% if (product.promoPrice) { %>
                                                             <div class="product-badge">
                                                                 <ul>
-                                                                    <li class="sale-badge">-<%= product.promoPrice %>%</li>
+                                                                    <% if (product.discount > 0) { %>
+                                                                        <li class="sale-badge">-<%= product.discount %>%</li>
+                                                                    <% } %>
                                                                 </ul>
                                                             </div>
                                                         <% } %>
@@ -917,11 +919,11 @@
                                                             <a href="/product-details?proId=<%=product._id %>"><%= product.name %></a>
                                                         </h2>
                                                         <div class="product-price">
-                                                            <% if (product.promoPrice) { %>
-                                                                <span>$<%= product.promoPrice %>.00</span>
-                                                            <% } %>
-                                                            <% if (product.price) { %>
-                                                                <del>$<%= product.price %>.00</del>
+                                                            <% if (product.promoPrice > 0) { %>
+                                                              <span>$<%= product.promoPrice %></span>
+                                                              <del>$<%= product.price %></del>
+                                                            <% } else { %>
+                                                              <span>$<%= product.price %></span>
                                                             <% } %>
                                                         </div>
                                                     </div>

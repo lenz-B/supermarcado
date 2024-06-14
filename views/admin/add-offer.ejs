@@ -1,0 +1,197 @@
+<!-- header -->
+<%- include('../layout/adminHeadder.ejs') %>
+
+<section class="content-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Offer</h2>
+                    <div>
+                        <button class="btn btn-md rounded font-sm hover-up" id="addOffer">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Offer Title</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="name" name="name" required />
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="offer_type" class="form-label">Offer Type</label>
+                                <select class="form-select" id="offer_type" name="offer_type">
+                                    <option value="">Select</option>
+                                    <option value="Category">Category</option>
+                                    <option value="Product">Product</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8 mb-6" id="category_container">
+                                <label for="category_name" class="form-label">Category</label>
+                                <select class="form-select" id="category_name" name="category_name">
+                                    <option value="">Select</option>
+                                    <% categories.forEach(category => { %>
+                                        <option value="<%= category._id %>"><%= category.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="col-md-8 mb-6" id="product_container">
+                                <label for="product_name" class="form-label">Product</label>
+                                <select class="form-select" id="product_name" name="product_name">
+                                    <option value="">Select</option>
+                                    <% products.forEach(product => { %>
+                                        <option value="<%= product.name %>"><%= product.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="discount" class="form-label">Discount</label>
+                            <input type="number" placeholder="Type here" class="form-control" id="discount" name="discount" min="1" max="99"/>
+                        </div>
+                        <div class="md-4 mb-3">
+                            <label for="max_redeemable_amount" class="form-label">Max Amount</label>
+                            <input type="number" placeholder="Max Redeemable Amount" class="form-control" id="max_redeemable_amount" name="max_redeemable_amount" min="1"/>
+                        </div>
+                        <div class="mb-4">
+                            <label for="expiry_date" class="form-label">Expiry Date</label>
+                            <input type="date" placeholder="Type here" class="form-control" id="expiry_date" name="expiry_date"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- card end// -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- offer type  -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const offerTypeSelect = document.getElementById("offer_type");
+        const categorySelect = document.getElementById("category_container");
+        const productSelect = document.getElementById("product_container");
+
+        offerTypeSelect.addEventListener("change", function () {
+            const selectedValue = offerTypeSelect.value;
+            if (selectedValue === "Category") {
+                categorySelect.style.display = "block";
+                productSelect.style.display = "none";
+            } else if (selectedValue === "Product") {
+                categorySelect.style.display = "none";
+                productSelect.style.display = "block";
+            } else {
+                categorySelect.style.display = "none";
+                productSelect.style.display = "none";
+            }
+        });
+
+        offerTypeSelect.dispatchEvent(new Event("change"));
+    });
+</script>
+
+<!-- validation and submit -->
+<script>
+    document.getElementById('addOffer').addEventListener('click', function() {
+        // Get input values
+        var name = document.getElementById('name').value;
+        var offer_type = document.getElementById('offer_type').value;
+        var category_name = document.getElementById('category_name').value;
+        var product_name = document.getElementById('product_name').value;
+        var discount = document.getElementById('discount').value;
+        var max_redeemable_amount = document.getElementById('max_redeemable_amount').value;
+        var expiry_date = new Date(document.getElementById('expiry_date').value);
+
+        if (name.trim() === '') {
+            alert('Please enter offer title');
+            return false;
+        }
+        if (offer_type === '') {
+            alert('Please select offer type');
+            return false;
+        }
+        if (expiry_date <= new Date()) {
+            alert('Expiry date should be at least one day from the current date');
+            return false;
+        }
+
+        if (offer_type === 'Category' && category_name === '') {
+            alert('Please select a category');
+            return false;
+        }
+        if (offer_type === 'Product' && product_name === '') {
+            alert('Please select a product');
+            return false;
+        }
+
+        if (discount < 1 || discount > 99) {
+            alert('Enter the discount');
+            return false;
+        }
+        if (max_redeemable_amount < 1) {
+            alert('Enter the max redeemable amount');
+            return false;
+        }
+
+        var data = {
+            name: name,
+            offer_type: offer_type,
+            category_name: category_name,
+            product_name: product_name,
+            discount: discount,
+            max_redeemable_amount: max_redeemable_amount,
+            expiry_date: expiry_date.toISOString() 
+        };
+
+        fetch('/admin/add-offer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status) {
+                showMessage('Coupon added successfully!', true);
+                setTimeout(() => {
+                    window.location.href = '/admin/offers';
+                }, 3000);
+            } else {
+                showMessage(data.message, false);
+            }
+        })
+        .catch(error => {
+            showMessage('An error occurred: ' + error.message, false);
+        });
+    });
+
+    function showMessage(message, isSuccess) {
+        Swal.fire({
+            icon: isSuccess ? 'success' : 'error',
+            title: isSuccess ? 'Success' : 'Error',
+            text: message,
+            confirmButtonColor: '#28a745' // green
+        });
+    }
+</script>
+
+
+
+
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

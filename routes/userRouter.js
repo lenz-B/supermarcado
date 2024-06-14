@@ -55,5 +55,7 @@ router.post('/capture-payment', orderController.captureRazorpayPayment);
 router.post('/webhook', orderController.razorpayWebhook);
 
 router.post('/apply-coupon', couponController.applyCoupon)
+router.post('/remove-coupon', couponController.removeCoupon);
+
 
 module.exports = router;

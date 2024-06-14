@@ -1,0 +1,165 @@
+<%- include('../layout/adminHeadder.ejs') %>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.card-product-grid {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #fff;
+    margin-bottom: 20px;
+    height: 97%; /* same height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header {
+    background-color: #3bb77e;
+    color: #fff;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #fff; 
+}
+
+.info-wrap {
+    padding: 15px;
+    flex-grow: 1; 
+}
+
+.info-wrap p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.btn-brand {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-brand:hover {
+    background-color: #0056b3;
+}
+
+.btn-brand.active {
+    background-color: #28a745;
+}
+
+.btn-brand.inactive {
+    background-color: #dc3545;
+}
+
+.btn-brand.active:hover {
+    background-color: #218838;
+}
+
+.btn-brand.inactive:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+    .card-product-grid {
+        margin-bottom: 15px;
+    }
+
+    .info-wrap {
+        padding: 10px;
+    }
+
+    .card-header {
+        padding: 8px 10px;
+    }
+
+    .card-header h4 {
+        font-size: 1.1rem;
+    }
+}
+</style>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Offers</h2>
+        </div>
+        <div>
+            <a href="/admin/add-offer" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+    <header class="card card-body mb-4">
+        <div class="row gx-3">
+            <div class="col-lg-4 col-md-6 me-auto">
+                <input type="text" placeholder="Search..." class="form-control" />
+            </div>
+        </div>
+    </header>
+    <!-- card-header end// -->
+    <div class="row">
+        <% offerData.forEach(function(offer) { %>
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card card-product-grid">
+                    <div class="card-header">
+                        <h4>
+                            <%= offer.name %>
+                        </h4>
+                    </div>
+                    <div class="info-wrap">
+                        <p>Type: <%= offer.offer_type %></p>
+                        <% if (offer.product_name) { %>
+                            <p>Product: <%= offer.product_name %></p>
+                        <% } else if (offer.category_name) { %>
+                            <p>Category: <%= offer.category_name %></p>
+                        <% } %>
+                        <p>Discount: <%= offer.discount %>%</p>
+                        <p>Expiry Date: <%= new Date(offer.expiry_date).toLocaleDateString() %></p>
+                        <p>Max Redeemable: $<%= offer.max_redeemable_amount %></p>
+                    </div>
+                    <div class="card-footer">
+                        <form action="/admin/offers/<%= offer._id %>/toggle-status" method="POST">
+                            <button type="submit" class="btn btn-sm btn-brand mt-2 <%= offer.status ? 'active' : 'inactive' %>">
+                                <%= offer.status ? 'Deactivate' : 'Activate' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <!-- card-product end// -->
+            </div>
+            <!-- col.// -->
+        <% }); %>        
+    </div>
+    <!-- row.// -->
+    <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<!-- content-main end// -->
+<!-- footer -->
+<%- include('../layout/adminFooter.ejs') %>

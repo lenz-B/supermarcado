@@ -65,26 +65,38 @@
                                     </div>
                                     <h3><%= productData.name %></h3>
                                     <div class="product-price">
-                                        <span>$<%= productData.promoPrice %></span>
-                                        <del>$<%= productData.price %></del>
+                                        <% if (productData.promoPrice > 0) { %>
+                                          <span>$<%= productData.promoPrice %></span>
+                                          <del>$<%= productData.price %></del>
+                                        <% } else { %>
+                                          <span>$<%= productData.price %></span>
+                                        <% } %>
                                     </div>
+                                    <% const latestOffer = productData.offer.reduce((latest, offer) => {
+                                        if (offer.status && new Date(offer.expiry_date) > new Date()) {
+                                            return (!latest || new Date(offer.expiry_date) > new Date(latest.expiry_date)) ? offer : latest;
+                                        }
+                                        return latest;
+                                    }, null); %>
+                                    
+                                    <% if (latestOffer) { %>
+                                      <div class="offer-details">
+                                        <p>Latest Offer!</p>
+                                        <h3><%= latestOffer.name %> - <%= latestOffer.discount %>% off</h4>
+                                      </div>
+                                    <% } %>
                                     <div class="modal-product-meta ltn__product-details-menu-1">
                                         <ul>
                                             <li>
-                                                <% if (stockLeft) { %>
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Only <%= productData.stock %> products left! 
-                                                        
+                                                <% if (stockOut) { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Out of stock!
                                                     </div>
-                                                <% } %>
-                                                
-                                                <!-- <strong>Categories:</strong> 
-                                                <span>
-                                                    <a href="#">Parts</a>
-                                                    <a href="#">Car</a>
-                                                    <a href="#">Seat</a>
-                                                    <a href="#">Cover</a>
-                                                </span> -->
+                                                <% } else if (stockLeft) { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Only <%= productData.stock %> products left!
+                                                    </div>
+                                                <% } %>                                                
                                             </li>
                                         </ul>
                                     </div>
@@ -1118,7 +1130,7 @@
                 });
             });
         });
-        </script>
+    </script>
      
   
         

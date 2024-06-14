@@ -4,6 +4,8 @@ const productDB = require('../models/products');
 const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
 const orderDB = require('../models/orders')
+const offerDB = require('../models/offer')
+const razorpayController = require('./razorpayController')
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
 const {addressValidationSchema} = require('../models/joi');
@@ -17,6 +19,8 @@ var razorpayInstance = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY
 });
 
+//__________________________________________________function__________________________________________________
+
 //category data
 const getHeaderData = async () => {
   const categories = await categoryDB.find({ status: true }).lean();
@@ -28,6 +32,34 @@ const getHeaderData = async () => {
   }));
 
   return categoryData;
+};
+
+const updatePromoPrices = async (products) => {
+  try {
+    const updatedProducts = await Promise.all(products.map(async (product) => {
+      const activeOffers = product.offer.filter(offer => offer.status && new Date(offer.expiry_date) > new Date());
+      if (activeOffers.length > 0) {
+        const latestOffer = activeOffers[activeOffers.length - 1];
+        product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
+      } else {
+        product.promoPrice = 0;
+      }
+      await product.save();
+      return product;
+    }));
+    return updatedProducts;
+  } catch (error) {
+    throw new Error(`Error updating promo prices: ${error.message}`);
+  }
+};
+
+const updateAndCachePromoPrices = async (req, products) => {
+  const updatedProducts = await updatePromoPrices(products);
+  req.session.promoPrices = updatedProducts.reduce((acc, product) => {
+    acc[product._id] = product.promoPrice;
+    return acc;
+  }, {});
+  return updatedProducts;
 };
 
 //calculation
@@ -43,11 +75,24 @@ async function calculateCartTotals(userId, session) {
     const shipping = 15;
     const vat = 0;
 
-    cart.products.forEach(product => {
-      const subTotal = product.product_id.price * product.quantity;
+    for (const product of cart.products) {
+      let promoPrice = product.product_id.price; // Default to regular price
+
+      // Check if there are any offers associated with the product
+      if (product.product_id.offer.length > 0) {
+        const lastOfferId = product.product_id.offer[product.product_id.offer.length - 1];
+        const offer = await offerDB.findById(lastOfferId);
+
+        if (offer) {
+          // Calculate promoPrice based on offer's discount
+          promoPrice = product.product_id.price - (product.product_id.price * offer.discount) / 100;
+        }
+      }
+
+      const subTotal = promoPrice * product.quantity;
       product.subTotal = subTotal;
       orderTotal += subTotal;
-    });
+    }
 
     orderTotal += shipping + vat;
 
@@ -55,11 +100,11 @@ async function calculateCartTotals(userId, session) {
       subTotals: cart.products.map(product => ({
         productId: product.product_id._id,
         subTotal: product.subTotal,
-        quantity: product.quantity 
+        quantity: product.quantity,
       })),
       orderTotal: orderTotal,
       shipping: shipping,
-      vat: vat
+      vat: vat,
     };
 
     console.log('Cart totals calculated and stored in session:', session.cartTotals);
@@ -67,6 +112,9 @@ async function calculateCartTotals(userId, session) {
     console.error('Error calculating cart totals:', error);
   }
 }
+
+
+//__________________________________________________user side__________________________________________________
 
 //rendering the checkout page
 const checkoutPage = async (req, res) => {
@@ -255,25 +303,25 @@ const placeOrder = async (req, res) => {
     });
         
     await newOrder.save();
+    console.log('12121: ', newOrder.totalAmount);
     console.log('Order placed successfully');
 
     if (paymentMethod == 'Razorpay') {
       console.log('razorkk ethii');
-      const razorpayOrder = razorpayInstance.orders.create({
-        amount: orderTotal * 100,
-        currency: 'INR',
-        receipt: `receipt_order_${newOrder._id}`,
-        payment_capture: '1'
+      const razorDataRes = await razorpayController.createOrder_id({
+        "amount": newOrder.totalAmount * 100,
+        "currency": "INR"
       })
-      newOrder.razorpay_id = razorpayOrder.id
-      await newOrder.save()
+  
+      const razorData = await razorDataRes.json()
+      // await newOrder.save()
 
       //res
       return res.json({
         status: true, 
         message: 'Razorpay order created and ready for payment.',
         order_id: newOrder._id,
-        razorpay_id: razorpayOrder.id,
+        razorpay_id: razorData.id,
         amount: newOrder.totalAmount * 100,
         key_id: process.env.RAZORPAY_ID_KEY
       })
@@ -296,15 +344,19 @@ const placeOrder = async (req, res) => {
 //razorpay
 const captureRazorpayPayment = async (req, res) => {
   try {
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, placed_order_id } = req.body;
     const { user_id } = req.session;
+    console.log('Razorpay signature:', razorpay_signature);
+    console.log('Order ID:', razorpay_order_id);
+    console.log('Payment ID:', razorpay_payment_id);
+    console.log('asdfasdf: ', placed_order_id )
 
     if (!user_id) {
       return res.status(401).json({ status: false, message: 'Unauthorized' });
     }
 
     // Fetch the order
-    const order = await orderDB.findOne({ razorpay_id: razorpay_order_id });
+    const order = await orderDB.findOne({ _id: placed_order_id });
 
     if (!order) {
       return res.status(404).json({ status: false, message: 'Order not found' });
@@ -321,7 +373,7 @@ const captureRazorpayPayment = async (req, res) => {
       console.log('Order ID:', razorpay_order_id);
       console.log('Payment ID:', razorpay_payment_id);
       return res.status(400).json({ status: false, message: 'Invalid payment signature' });
-    }
+    } 
 
     // If verification is successful, mark payment as completed
     order.payment = order.totalAmount;
