@@ -53,6 +53,7 @@ router.post('/add-order', orderController.addOrder)
 router.post('/cancel-order', orderController.cancelOrder)
 router.post('/capture-payment', orderController.captureRazorpayPayment);
 router.post('/webhook', orderController.razorpayWebhook);
+router.get('/wallet', userAuthantication.login, orderController.walletPage)
 
 router.post('/apply-coupon', couponController.applyCoupon)
 router.post('/remove-coupon', couponController.removeCoupon);

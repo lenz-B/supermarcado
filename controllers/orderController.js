@@ -5,6 +5,7 @@ const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
 const orderDB = require('../models/orders')
 const offerDB = require('../models/offer')
+const walletDB = require('../models/wallet')
 const razorpayController = require('./razorpayController')
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
@@ -129,6 +130,12 @@ const checkoutPage = async (req, res) => {
     // console.log(cartData);
     // console.log(addressData);
 
+    if (!cartData) {
+      console.log('ayyoo cart illaaa........');
+      const userWithoutCart = true
+      res.render('user/checkout', {user, user_id, categoryData, 
+        addressData, userWithoutCart})
+    }
     await calculateCartTotals(user_id, req.session);
     console.log(req.session.cartTotals);
     const {orderTotal, subTotals} = req.session.cartTotals
@@ -235,15 +242,22 @@ const placeOrder = async (req, res) => {
     console.log('req.body:', req.body);
 
     const { user_id } = req.session;
+    const cart = await cartDB.findOne({user_id})
     const { addressIndex, paymentMethod } = req.body;
+
+    if (!cart.products || cart.products.length === 0) {
+      console.log('ullil ethiii');
+      return res.status(400).json({ status: false, message: 'Please select a product' });
+    }
 
     console.log('address index ind: ', addressIndex, ' , payment method ind: ', paymentMethod);
 
     if (addressIndex === undefined || addressIndex === '') {
-      return res.status(400).json({ status: false, message: 'No address selected' });
+      return res.status(400).json({ status: false, message: 'Please select a address' });
     }
 
     const userAddresses = await addressDB.findOne({ user_id: user_id });
+    const wallet = await walletDB.findOneAndUpdate({ user_id: user_id }, { $setOnInsert: { user_id: user_id } }, { new: true, upsert: true })
 
     if (!userAddresses || !userAddresses.user_address[addressIndex]) {
       return res.status(400).json({ status: false, message: 'Invalid address selected' });
@@ -284,7 +298,11 @@ const placeOrder = async (req, res) => {
       total_amount = orderTotal;
       console.log('total: ', total_amount);
     }
-    console.log('fianal total', total_amount);
+    console.log('final total', total_amount);
+
+    if (paymentMethod === 'Wallet' && wallet.wallet_amount < total_amount) {
+      return res.status(403).json({ message: "Uh-oh, your wallet's on a diet!" });
+    }
     
     const newOrder = new orderDB({
       user_id,
@@ -307,14 +325,13 @@ const placeOrder = async (req, res) => {
     console.log('Order placed successfully');
 
     if (paymentMethod == 'Razorpay') {
-      console.log('razorkk ethii');
+      console.log('razork ethii');
       const razorDataRes = await razorpayController.createOrder_id({
         "amount": newOrder.totalAmount * 100,
         "currency": "INR"
       })
   
       const razorData = await razorDataRes.json()
-      // await newOrder.save()
 
       //res
       return res.json({
@@ -328,13 +345,28 @@ const placeOrder = async (req, res) => {
     } else {
       newOrder.orderStatus = "Processing"
       await newOrder.save()
+
+      // wallet changes >>
+      if (paymentMethod === 'Wallet') {
+        await walletDB.findOneAndUpdate(
+        { user_id: user_id },
+        {
+          $inc: { wallet_amount: - newOrder.totalAmount },
+          $push: {
+            transaction_history: {
+              amount: newOrder.totalAmount,
+              Payment_type: "Debit",
+              date: new Date()
+            }
+          }
+        },
+        { new: true, upsert: true })
+      }
+
+      delete req.session.discountedAmount;
+      await cartDB.updateOne({ user_id: user_id }, { products: [] });
+      return res.json({ status: true, message: 'Order placed successfully' });
     }
-
-    delete req.session.discountedAmount
-
-    await cartDB.updateOne({ user_id: user_id }, { products: [] });
-    
-    return res.json({ status: true, message: 'Order placed successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: 'Order placement failed' });
@@ -349,20 +381,18 @@ const captureRazorpayPayment = async (req, res) => {
     console.log('Razorpay signature:', razorpay_signature);
     console.log('Order ID:', razorpay_order_id);
     console.log('Payment ID:', razorpay_payment_id);
-    console.log('asdfasdf: ', placed_order_id )
+    console.log('User ID: ', placed_order_id )
 
     if (!user_id) {
       return res.status(401).json({ status: false, message: 'Unauthorized' });
     }
 
-    // Fetch the order
     const order = await orderDB.findOne({ _id: placed_order_id });
 
     if (!order) {
       return res.status(404).json({ status: false, message: 'Order not found' });
     }
 
-    // Verify the payment signature
     const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest('hex');
@@ -375,10 +405,11 @@ const captureRazorpayPayment = async (req, res) => {
       return res.status(400).json({ status: false, message: 'Invalid payment signature' });
     } 
 
-    // If verification is successful, mark payment as completed
     order.payment = order.totalAmount;
     order.orderStatus = 'Processing';
     await order.save();
+    delete req.session.discountedAmount;
+    await cartDB.updateOne({ user_id: user_id }, { products: [] });
 
     return res.json({ status: true, message: 'Payment verified and order updated' });
   } catch (error) {
@@ -397,14 +428,12 @@ const razorpayWebhook = async (req, res) => {
 
   if (digest === req.headers['x-razorpay-signature']) {
     try {
-      // Handle the event
       const event = req.body.event;
       const payload = req.body.payload;
 
       switch (event) {
         case 'payment.captured':
           const payment = payload.payment.entity;
-          // Update the order status here
           const order = await orderDB.findOne({ razorpay_id: payment.order_id });
 
           if (order) {
@@ -413,7 +442,6 @@ const razorpayWebhook = async (req, res) => {
             await order.save();
           }
           break;
-        // Handle other events if necessary
         default:
           break;
       }
@@ -438,7 +466,38 @@ const cancelOrder = async (req, res) => {
       return res.status(404).send('Order not found');
     }
 
-    order.orderStatus = 'Cancelled';
+    if (order.paymentMethod === 'wallet' || order.paymentMethod === 'razorpay') {
+
+      order.orderStatus = 'Cancelled';
+      
+      for (const item of order.orderedItems) {
+        const product = await productDB.findById(item.product_id);
+        if (product) {
+          product.stock += item.quantity; 
+          await product.save();
+        }
+      }
+
+      let wallet = await walletDB.findOne({ user_id: order.user_id });
+
+      if (!wallet) {
+        wallet = await walletDB.create({ user_id: order.user_id });
+      }
+
+      wallet.wallet_amount += order.totalAmount;
+      await wallet.save();
+    } else {
+      order.orderStatus = 'Cancelled';
+
+      for (const item of order.orderedItems) {
+        const product = await productDB.findById(item.product_id);
+        if (product) {
+          product.stock += item.quantity; 
+          await product.save();
+        }
+      }
+    }
+
     await order.save();
 
     res.send({ success: true });
@@ -447,6 +506,7 @@ const cancelOrder = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 }
+
 
 
 //admin orders
@@ -539,9 +599,23 @@ const orderDetails = async (req, res) => {
 };
 
 
+//wallet page
+const walletPage = async (req, res) => {
+  try {
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+    const walletData = await walletDB.findOne({ user_id }).populate('user_id');
+
+    res.render('user/wallet', {user_id, categoryData, walletData})
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+}
+
 
 
 module.exports = { checkoutPage, addOrder, placeOrder,
   captureRazorpayPayment, razorpayWebhook, cancelOrder,
-  orders, updateOrderStatus, orderDetails, 
+  orders, updateOrderStatus, orderDetails, walletPage,
 }

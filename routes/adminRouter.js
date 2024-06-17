@@ -10,6 +10,7 @@ const uploadCat = require('../middlewares/multer')
 const uploadPro = require('../middlewares/productMulter')
 
 router.get('/',adminAuthentication.logIn, adminController.adminDash)
+router.post('/', adminController.salesFilter)
 router.get('/login',adminAuthentication.logOut, adminController.login)
 router.post('/login', adminController.logingin)
 router.delete('/logout', adminController.logout)

@@ -31,7 +31,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 const morgan = require('morgan')
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 
 require('dotenv').config()
 const {PORT} = process.env

@@ -15,11 +15,13 @@
         <div class="col-lg-3">
             <div class="card card-body mb-4">
                 <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                        <i class="text-primary material-icons md-monetization_on"></i>
+                    </span>
                     <div class="text">
                         <h6 class="mb-1 card-title">Revenue</h6>
-                        <span>$13,456.5</span>
-                        <span class="text-sm"> Shipping fees are not included </span>
+                        <span>$<%= overallOrderAmount.toFixed(2) %></span>
+                        <span class="text-sm"> Shipping fees are included </span>
                     </div>
                 </article>
             </div>
@@ -27,10 +29,12 @@
         <div class="col-lg-3">
             <div class="card card-body mb-4">
                 <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                    <span class="icon icon-sm rounded-circle bg-success-light">
+                        <i class="text-success material-icons md-local_shipping"></i>
+                    </span>
                     <div class="text">
                         <h6 class="mb-1 card-title">Orders</h6>
-                        <span>53.668</span>
+                        <span><%= overallSalesCount %></span>
                         <span class="text-sm"> Excluding orders in transit </span>
                     </div>
                 </article>
@@ -51,10 +55,12 @@
         <div class="col-lg-3">
             <div class="card card-body mb-4">
                 <article class="icontext">
-                    <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
+                    <span class="icon icon-sm rounded-circle bg-info-light">
+                        <i class="text-info material-icons md-shopping_basket"></i>
+                    </span>
                     <div class="text">
                         <h6 class="mb-1 card-title">Monthly Earning</h6>
-                        <span>$6,982</span>
+                        <span>$<%= monthlyEarnings.toFixed(2) %></span>
                         <span class="text-sm"> Based in your local time. </span>
                     </div>
                 </article>
@@ -87,7 +93,7 @@
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <div class="d-flex align-items-center">
-                                        <img src="assets/imgs/people/avatar-2.png" alt="" class="avatar" />
+                                        <img src="" alt="" class="avatar" />
                                         <div>
                                             <h6>Dilan Specter</h6>
                                             <p class="text-muted font-xs">Sanfrancisco</p>
@@ -221,182 +227,86 @@
     </div>
     <div class="card mb-4">
         <header class="card-header">
-            <h4 class="card-title">Latest orders</h4>
+            <h4 class="card-title">Sales Report</h4>
+            <button id="filterButton">Apply Filter</button>
             <div class="row align-items-center">
                 <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                     <div class="custom_select">
-                        <select class="form-select select-nice">
-                            <option selected>All Categories</option>
-                            <option>Women's Clothing</option>
-                            <option>Men's Clothing</option>
-                            <option>Cellphones</option>
-                            <option>Computer & Office</option>
-                            <option>Consumer Electronics</option>
-                            <option>Jewelry & Accessories</option>
-                            <option>Home & Garden</option>
-                            <option>Luggage & Bags</option>
-                            <option>Shoes</option>
-                            <option>Mother & Kids</option>
+                        <select id="productFilter" class="form-select select-nice">
+                            <option selected value="all">All Products</option>
+                            <% orderData.forEach(order => { %>
+                                <% order.Products.forEach(product => { %>
+                                <option value="<%= product.productName %>"><%= product.productName %></option>
+                                <% }); %>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                    <div class="custom_select">
+                        <select id="categoryFilter" class="form-select select-nice">
+                            <option selected value="all">All Categories</option>
+                            <% categoryData.forEach(category => { %>
+                                <option value="<%= category.name %>"><%= category.name %></option>
+                            <% }); %>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-2 col-6">
-                    <input type="date" value="02.05.2021" class="form-control" />
+                    <input type="date" id="startDate" class="form-control" />
+                </div>
+                <div class="col-md-2 col-6">
+                    <input type="date" id="endDate" class="form-control" />
                 </div>
                 <div class="col-md-2 col-6">
                     <div class="custom_select">
-                        <select class="form-select select-nice">
-                            <option selected>Status</option>
-                            <option>All</option>
-                            <option>Paid</option>
-                            <option>Chargeback</option>
-                            <option>Refund</option>
-                        </select>
+                    </select>
+                    <select id="timeFilter" class="form-select select-nice">
+                        <option selected value="all">All</option>
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                        <option value="custom">Custom</option>
+                    </select>
                     </div>
                 </div>
             </div>
         </header>
         <div class="card-body">
             <div class="table-responsive">
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col" class="text-center">
-                                    <div class="form-check align-middle">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck01" />
-                                        <label class="form-check-label" for="transactionCheck01"></label>
-                                    </div>
-                                </th>
-                                <th class="align-middle" scope="col">Order ID</th>
-                                <th class="align-middle" scope="col">Billing Name</th>
-                                <th class="align-middle" scope="col">Date</th>
-                                <th class="align-middle" scope="col">Total</th>
-                                <th class="align-middle" scope="col">Payment Status</th>
-                                <th class="align-middle" scope="col">Payment Method</th>
-                                <th class="align-middle" scope="col">View Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck02" />
-                                        <label class="form-check-label" for="transactionCheck02"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2540</a></td>
-                                <td>Neal Matthews</td>
-                                <td>07 Oct, 2021</td>
-                                <td>$400</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-success">Paid</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Mastercard</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck03" />
-                                        <label class="form-check-label" for="transactionCheck03"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2541</a></td>
-                                <td>Jamal Burnett</td>
-                                <td>07 Oct, 2021</td>
-                                <td>$380</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-danger">Chargeback</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck04" />
-                                        <label class="form-check-label" for="transactionCheck04"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2542</a></td>
-                                <td>Juan Mitchell</td>
-                                <td>06 Oct, 2021</td>
-                                <td>$384</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-success">Paid</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Paypal</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck05" />
-                                        <label class="form-check-label" for="transactionCheck05"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2543</a></td>
-                                <td>Barry Dick</td>
-                                <td>05 Oct, 2021</td>
-                                <td>$412</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-success">Paid</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Mastercard</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck06" />
-                                        <label class="form-check-label" for="transactionCheck06"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2544</a></td>
-                                <td>Ronald Taylor</td>
-                                <td>04 Oct, 2021</td>
-                                <td>$404</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-warning">Refund</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="transactionCheck07" />
-                                        <label class="form-check-label" for="transactionCheck07"></label>
-                                    </div>
-                                </td>
-                                <td><a href="#" class="fw-bold">#SK2545</a></td>
-                                <td>Jacob Hunter</td>
-                                <td>04 Oct, 2021</td>
-                                <td>$392</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-success">Paid</span>
-                                </td>
-                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Paypal</td>
-                                <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table align-middle table-nowrap mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="text-center">No</th>
+                            <th class="align-middle" scope="col">Order ID</th>
+                            <th class="align-middle" scope="col">Billing Name</th>
+                            <th class="align-middle" scope="col">Date</th>
+                            <th class="align-middle" scope="col">Price</th>
+                            <th class="align-middle" scope="col">Product</th>
+                            <th class="align-middle" scope="col">Category</th>
+                            <th class="align-middle" scope="col">View Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                        <% let i = 1; %>
+                        <% orderData.forEach(order => { %>
+                            <% order.Products.forEach(product => { %>
+                                <tr data-product="<%= product.productName %>" data-category="<%= product.category %>" data-date="<%= order.Date %>">
+                                    <td class="text-center"><%= i++ %></td>
+                                    <td><a href="/admin/order-details?order_id=<%= order.id %>" class="fw-bold"><%= order.id %></a></td>
+                                    <td><%= order.Name %></td>
+                                    <td><%= order.Date %></td>
+                                    <td><%= product.productPrice %></td>
+                                    <td><span class=""><%= product.productName %></span></td>
+                                    <td><%= product.category %></td>
+                                    <td><a href="/admin/order-details?order_id=<%= order.id %>" class="btn btn-xs">View details</a></td>
+                                </tr>
+                            <% }); %>
+                        <% }); %>
+                    </tbody>
+                </table>
             </div>
-            <!-- table-responsive end// -->
         </div>
     </div>
     <div class="pagination-area mt-30 mb-50">
@@ -415,6 +325,53 @@
     </div>
 </section>
 <!-- content-main end// -->             
+
+<script>
+    document.getElementById('filterButton').addEventListener('click', () => {
+    const category = document.getElementById('categoryFilter').value;
+    const product = document.getElementById('productFilter').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const timeFilter = document.getElementById('timeFilter').value;
+
+    const queryParam = new URLSearchParams({
+        category,
+        product,
+        startDate,
+        endDate,
+        timeFilter
+    });
+
+    const queryParams = queryParam.toString()
+
+    console.log('ioioioii', queryParams);
+
+    // fetch(`/admin/dashboard?${queryParams}`)rs
+    fetch(`/admin/?${queryParams}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update UI with filtered data
+            const orderTableBody = document.getElementById('orderTableBody');
+            orderTableBody.innerHTML = ''; // Clear existing data
+            data.forEach(order => {
+                // Construct table rows with order data
+                const row = document.createElement('tr');
+                // Populate row with order details
+                // Append row to table body
+                orderTableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching filtered data:', error);
+            // Handle error
+        });
+});
+</script>
 
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>
