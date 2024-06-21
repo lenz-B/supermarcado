@@ -341,6 +341,11 @@ async function logingIn (req, res) {
       return res.redirect('/login')
     }
 
+    if (user.is_block) {
+      req.flash('error', 'User not available !');
+      return res.redirect('/login');
+    }
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     console.log(passwordMatch);
 

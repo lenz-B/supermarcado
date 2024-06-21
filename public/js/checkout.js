@@ -188,7 +188,11 @@
 
             const paymentMethod = getSelectedPaymentMethod();
             if (!paymentMethod) {
-                alert('Please select a payment method.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Please select a payment method.'
+                });
                 return;
             }
 

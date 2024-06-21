@@ -1,5 +1,6 @@
 const categoryDB = require('../models/category');
 const productDB = require('../models/products');
+const orderDB = require('../models/orders')
 const offerDB = require('../models/offer')
 const { productSchema } = require('../models/joi');
 
@@ -46,6 +47,59 @@ const updateAndCachePromoPrices = async (req, products) => {
   }, {});
   return updatedProducts;
 };
+
+const sortProducts = async (products, sortOption) => {
+  switch (sortOption) {
+    case 'popularity':
+      return await sortProductsByPopularity(products);
+    case 'new-arrivals' :
+      return products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    case 'price-low-high':
+      return products.sort((a, b) => {
+        const aPrice = a.promoPrice > 0 ? a.promoPrice : a.price;
+        const bPrice = b.promoPrice > 0 ? b.promoPrice : b.price;
+        return aPrice - bPrice;
+      });
+    case 'price-high-low':
+      return products.sort((a, b) => {
+        const aPrice = a.promoPrice > 0 ? a.promoPrice : a.price;
+        const bPrice = b.promoPrice > 0 ? b.promoPrice : b.price;
+        return bPrice - aPrice;
+      });
+    default:
+      return products;
+  }
+};
+
+//checking popularity
+const getOrderCounts = async () => {
+  const orderAggregation = await orderDB.aggregate([
+    { $unwind: '$orderedItems' },
+    { $group: { _id: '$orderedItems.product_id', orderCount: { $sum: 1 } } }
+  ]);
+
+  // Convert aggregation result to a map for quick access
+  const orderCounts = {};
+  orderAggregation.forEach(order => {
+    orderCounts[order._id] = order.orderCount;
+  });
+  // console.log(orderCounts);
+
+  return orderCounts;
+};
+
+// popularity sort
+const sortProductsByPopularity = async (products) => {
+  const orderCounts = await getOrderCounts();
+
+  return products.sort((a, b) => {
+    const aPopularity = orderCounts[a._id] || 0;
+    const bPopularity = orderCounts[b._id] || 0;
+    return bPopularity - aPopularity;
+  });
+};
+
+
 
 //__________________________________________________admin side__________________________________________________
 
@@ -195,17 +249,36 @@ const updateProStatus = async (req, res) => {
 async function shop(req, res) {
   try {
     const { user_id } = req.session;
-    let productData = await productDB.find({ status: true }).populate('offer');
+    const sortOption = req.query.sort || 'default';
+    const categoryId = req.query.category;
+    let priceRange = req.query.price;
+
+    let query = { status: true };
+    if (categoryId) {
+      query.category_id = categoryId;
+    }
+    if (priceRange) {
+      priceRange = priceRange.replace(/[^\d\s-]/g, '');
+
+      const [minPrice, maxPrice] = priceRange.split('-').map(price => parseInt(price));
+
+      query.price = { $gte: minPrice, $lte: maxPrice };
+    }
+
+    let productData = await productDB.find(query).populate('offer');
 
     // Update promo prices
     productData = await updateAndCachePromoPrices(req, productData);
 
+    // Sort products based on the selected option
+    productData = await sortProducts(productData, sortOption);
+
     const categoryData = await getHeaderData();
 
-    res.render('user/shop', { user_id, productData, categoryData });
+    res.render('user/shop', { user_id, productData, categoryData, sortOption, categoryId, priceRange });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).send("Internal Server Error");
+      console.log(error.message);
+      res.status(500).send("Internal Server Error");
   }
 }
 

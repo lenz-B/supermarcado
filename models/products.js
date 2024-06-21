@@ -5,8 +5,6 @@ const productSchema = new mongoose.Schema({
   category_id: {
     type: mongoose.Schema.Types.ObjectId, required: true,
     ref: 'Category'},
-  // brand_id: {
-  //   type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Brand'},
   name: { type: String, required: true, trim: true},
   description: { type: String, trim: true},
   price: { type: Number, required: true, min: 0},
@@ -19,7 +17,8 @@ const productSchema = new mongoose.Schema({
   offer: [{ type: mongoose.Types.ObjectId, default: null, ref: 'Offer'}],
   createdAt: { type: Date, default: Date.now},
   updatedAt: { type: Date, default: Date.now}
-});
+},
+{timestamps: true});
 
 
 module.exports = mongoose.model('Product', productSchema)

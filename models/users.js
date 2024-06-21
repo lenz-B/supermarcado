@@ -11,8 +11,9 @@ const userSchema = new mongoose.Schema({
     is_admin: { type: Boolean, default: false },
     is_verified: { type: Boolean, default: false },
     is_block: { type: Boolean, default: false},
-    createdAt: { type: Date, default: Date.now }
-  });
+  },
+  {timestamps: true}
+  );
   
   const Users = mongoose.model('Users', userSchema);
 
