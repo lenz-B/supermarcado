@@ -5,8 +5,9 @@
             <section class="content-main">
                 <div class="content-header">
                     <div>
-                        <h2 class="content-title card-title">Sales Report</h2>
-                        <p></p>
+                        <a href="/admin/sales-report">
+                            <h2 class="content-title card-title">Sales Report</h2>
+                        </a>
                     </div>
                     <div>
                         <input type="text" placeholder="Search by name" class="form-control bg-white" />
@@ -15,44 +16,37 @@
                 <div class="card mb-4">
                     <header class="card-header">
                         <div class="row gx-3">
-                            <!-- <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div> -->
                             <div class="col-lg-2 col-md-3 col-6">
                                 <div class="custom_select">
-                                    <select id="sort" class="form-select select-nice">
-                                        <option>All</option>
-                                        <option>Daily</option>
-                                        <option>Weekly</option>
-                                        <option>Monthly</option>
-                                        <option>Yearly</option>
-                                        <option>Custom</option>
+                                    <select id="sort" class="form-select select-nice" onchange="applyFilters()">
+                                        <option value="All">All</option>
+                                        <option value="Daily">Daily</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Yearly">Yearly</option>
+                                        <option value="Custom">Custom</option>
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-2 col-6">                                
-                            </div>
-                            <div class="col-md-2 col-6">                                
-                            </div>
-
-                            <div class="col-md-2 col-6" id="startDate" hidden>
+                            <div class="col-md-2 col-6"></div>
+                            <div class="col-md-2 col-6"></div>
+                            <div class="col-md-2 col-6" id="startDate" style="display: none;">
                                 <h6>Start date</h6>
-
-                                <input type="date" value="02.05.2021" class="form-control" required />
+                                <input type="date" class="form-control" />
                             </div>
-                            <div class="col-md-2 col-6"  id="endDate" hidden>
+                            <div class="col-md-2 col-6" id="endDate" style="display: none;">
                                 <h6>End date</h6>
-
-                                <input type="date" value="02.05.2021" class="form-control" required />
+                                <input type="date" class="form-control" />
                             </div>
-                            <div class="col-md-2 col-6"  id="customGenerate" hidden>
+                            <div class="col-md-2 col-6" id="customGenerate" style="display: none;">
                                 <br>
-
-                                <a href="#" onclick="customGenerate()" class="btn btn-primary">Generate</a>
-                                    
-                                </div>
+                                <a href="#" class="btn btn-primary" onclick="generateReport()">Generate</a>
+                            </div>                            
+                            <div id="productContainer" hidden>
+                                <!-- Product data will be injected here -->
+                            </div>
                         </div>
+                        
                     </header>
                     <!-- card-header end// -->
                     <div class="card-body">
@@ -232,106 +226,63 @@
 
         <!-------------------------CUSTOM----------------------->
         <script>
-            function customGenerate() {
-                
-                const startDateElement = document.getElementById('startDate');
-                const startDateValue = startDateElement.querySelector('input[type="date"]').value;
-                console.log('Start Date:', startDateValue);
-                const endDateElement = document.getElementById('endDate');
-                const endDateValue = endDateElement.querySelector('input[type="date"]').value;
-                console.log('Start Date:', endDateValue);
-
-
-                const selectedValue='Custom'
+            function applyFilters(categoryId = null) {
+                const sortOption = document.getElementById('sort').value;
+                const urlParams = new URLSearchParams(window.location.search);
             
-                axios.post('/filterSalesReport', { selectedValue,startDateValue ,endDateValue})
-                        .then(function(response) {
-                            const { filter } = response.data;
-                            console.log(filter);
+                if (sortOption === 'Custom') {
+                    toggleDateFields()
+                } else {
+                    urlParams.set('sort', sortOption);
+                    window.location.href = `/admin/sales-report?${urlParams.toString()}`;
 
-                            const productContainer = document.getElementById('productContainer');
-                            productContainer.hidden = false; 
-
-                            let productHTML = '';
+                }
             
-                            filter.forEach(order => {
-                                const expirationDate = new Date(order.orderedAt);
-                                productHTML += `
-                                    <tr>
-                                        <td>prinDecorFRGDSDS</td>
-                                        <td>${order.userId.fName}</td>
-                                        <td>${expirationDate.getDate()}/${expirationDate.getMonth() + 1}/${expirationDate.getFullYear()}</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>${order.products[0].totalAmount}</td>
-                                        <td>${order.paymentOption}</td>
-                                    </tr>
-                                `;
-                            });
-            
-                            productContainer.innerHTML = productHTML;
-                        })
-                        .catch(function(error) {
-                            console.error('Error:', error);
-                        });
             }
         </script>
-
-        <!-- ---- -------------------FILTER -------------------->
+            
         <script>
-            const selectElement = document.getElementById('sort');
-            selectElement.addEventListener('change', handleChange);
+            function toggleDateFields() {
+                var sortSelect = document.getElementById("sort");
+                var startDateDiv = document.getElementById("startDate");
+                var endDateDiv = document.getElementById("endDate");
+                var customGenerateDiv = document.getElementById("customGenerate");
         
-            function handleChange(event) {
-                const selectedValue = event.target.value;
-                console.log(selectedValue);
-
-                if(selectedValue==='Custom'){
-                    const startDate= document.getElementById('startDate')
-                    const endDate= document.getElementById('endDate')
-                    const customGenerate= document.getElementById('customGenerate')
-                    const productContainer = document.getElementById('productContainer');
-                                    
-
-
-                    console.log('custom')
-                    startDate.hidden = false;
-                    endDate.hidden = false;
-                    customGenerate.hidden = false;
-                    productContainer.hidden = true;                        
-
-                }else{
-
-                    axios.post('/filterSalesReport', { selectedValue })
-                        .then(function(response) {
-                            const { filter } = response.data;
-                            console.log(filter);
-                            const productContainer = document.getElementById('productContainer');
-                            let productHTML = '';
-            
-                            filter.forEach(order => {
-                                const expirationDate = new Date(order.orderedAt);
-                                productHTML += `
-                                    <tr>
-                                        <td>prinDecorFRGDSDS</td>
-                                        <td>${order.userId.fName}</td>
-                                        <td>${expirationDate.getDate()}/${expirationDate.getMonth() + 1}/${expirationDate.getFullYear()}</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>${order.products[0].totalAmount}</td>
-                                        <td>${order.paymentOption}</td>
-                                    </tr>
-                                `;
-                            });
-            
-                            productContainer.innerHTML = productHTML;
-                        })
-                        .catch(function(error) {
-                            console.error('Error:', error);
-                        });
+                if (sortSelect.value === "Custom") {
+                    startDateDiv.style.display = "block";
+                    endDateDiv.style.display = "block";
+                    customGenerateDiv.style.display = "block";
+                } else {
+                    startDateDiv.style.display = "none";
+                    endDateDiv.style.display = "none";
+                    customGenerateDiv.style.display = "none";
                 }
-        
             }
+
+            function generateReport() {
+                const startDateInput = document.getElementById('startDate').querySelector('input');
+                const endDateInput = document.getElementById('endDate').querySelector('input');
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const urlParams = new URLSearchParams(window.location.search);
+
+                if (!startDate || !endDate) {
+                    swal("Oops!", "Please select both start and end dates.", "error");
+                    return; 
+                }
+
+                if (startDate > endDate) {
+                    swal("Oops!", "End date cannot be before start date.", "error");
+                    return; 
+                }
+
+                urlParams.set('startDate', startDate);
+                urlParams.set('endDate', endDate);
+                urlParams.set('sort', 'Custom');
+
+                window.location.href = `/admin/sales-report?${urlParams.toString()}`;
+            }
+
         </script>
 
 
@@ -340,6 +291,8 @@
         <script src="assets/js/vendors/select2.min.js"></script>
         <script src="assets/js/vendors/perfect-scrollbar.js"></script>
         <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
         <!-- Main Script -->
         <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
     </body>

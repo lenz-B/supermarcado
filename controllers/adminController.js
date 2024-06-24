@@ -21,48 +21,6 @@ const adminDash = async (req, res) => {
 
       const filteredOrderData = await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
 
-    console.log('Queryyyyyyy: ', req.que);
-    const { category, product, startDate, endDate, timeFilter } = req.query;
-    console.log(category, product, startDate, endDate, timeFilter);    
-
-    if (category && category !== 'all') {
-      // Filter orders by category
-      orderData = orderData.filter(order =>
-        order.orderedItems.some(item => item.product_id.category_id.name === category)
-      );
-    }
-
-    if (product && product !== 'all') {
-      // Filter orders by product
-      orderData = orderData.filter(order =>
-        order.orderedItems.some(item => item.product_id.name === product)
-      );
-    }
-
-    if (startDate && endDate) {
-      // Filter orders by date range
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      orderData = orderData.filter(order => {
-        const orderDate = new Date(order.date);
-        return orderDate >= start && orderDate <= end;
-      });
-    }
-
-    if (timeFilter && timeFilter !== 'all') {
-      // Filter orders based on time filter (day, week, month, year)
-      const now = new Date();
-      const start = new Date(now);
-      if (timeFilter === 'week') {
-        start.setDate(start.getDate() - 7);
-      } else if (timeFilter === 'month') {
-        start.setMonth(start.getMonth() - 1);
-      } else if (timeFilter === 'year') {
-        start.setFullYear(start.getFullYear() - 1);
-      }
-      orderData = orderData.filter(order => new Date(order.date) >= start);
-    }
-
     const overallSalesCount = filteredOrderData.reduce((count, order) => count + order.orderedItems.length, 0);
     const overallOrderAmount = filteredOrderData.reduce((total, order) => total + order.totalAmount, 0);
 
@@ -97,9 +55,7 @@ const adminDash = async (req, res) => {
         }))
       }));
 
-      const categoryData = await categoryDB.find().select('name'); 
-      const productData = productDB.find()
-    
+      const categoryData = await categoryDB.find().select('name');     
 
   res.render('admin/dashboard', {
     orderData: formattedData, categoryData, overallOrderAmount, overallSalesCount, monthlyEarnings, 
@@ -114,79 +70,118 @@ const adminDash = async (req, res) => {
 const salesReport = async (req, res) => {
   try {
     console.log('sales-report');
-    const orderData = await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
-    const overallOrderAmount = orderData.reduce((total, order) => total + order.totalAmount, 0);
+    const { sort, startDate, endDate } = req.query;
+    let filter = { orderStatus: { $ne: 'Cancelled' } };
 
-    res.render('admin/sales-report', {orderData, overallOrderAmount})
+    switch (sort) {
+      case 'Custom':
+        if (startDate && endDate) {
+          filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+        }
+        break;
+      case 'Daily':
+        filter.date = { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lte: new Date() };
+        break;
+      case 'Weekly':
+        const startOfWeek = new Date();
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+        filter.date = { $gte: startOfWeek, $lte: endOfWeek };
+        break;
+      case 'Monthly':
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        const endOfMonth = new Date(startOfMonth);
+        endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+        endOfMonth.setDate(0);
+        endOfMonth.setHours(23, 59, 59, 999);
+        filter.date = { $gte: startOfMonth, $lte: endOfMonth };
+        break;
+      case 'Yearly':
+        const startOfYear = new Date();
+        startOfYear.setMonth(0);
+        startOfYear.setDate(1);
+        startOfYear.setHours(0, 0, 0, 0);
+        const endOfYear = new Date(startOfYear);
+        endOfYear.setFullYear(endOfYear.getFullYear() + 1);
+        endOfYear.setDate(0);
+        endOfYear.setHours(23, 59, 59, 999);
+        filter.date = { $gte: startOfYear, $lte: endOfYear };
+        break;
+    }
+
+    const orderData = sort !== 'All' ? await orderDB.find(filter) : await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
+
+    res.render('admin/sales-report', { orderData });
+
+    // const orderData = await orderDB.find(filter);
+    // res.render('admin/sales-report', { orderData });
   } catch (error) {
-    
+    console.error('Error in sales report:', error);
+    res.status(500).send('Internal Server Error');
   }
 }
+
 
 // filter
 const salesFilter = async (req, res) => {
   try {
-    console.log('sales filter ;;;;;;;;;;;;;;;;;;;');
-    let orderData = await orderDB.find()
-      .populate('user_id', 'username email')
-      .populate({
-        path: 'orderedItems.product_id',
-        populate: {
-          path: 'category_id',
-          select: 'name'
-        },
-        select: 'name price'
-      });
+      console.log('sales filter ;;;;;;;;;;;;;;;;;;;');
+      console.log('req body: ', req.body);
+      const { selectedValue, startDateValue, endDateValue } = req.body;
 
-    const filteredOrderData = orderData.filter(order => order.orderStatus !== 'Cancelled');
+      let filter = {};
 
-    console.log('Queryyyyyyy: ', req.que);
-    const { category, product, startDate, endDate, timeFilter } = req.query;
-    console.log(category, product, startDate, endDate, timeFilter);    
-
-    if (category && category !== 'all') {
-      // Filter category
-      orderData = orderData.filter(order =>
-        order.orderedItems.some(item => item.product_id.category_id.name === category)
-      );
-    }
-
-    if (product && product !== 'all') {
-      // Filter product
-      orderData = orderData.filter(order =>
-        order.orderedItems.some(item => item.product_id.name === product)
-      );
-    }
-
-    if (startDate && endDate) {
-      // Filter date range
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      orderData = orderData.filter(order => {
-        const orderDate = new Date(order.date);
-        return orderDate >= start && orderDate <= end;
-      });
-    }
-
-    if (timeFilter && timeFilter !== 'all') {
-      // time filter (day, week, month, year)
-      const now = new Date();
-      const start = new Date(now);
-      if (timeFilter === 'week') {
-        start.setDate(start.getDate() - 7);
-      } else if (timeFilter === 'month') {
-        start.setMonth(start.getMonth() - 1);
-      } else if (timeFilter === 'year') {
-        start.setFullYear(start.getFullYear() - 1);
+      switch (selectedValue) {
+          case 'Daily':
+              filter.date = {
+                  $gte: moment().startOf('day').toDate(),
+                  $lt: moment().endOf('day').toDate()
+              };
+              break;
+          case 'Weekly':
+              filter.date = {
+                  $gte: moment().startOf('week').toDate(),
+                  $lt: moment().endOf('week').toDate()
+              };
+              break;
+          case 'Monthly':
+              filter.date = {
+                  $gte: moment().startOf('month').toDate(),
+                  $lt: moment().endOf('month').toDate()
+              };
+              break;
+          case 'Yearly':
+              filter.date = {
+                  $gte: moment().startOf('year').toDate(),
+                  $lt: moment().endOf('year').toDate()
+              };
+              break;
+          case 'Custom':
+            if (!startDateValue || !endDateValue) {
+                return res.status(400).json({ error: 'Start and end dates are required for custom filter' });
+            }
+            filter.date = {
+                $gte: new Date(startDateValue),
+                $lt: new Date(endDateValue)
+            };
+            break;
+          default:
+            break;
       }
-      orderData = orderData.filter(order => new Date(order.date) >= start);
-    }
 
-    res.redirect('/', {orderData})
+      const orders = await orderDB.find(filter).populate('user_id').populate('orderedItems.product_id');
+      res.json({ filter: orders });
   } catch (error) {
-    
+      console.error('Error in sales filter:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
 }
+
 
 //login
 const login = async (req, res) => {
