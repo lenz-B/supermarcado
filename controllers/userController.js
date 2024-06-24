@@ -9,6 +9,11 @@ const categoryDB = require('../models/category')
 const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
 const { joiRegSchema, addressValidationSchema} = require('../models/joi');
+const PDFDocument = require('pdfkit');
+const pug = require('pug');
+const path = require('path');
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 const flash = require('flash');
 
 
@@ -663,6 +668,63 @@ const deleteAddress = async (req, res) => {
   }
 }
 
+//invoice Download
+const invoiceDownload = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await orderDB.findById(orderId).populate('orderedItems.product_id').exec();
+
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+
+    // Create a PDF document
+    const doc = new PDFDocument();
+
+    // Set up the PDF document
+    doc.fontSize(15).text('Invoice', { align: 'center' });
+    doc.moveDown();
+
+    // Header for Product and Price
+    doc.fontSize(12).text('Product', 100).text('Price', { align: 'right' });
+    doc.moveDown();
+
+    // List each ordered item with its price
+    order.orderedItems.forEach(item => {
+      doc.fontSize(10).text(`${item.product_id.name}`, 100).text(`$${(item.product_id.price * item.quantity).toFixed(2)}`, { align: 'center' });
+    });
+
+    doc.moveDown();
+    // Add Shipping and Handling, Vat, Order Total, Status, Payment Method, and Order Address
+    doc.fontSize(10).text(`Shipping and Handling:`, { align: 'left' }).text(`$15.00`, { align: 'center' });
+    doc.moveDown();
+    doc.text(`Vat:`, { align: 'left' }).text(`$0.00`, { align: 'center' });
+    doc.moveDown();
+    doc.text(`Order Total:`, { align: 'left' }).text(`$${order.totalAmount.toFixed(2)}`, { align: 'center' });
+    doc.moveDown();
+    doc.text(`Status: ${order.orderStatus}`, { align: 'left' });
+    doc.moveDown();
+    doc.text(`Payment Method: ${order.paymentMethod}`, { align: 'left' });
+    doc.moveDown();
+    doc.text(`Order Address:`, { align: 'left' });
+    doc.text(`${order.address.name}`);
+    doc.text(`${order.address.mobile}`);
+    doc.text(`${order.address.address}`);
+    doc.text(`${order.address.city}, ${order.address.state}, ${order.address.pin}`);
+
+    // Stream the PDF back as the response
+    res.setHeader('Content-type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice-${orderId}.pdf`);
+    doc.pipe(res);
+    doc.end();
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
 
 
 module.exports = {home, signup, registration, 
@@ -670,5 +732,6 @@ module.exports = {home, signup, registration,
   resendOTP, login, logingIn, googleSignIn,
   logOut, sendCode, getForgetPassword,
   forgetPassword, confirmPassword, myAccount,
-  profileUpdate, addAddress, deleteAddress
+  profileUpdate, addAddress, deleteAddress,
+  invoiceDownload
 }

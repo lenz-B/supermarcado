@@ -33,6 +33,7 @@ router.get('/google-auth/callback', passport.authenticate('google', {failureRedi
 
 router.get('/my-account',userAuthentication.login , userController.myAccount)
 router.post('/user-profile-update', userController.profileUpdate)
+router.get('/downloadInvoice/:orderId', userController.invoiceDownload)
 
 router.post('/add-address', userController.addAddress)
 router.post('/delete-address', userController.deleteAddress)

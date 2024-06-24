@@ -148,11 +148,14 @@
                                                                                         <% if (order.orderStatus === 'Pending') { %>
                                                                                             <button onclick="finishPayment('<%= order._id %>')" id="finishPaymentBtn">Finish Payment</button>
                                                                                             <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-                                                                                        <% } else if (order.orderStatus !== 'Cancelled') { %>
+                                                                                        <% } else if (order.orderStatus === 'Delivered') { %>
+                                                                                            <a href="/downloadInvoice/<%= order._id %>" id="downloadInvoiceLink">Download Invoice</a>
+                                                                                        <% } else if (order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Delivered') { %>
                                                                                             <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
                                                                                         <% } else { %>
                                                                                             <strong>Order Cancelled</strong>
                                                                                         <% } %>
+
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
