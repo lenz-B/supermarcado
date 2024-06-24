@@ -19,7 +19,7 @@ const adminDash = async (req, res) => {
         select: 'name price'
       });
 
-    const filteredOrderData = orderData.filter(order => order.orderStatus !== 'Cancelled');
+      const filteredOrderData = await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
 
     console.log('Queryyyyyyy: ', req.que);
     const { category, product, startDate, endDate, timeFilter } = req.query;
@@ -110,6 +110,19 @@ const adminDash = async (req, res) => {
   }
 }
 
+//sales report page
+const salesReport = async (req, res) => {
+  try {
+    console.log('sales-report');
+    const orderData = await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
+    const overallOrderAmount = orderData.reduce((total, order) => total + order.totalAmount, 0);
+
+    res.render('admin/sales-report', {orderData, overallOrderAmount})
+  } catch (error) {
+    
+  }
+}
+
 // filter
 const salesFilter = async (req, res) => {
   try {
@@ -132,21 +145,21 @@ const salesFilter = async (req, res) => {
     console.log(category, product, startDate, endDate, timeFilter);    
 
     if (category && category !== 'all') {
-      // Filter orders by category
+      // Filter category
       orderData = orderData.filter(order =>
         order.orderedItems.some(item => item.product_id.category_id.name === category)
       );
     }
 
     if (product && product !== 'all') {
-      // Filter orders by product
+      // Filter product
       orderData = orderData.filter(order =>
         order.orderedItems.some(item => item.product_id.name === product)
       );
     }
 
     if (startDate && endDate) {
-      // Filter orders by date range
+      // Filter date range
       const start = new Date(startDate);
       const end = new Date(endDate);
       orderData = orderData.filter(order => {
@@ -156,7 +169,7 @@ const salesFilter = async (req, res) => {
     }
 
     if (timeFilter && timeFilter !== 'all') {
-      // Filter orders based on time filter (day, week, month, year)
+      // time filter (day, week, month, year)
       const now = new Date();
       const start = new Date(now);
       if (timeFilter === 'week') {
@@ -239,6 +252,6 @@ const userStatus = async (req, res) => {
   }
 }
 
-module.exports = {adminDash, salesFilter,
+module.exports = {adminDash, salesFilter, salesReport,
   login, logingin, logout, user, userStatus
 }

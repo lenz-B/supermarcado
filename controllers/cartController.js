@@ -67,7 +67,7 @@ const updatePromoPricesAndExtractDiscount = async (products) => {
         product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
         discount = latestOffer.discount;
       } // No need to set promoPrice if no active offers
-      return { ...product.toObject(), discount }; // Return product as plain JS object with discount
+      return { ...product.toObject(), discount };
     }));
     return updatedProducts;
   } catch (error) {

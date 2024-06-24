@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema({
   },
   orderedItems: [{
     product_id: {type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    price: {type: Number},
     quantity: {type: Number, required: true }, 
     subTotal: {type: Number, required: true},
     productStatus:{type:String,enum: ['Pending','Cancel', 'Return','Processing', 'Shipped', 'Delivered',"placed"], default: 'Pending'}
@@ -25,6 +26,8 @@ const orderSchema = new mongoose.Schema({
     is_Home: { type: Boolean, default: false },
     is_Work: { type: Boolean, default: false }
   },
+  offerDiscount: {type: Number, default: 0},
+  couponDiscount: {type: Number, default: 0},
   totalAmount: {type: Number, required: true},
   payment: {type: Number},
   orderStatus: { type: String, enum: ['Pending', 'Placed', 'Processing', 'Shipped', 'Delivered', "Cancelled"], default: 'Pending' },

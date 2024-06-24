@@ -145,10 +145,13 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td colspan="2">
-                                                                                        <% if (order.orderStatus !== 'Cancelled') { %>
-                                                                                        <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                                                        <% if (order.orderStatus === 'Pending') { %>
+                                                                                            <button onclick="finishPayment('<%= order._id %>')" id="finishPaymentBtn">Finish Payment</button>
+                                                                                            <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                                                        <% } else if (order.orderStatus !== 'Cancelled') { %>
+                                                                                            <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
                                                                                         <% } else { %>
-                                                                                        <strong>Order Cancelled</strong>
+                                                                                            <strong>Order Cancelled</strong>
                                                                                         <% } %>
                                                                                     </td>
                                                                                 </tr>
@@ -162,7 +165,7 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>                                        
+                                        </div>                                                                           
                                         <script>
                                             function showOrderDetails(orderId) {
                                               var detailsRow = document.getElementById('order-details-' + orderId);

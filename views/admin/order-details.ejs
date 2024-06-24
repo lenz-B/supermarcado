@@ -57,7 +57,7 @@
                             <h6 class="mb-1">Order info</h6>
                             <p class="mb-1">
                                 Shipping: Fargo express<br />
-                                Pay method: card<br />
+                                Pay method: <%= order.PaymentMethod %><br />
                                 Status: <%= order.Status %>
                             </p>
                             <a href="#">Download info</a>
@@ -73,9 +73,9 @@
                         <div class="text">
                             <h6 class="mb-1">Deliver to</h6>
                             <p class="mb-1">
-                                City: Tashkent, Uzbekistan<br />
-                                Block A, House 123, Floor 2<br />
-                                Po Box 10000
+                                City: <%= order.Address.city %><br />
+                                <%= order.Address.address %><br />
+                                Po <%= order.Address.pin %>
                             </p>
                             <a href="#">View profile</a>
                         </div>
@@ -102,7 +102,7 @@
                                     <td>
                                         <a class="itemside" href="#">
                                             <div class="left">
-                                                <img src="assets/imgs/items/placeholder.jpg" width="40" height="40" class="img-xs" alt="Item" />
+                                                <img src="/productImage/<%= product.img %>" width="40" height="40" class="img-xs" alt="Item" />
                                             </div>
                                             <div class="info"><%= product.productName %></div>
                                         </a>

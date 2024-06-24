@@ -1,0 +1,346 @@
+<!-- header -->
+<%- include('../layout/adminHeadder.ejs') %>
+
+
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Sales Report</h2>
+                        <p></p>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Search by name" class="form-control bg-white" />
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <!-- <div class="col-lg-4 col-md-6 me-auto">
+                                <input type="text" placeholder="Search..." class="form-control" />
+                            </div> -->
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <div class="custom_select">
+                                    <select id="sort" class="form-select select-nice">
+                                        <option>All</option>
+                                        <option>Daily</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                        <option>Yearly</option>
+                                        <option>Custom</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-6">                                
+                            </div>
+                            <div class="col-md-2 col-6">                                
+                            </div>
+
+                            <div class="col-md-2 col-6" id="startDate" hidden>
+                                <h6>Start date</h6>
+
+                                <input type="date" value="02.05.2021" class="form-control" required />
+                            </div>
+                            <div class="col-md-2 col-6"  id="endDate" hidden>
+                                <h6>End date</h6>
+
+                                <input type="date" value="02.05.2021" class="form-control" required />
+                            </div>
+                            <div class="col-md-2 col-6"  id="customGenerate" hidden>
+                                <br>
+
+                                <a href="#" onclick="customGenerate()" class="btn btn-primary">Generate</a>
+                                    
+                                </div>
+                        </div>
+                    </header>
+                    <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="table-responsive" id="downloadPdf">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>SL No</th>
+                                        <th>Order ID</th>
+                                        <th>Billing Name</th>
+                                        <th>Date</th>
+                                        <th>Offer Deduction</th>
+                                        <th>Coupon Deduction</th>
+                                        <th>Total</th>
+                                        <th>Payment Method</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productContainer">
+                                    <% let i = 1; %>
+                                    <% if(orderData){ %>
+                                    <% orderData.forEach(order => { %>
+                                    <tr>
+                                        <td><%= i++ %></td>
+                                        <td><%= order._id %></td>
+                                        <td><%= order.address.name %></td>
+                                        <td>
+                                            <% const expirationDate = new Date(order.date); %>
+                                            <span><%= expirationDate.getDate() %>/</span>
+                                            <span><%= expirationDate.getMonth() + 1 %>/</span>
+                                            <span><%= expirationDate.getFullYear() %></span>
+                                        </td>
+                                        <td><%= order.offerDiscount.toFixed(2) %></td>
+                                        <td><%= order.couponDiscount.toFixed(2) %></td>
+                                        
+                                        <td><%= order.totalAmount.toFixed(2) %></td>
+                                        <td><%= order.paymentMethod %></td>
+                                    </tr>
+                                    <% }); %>
+                                    <% } %>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <% const orderCount = orderData.length %>  
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total order count</td>
+                                        <td><%= orderCount %></td> 
+                                    </tr>
+                                    <tr>
+                                      <% const allOrderTotals = []; %>
+                                        <% orderData.forEach(order => { %>
+                                            <% let orderTotal = 0; %> 
+                                            <% order.orderedItems.forEach(item => { %>
+                                                <% orderTotal += item.subTotal; %> 
+                                            <% }); %>
+                                            <% allOrderTotals.push(orderTotal); %> 
+                                        <% }); %>
+                                        <% const totalSum = allOrderTotals.reduce((total, orderTotal) => { %>
+                                            <% return total + orderTotal; %>
+                                        <% }, 0); %>                     
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total order Amount</td>
+                                        <td>$<%= totalSum.toFixed(2) %></td>
+                                    </tr>
+                                    <tr>
+                                        <% const couponDiscount = orderData.reduce((total, coupon) => {%>
+                                            <%  return total + coupon.couponDiscount;%>
+                                            <% }, 0);%>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total coupon discount</td>
+                                        <td><%= couponDiscount.toFixed(2) %></td> 
+                                    </tr>
+                                    <tr>
+                                        <% const offerDiscount = orderData.reduce((total, coupon) => {%>
+                                            <%  return total + coupon.offerDiscount;%>
+                                            <% }, 0);%>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total offer discount</td>
+                                        <td><%= offerDiscount.toFixed(2) %></td> 
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                        <!-- table-responsive end -->
+                        
+                        <div>
+                            <a href="#" id="downloadPdfBtn" class="btn btn-primary" onclick="convertToPDF()"><i class="text-muted material-icons md-post_add"></i>Download Pdf</a>
+                            <a href="#" id="downloadExcelBtn" class="btn btn-primary" onclick="convertToExcel()"><i class="text-muted material-icons md-post_add"></i>Download Excel</a>
+                        </div>
+                    </div>
+                    
+                    <!-- card-body end -->
+                </div>
+                <div class="pagination-area mt-30 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+              <div class="row pb-30 pt-15">
+                  <div class="col-sm-6">
+                      <script>
+                          document.write(new Date().getFullYear());
+                      </script>
+                      &copy; lenzB - Creatives .
+                  </div>
+                  <div class="col-sm-6">
+                      <div class="text-sm-end">All rights reserved</div>
+                  </div>
+              </div>
+            </footer>
+        </main>
+       
+    
+
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+   
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+   
+        <script>
+            function convertToExcel() {
+            
+            const table = document.getElementById('downloadPdf').querySelector('table');
+            const wb = XLSX.utils.table_to_book(table);
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+            const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+            saveAs(blob, 'table_data.xlsx');
+            }
+            function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+            }
+        </script>
+        
+        <script>
+        function convertToPDF() {
+            const element = document.getElementById('downloadPdf');
+            setTimeout(() => {
+            html2pdf()
+                .from(element)
+                .save();
+            }, 1000);
+        }
+        </script>
+
+        <!-------------------------CUSTOM----------------------->
+        <script>
+            function customGenerate() {
+                
+                const startDateElement = document.getElementById('startDate');
+                const startDateValue = startDateElement.querySelector('input[type="date"]').value;
+                console.log('Start Date:', startDateValue);
+                const endDateElement = document.getElementById('endDate');
+                const endDateValue = endDateElement.querySelector('input[type="date"]').value;
+                console.log('Start Date:', endDateValue);
+
+
+                const selectedValue='Custom'
+            
+                axios.post('/filterSalesReport', { selectedValue,startDateValue ,endDateValue})
+                        .then(function(response) {
+                            const { filter } = response.data;
+                            console.log(filter);
+
+                            const productContainer = document.getElementById('productContainer');
+                            productContainer.hidden = false; 
+
+                            let productHTML = '';
+            
+                            filter.forEach(order => {
+                                const expirationDate = new Date(order.orderedAt);
+                                productHTML += `
+                                    <tr>
+                                        <td>prinDecorFRGDSDS</td>
+                                        <td>${order.userId.fName}</td>
+                                        <td>${expirationDate.getDate()}/${expirationDate.getMonth() + 1}/${expirationDate.getFullYear()}</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>${order.products[0].totalAmount}</td>
+                                        <td>${order.paymentOption}</td>
+                                    </tr>
+                                `;
+                            });
+            
+                            productContainer.innerHTML = productHTML;
+                        })
+                        .catch(function(error) {
+                            console.error('Error:', error);
+                        });
+            }
+        </script>
+
+        <!-- ---- -------------------FILTER -------------------->
+        <script>
+            const selectElement = document.getElementById('sort');
+            selectElement.addEventListener('change', handleChange);
+        
+            function handleChange(event) {
+                const selectedValue = event.target.value;
+                console.log(selectedValue);
+
+                if(selectedValue==='Custom'){
+                    const startDate= document.getElementById('startDate')
+                    const endDate= document.getElementById('endDate')
+                    const customGenerate= document.getElementById('customGenerate')
+                    const productContainer = document.getElementById('productContainer');
+                                    
+
+
+                    console.log('custom')
+                    startDate.hidden = false;
+                    endDate.hidden = false;
+                    customGenerate.hidden = false;
+                    productContainer.hidden = true;                        
+
+                }else{
+
+                    axios.post('/filterSalesReport', { selectedValue })
+                        .then(function(response) {
+                            const { filter } = response.data;
+                            console.log(filter);
+                            const productContainer = document.getElementById('productContainer');
+                            let productHTML = '';
+            
+                            filter.forEach(order => {
+                                const expirationDate = new Date(order.orderedAt);
+                                productHTML += `
+                                    <tr>
+                                        <td>prinDecorFRGDSDS</td>
+                                        <td>${order.userId.fName}</td>
+                                        <td>${expirationDate.getDate()}/${expirationDate.getMonth() + 1}/${expirationDate.getFullYear()}</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>${order.products[0].totalAmount}</td>
+                                        <td>${order.paymentOption}</td>
+                                    </tr>
+                                `;
+                            });
+            
+                            productContainer.innerHTML = productHTML;
+                        })
+                        .catch(function(error) {
+                            console.error('Error:', error);
+                        });
+                }
+        
+            }
+        </script>
+
+
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    </body>
+</html>

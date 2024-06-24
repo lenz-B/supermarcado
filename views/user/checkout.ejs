@@ -265,8 +265,11 @@
                                     </label>                                </h5>
                                 <div id="faq-item-2-4" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
+                                        <% if (walletData) {%>
                                         <p>Your wallet balance is <strong>$<%= walletData.wallet_amount %></strong>. </p>
-
+                                        <% } else {%>
+                                        <p>Your Wallet is empty.</p>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>

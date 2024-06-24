@@ -69,12 +69,13 @@
                                             <a href="/admin/order-details?order_id=<%= order.id %>" class="btn btn-md rounded font-sm">Detail</a>
                                             <div class="dropdown">
                                                 <a href="#" data-bs-toggle="dropdown" class=""></a>
-                                                <select class="form-select status-select" onchange="updateOrderStatus(this)">
+                                                <select class="form-select status-select" onchange="updateOrderStatus(this)" <% if (order.Status === 'Pending') { %> disabled <% } %>>
                                                     <% const statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Placed', 'Cancelled']; %>
                                                     <% statuses.forEach(status => { %>
-                                                        <option value="<%= status %>" <% if (status === order.Status) { %> selected <% } %>><%= status %></option>
+                                                        <option value="<%= status %>" <% if (status === order.Status) { %> selected <% } %> <% if (status === 'Pending') { %> disabled <% } %>><%= status %></option>
                                                     <% }); %>
                                                 </select>
+                                                
                                             </div>
                                         </td>
                                     </tr>

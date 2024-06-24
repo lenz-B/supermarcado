@@ -4,10 +4,10 @@ const nodemailer = require('nodemailer')
 const User = require('../models/users')
 const otpDb =require('../models/otp')
 const productDB = require('../models/products');
+const orderDB = require('../models/orders')
 const categoryDB = require('../models/category')
 const cartDB = require('../models/cart')
 const addressDB = require('../models/address')
-const orderDB = require('../models/orders')
 const { joiRegSchema, addressValidationSchema} = require('../models/joi');
 const flash = require('flash');
 

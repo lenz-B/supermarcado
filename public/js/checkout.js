@@ -1,5 +1,4 @@
 //  form validation and add address 
-
     document.getElementById('placeOrderButton').addEventListener('click', async function(event) {
         event.preventDefault();
         let isValid = true;
@@ -155,8 +154,8 @@
             event.preventDefault();
         }
     });
-//  place order 
 
+//  place order 
     document.getElementById('paymentBtn').addEventListener('click', function(event) {
         event.preventDefault(); 
 
@@ -331,8 +330,8 @@
                     });
                 }
             });
-// <!-- checkbox hide -->
 
+// <!-- checkbox hide -->
     document.addEventListener('DOMContentLoaded', function() {
         var agreeCheckbox = document.getElementById('agree');
         var formContainer = document.getElementById('addressFormContainer');
@@ -370,8 +369,8 @@
 
         window.handleCheckbox = handleCheckbox;
     });
-// <!-- apply coupon -->
 
+// <!-- apply coupon -->
     document.getElementById("applyCouponBtn").addEventListener("click", function(event) {
         event.preventDefault();
 
@@ -437,8 +436,8 @@
             console.error('Error applying coupon:', error);
         });
     });
-// <!-- remove coupon  -->
 
+// <!-- remove coupon  -->
     document.getElementById("removeCouponBtn").addEventListener("click", function(event) {
 event.preventDefault();
 
