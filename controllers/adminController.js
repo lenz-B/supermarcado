@@ -2,7 +2,110 @@ const bcrypt = require('bcrypt');
 const User = require('../models/users')
 const categoryDB = require('../models/category')
 const productDB = require('../models/products');
+const cartDB = require('../models/cart')
 const orderDB = require('../models/orders')
+
+
+
+//__________________________________________________functions_________________________________________________
+
+const fetchTopSellingProducts = async () => {
+  try {
+    const allOrders = await orderDB.find();
+
+    const allOrderedItems = allOrders.flatMap(order => order.orderedItems);
+
+    const productQuantities = allOrderedItems.reduce((acc, item) => {
+      acc[item.product_id.toString()] = (acc[item.product_id.toString()] || 0) + item.quantity;
+      return acc;
+    }, {});
+
+    const sortedProducts = Object.keys(productQuantities).sort((a, b) => productQuantities[b] - productQuantities[a]);
+
+    const topProducts = sortedProducts.slice(0, 10);
+
+    const topProductsDetails = await productDB.find({ _id: { $in: topProducts } });
+
+    const productNames = topProductsDetails.map(product => product.name);
+    const productQuantitiesSold = topProducts.map(id => productQuantities[id]);
+
+    const topTenProducts = {
+      topProductsDetails: topProductsDetails,
+      productNames: productNames,
+      productQuantitiesSold: productQuantitiesSold
+    }
+
+    return topTenProducts;
+  } catch (error) {
+    throw new Error('Error fetching top selling products: ' + error.message);
+  }
+};
+
+const fetchTopSellingCategories = async () => {
+  try {
+    const allOrders = await orderDB.find().populate({
+      path: 'orderedItems.product_id',
+      populate: {
+        path: 'category_id',
+        select: 'name'
+      },
+      select: 'name'
+    });
+
+    const allOrderedItems = allOrders.flatMap(order => order.orderedItems);
+
+    const categoryQuantitiesFromOrders = allOrderedItems.reduce((acc, item) => {
+      const categoryId = item.product_id.category_id._id.toString();
+      acc[categoryId] = (acc[categoryId] || 0) + item.quantity;
+      return acc;
+    }, {});
+
+    const allCarts = await cartDB.find().populate({
+      path: 'products.product_id',
+      populate: {
+        path: 'category_id',
+        select: 'name'
+      },
+      select: 'product_id'
+    });
+
+    const allCartProducts = allCarts.flatMap(cart => cart.products);
+
+    const categoryQuantitiesFromCarts = allCartProducts.reduce((acc, item) => {
+      const categoryId = item.product_id.category_id._id.toString();
+      acc[categoryId] = (acc[categoryId] || 0) + item.quantity;
+      return acc;
+    }, {});
+
+    const categoryQuantities = Object.keys(categoryQuantitiesFromOrders).reduce((acc, categoryId) => {
+      acc[categoryId] = (categoryQuantitiesFromOrders[categoryId] || 0) + (categoryQuantitiesFromCarts[categoryId] || 0);
+      return acc;
+    }, {});
+
+    const sortedCategories = Object.keys(categoryQuantities).sort((a, b) => categoryQuantities[b] - categoryQuantities[a]);
+
+    const topCategories = sortedCategories.slice(0, 10);
+
+    const topCategoriesDetails = await categoryDB.find({ _id: { $in: topCategories } });
+
+    const categoryNames = topCategoriesDetails.map(category => category.name);
+    const categoryQuantitiesSold = topCategories.map(id => categoryQuantities[id]);
+
+    const topTenCategories = {
+      topCategoriesDetails: topCategoriesDetails,
+      categoryNames: categoryNames,
+      categoryQuantitiesSold: categoryQuantitiesSold
+    };
+
+    return { topTenCategories };
+  } catch (error) {
+    throw new Error('Error fetching top selling categories: ' + error.message);
+  }
+};
+
+
+
+//_________________________________________________admin side_________________________________________________
 
 //admin home page
 const adminDash = async (req, res) => {
@@ -30,37 +133,42 @@ const adminDash = async (req, res) => {
 
     // Calculate monthly earnings
     const monthlyEarnings = filteredOrderData
-      .filter(order => {
-        const orderDate = new Date(order.date);
-        return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
-      })
-      .reduce((total, order) => total + order.totalAmount, 0);
+    .filter(order => {
+      const orderDate = new Date(order.date);
+      return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+    })
+    .reduce((total, order) => total + order.totalAmount, 0);
 
-      const formattedData = orderData
-      .filter(order => order.orderStatus !== 'Cancelled')
-      .map(order => ({
-        id: order._id,
-        Name: order.address.name,
-        Email: order.user_id.email,
-        Total: order.totalAmount,
-        Status: order.orderStatus,
-        Date: order.date.toLocaleDateString(),
-        Products: order.orderedItems.map(item => ({
-          productName: item.product_id.name,
-          productPrice: item.product_id.price,
-          category: item.product_id.category_id.name,
-          quantity: item.quantity,
-          subTotal: item.subTotal,
-          productStatus: item.productStatus
-        }))
-      }));
+    const formattedData = orderData
+    .filter(order => order.orderStatus !== 'Cancelled')
+    .map(order => ({
+      id: order._id,
+      Name: order.address.name,
+      Email: order.user_id.email,
+      Total: order.totalAmount,
+      Status: order.orderStatus,
+      Date: order.date.toLocaleDateString(),
+      Products: order.orderedItems.map(item => ({
+        productName: item.product_id.name,
+        productPrice: item.product_id.price,
+        category: item.product_id.category_id.name,
+        quantity: item.quantity,
+        subTotal: item.subTotal,
+        productStatus: item.productStatus
+      }))
+    }));
 
-      const categoryData = await categoryDB.find().select('name');     
+    const categoryData = await categoryDB.find().select('name'); 
 
-  res.render('admin/dashboard', {
-    orderData: formattedData, categoryData, overallOrderAmount, overallSalesCount, monthlyEarnings, 
-   })
-    
+    const topTenProducts = await fetchTopSellingProducts();
+    const topTenCategories = await fetchTopSellingCategories();
+
+    res.render('admin/dashboard', {
+      orderData: formattedData, categoryData, overallOrderAmount, overallSalesCount, monthlyEarnings,
+      topTenProducts: JSON.stringify(topTenProducts),
+      topTenCategories: JSON.stringify(topTenCategories)
+    })
+      
   } catch (error) {
     console.log('error in dashboard: ', error.message);
   }

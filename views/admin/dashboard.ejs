@@ -71,135 +71,137 @@
         <div class="col-xl-8 col-lg-12">
             <div class="card mb-4">
                 <article class="card-body">
-                    <h5 class="card-title">Sale statistics</h5>
+                    <h5 class="card-title">Top Selling Products</h5>
+                    <canvas id="topProductsChart" width="400" height="200px"></canvas>
+                    <div id="topTenProductsData" style="display: none;"><%= topTenProducts %></div>
                     <canvas id="myChart" height="120px"></canvas>
                 </article>
-            </div>
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">New Members</h5>
-                            <div class="new-member-list">
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <img src="assets/imgs/people/avatar-4.png" alt="" class="avatar" />
-                                        <div>
-                                            <h6>Patric Adams</h6>
-                                            <p class="text-muted font-xs">Sanfrancisco</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <img src="" alt="" class="avatar" />
-                                        <div>
-                                            <h6>Dilan Specter</h6>
-                                            <p class="text-muted font-xs">Sanfrancisco</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <img src="assets/imgs/people/avatar-3.png" alt="" class="avatar" />
-                                        <div>
-                                            <h6>Tomas Baker</h6>
-                                            <p class="text-muted font-xs">Sanfrancisco</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Recent activities</h5>
-                            <ul class="verti-timeline list-unstyled font-sm">
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>Today</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>Lorem ipsum dolor sit amet consectetur</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list active">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl animation-fade-right"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>17 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>Debitis nesciunt voluptatum dicta reprehenderit</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>13 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>Accusamus voluptatibus voluptas.</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>05 April</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>At vero eos et accusamus et iusto odio dignissi</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="event-list">
-                                    <div class="event-timeline-dot">
-                                        <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                    </div>
-                                    <div class="media">
-                                        <div class="me-3">
-                                            <h6><span>26 Mar</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>Responded to need “Volunteer Activities</div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </article>
-                    </div>
-                </div>
+                <!-- <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      const topTenProductsData = document.getElementById('topTenProductsData').textContent;
+                      try {
+                        const topTenProducts = JSON.parse(topTenProductsData);
+                
+                        const renderTopProductsChart = (productNames, productQuantitiesSold) => {
+                          const ctx = document.getElementById('topProductsChart').getContext('2d');
+                          const topProductsChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                              labels: productNames,
+                              datasets: [{
+                                label: 'Quantity Sold',
+                                data: productQuantitiesSold,
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color with transparency
+                                borderColor: 'rgba(54, 162, 235, 1)', // Blue color
+                                borderWidth: 1
+                              }]
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: true
+                                }
+                              }
+                            }
+                          });
+                        };
+                
+                        // Render the chart with the data
+                        renderTopProductsChart(topTenProducts.productNames, topTenProducts.productQuantitiesSold);
+                      } catch (e) {
+                        console.error("Failed to parse top ten products data:", e);
+                      }
+                    });
+                  </script> -->
             </div>
         </div>
         <div class="col-xl-4 col-lg-12">
             <div class="card mb-4">
                 <article class="card-body">
                     <h5 class="card-title">Revenue Base on Area</h5>
-                    <canvas id="myChart2" height="217"></canvas>
+                    <canvas id="topCategoriesChart" width="400" height="400"></canvas>
+                    <div id="topTenCategoriesData" style="display: none;"><%= topTenCategories %></div>
+                    <!-- <canvas id="myChart2" height="217"></canvas> -->
                 </article>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      const topTenProductsData = document.getElementById('topTenProductsData').textContent;
+                      const topTenCategoriesData = document.getElementById('topTenCategoriesData').textContent;
+                
+                      let topProductsChart, topCategoriesChart;
+                
+                      try {
+                        const topTenProducts = JSON.parse(topTenProductsData);
+                        const topTenCategories = JSON.parse(topTenCategoriesData);
+                
+                        const renderTopProductsChart = (productNames, productQuantitiesSold) => {
+                          if (topProductsChart) {
+                            topProductsChart.destroy(); 
+                          }
+                          console.log('product: ', productQuantitiesSold);
+                          const ctx = document.getElementById('topProductsChart').getContext('2d');
+                          topProductsChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                              labels: productNames,
+                              datasets: [{
+                                label: 'Quantity Sold',
+                                data: productQuantitiesSold,
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color with transparency
+                                borderColor: 'rgba(54, 162, 235, 1)', // Blue color
+                                borderWidth: 1
+                              }]
+                            },
+                            options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: true
+                                }
+                              }
+                            }
+                          });
+                        };
+                
+                        const renderTopCategoriesChart = (categoryNames, categoryQuantitiesSold) => {
+                        if (topCategoriesChart) {
+                            topCategoriesChart.destroy(); 
+                        }
+                        
+                        console.log('asdfasdf',categoryQuantitiesSold);
+                        const ctx = document.getElementById('topCategoriesChart').getContext('2d');
+                        topCategoriesChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                            labels: categoryNames,
+                            datasets: [{
+                                label: 'Quantity Sold',
+                                data: categoryQuantitiesSold,
+                                backgroundColor: 'rgba(75, 192, 192, 0.5)', // Teal color with transparency
+                                borderColor: 'rgba(75, 192, 192, 1)', // Teal color
+                                borderWidth: 1
+                            }]
+                            },
+                            options: {
+                            scales: {
+                                y: {
+                                beginAtZero: true
+                                }
+                            }
+                            }
+                        });
+                        };
+                
+                        // Render the charts with the data
+                        renderTopProductsChart(topTenProducts.productNames, topTenProducts.productQuantitiesSold);
+                        renderTopCategoriesChart(topTenCategories.categoryNames, topTenCategories.categoryQuantitiesSold);
+                    } catch (e) {
+                        console.error("Failed to parse data:", e);
+                      }
+                    });
+                  </script>
             </div>
             <div class="card mb-4">
-                <article class="card-body">
+                <!-- <article class="card-body">
                     <h5 class="card-title">Marketing Chanel</h5>
                     <span class="text-muted font-xs">Facebook</span>
                     <div class="progress mb-3">
@@ -221,7 +223,7 @@
                     <div class="progress mb-3">
                         <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
                     </div>
-                </article>
+                </article> -->
             </div>
         </div>
     </div>
