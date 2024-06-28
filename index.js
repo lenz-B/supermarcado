@@ -1,46 +1,57 @@
-const express = require("express")
-const app = express()
-const session = require('express-session')
+const express = require("express");
+const app = express();
+const session = require('express-session');
 const flash = require('connect-flash');
-const noCache = require('nocache')
-const connectDB = require('mongoose')
+const noCache = require('nocache');
+const connectDB = require('mongoose');
 const bodyParser = require('body-parser');
-const passport = require('./config/passport')
+const passport = require('./config/passport');
+const cartMiddleware = require('./middlewares/cartMiddleware');
+const morgan = require('morgan');
+require('dotenv').config();
 
+const { PORT } = process.env;
 
-connectDB.connect(process.env.MONGODB_URI)
+// Connect to MongoDB
+connectDB.connect(process.env.MONGODB_URI);
 
-app.set('view engine', 'ejs')
-app.use(express.urlencoded({extended:true}))
-app.use(express.json())
-app.use(noCache())
+// Set view engine
+app.set('view engine', 'ejs');
+
+// Middleware setup
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(noCache());
 app.use(session({
   secret: 'mySecret',
   resave: false,
   saveUninitialized: true
-}))
+}));
 
-app.use(flash())
+app.use(flash());
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
   next();
 });
 app.use(express.static('./public'));
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
-const morgan = require('morgan')
-// app.use(morgan('dev'))
+// Apply cart middleware
+app.use(cartMiddleware);
 
-require('dotenv').config()
-const {PORT} = process.env
+// Morgan
+// app.use(morgan('dev'));
 
+// Load routes
+const userRouter = require('./routes/userRouter');
+app.use('/', userRouter);
 
-const userRouter = require('./routes/userRouter')
-app.use('/', userRouter)
+const adminRouter = require('./routes/adminRouter');
+app.use('/admin', adminRouter);
 
-const adminRouter = require('./routes/adminRouter')
-app.use('/admin', adminRouter)
+// Start the server
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-app.listen(PORT, () => console.log(`Server running in ${PORT}`))
+module.exports = app;

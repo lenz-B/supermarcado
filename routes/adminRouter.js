@@ -16,7 +16,6 @@ router.delete('/logout', adminController.logout)
 router.get('/user',adminAuthentication.logIn, adminController.user)
 router.post('/user/:id', adminController.userStatus)
 router.get('/sales-report', adminController.salesReport)
-router.post('/sales-report', adminController.salesFilter)
 
 router.get('/categories',adminAuthentication.logIn, categoryController.categories)
 router.post('/categories/:id', categoryController.updateCatStatus);

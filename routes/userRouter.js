@@ -10,6 +10,7 @@ const userAuthentication = require('../middlewares/userAuth')
 const passport = require('passport')
 
 
+
 router.get('/', userController.home)
 router.get('/signup',userAuthentication.logOut, userController.signup)
 router.post('/signup', userController.registration)
@@ -54,6 +55,7 @@ router.post('/cancel-order', orderController.cancelOrder)
 router.post('/capture-payment', orderController.captureRazorpayPayment);
 router.post('/webhook', orderController.razorpayWebhook);
 router.get('/wallet', userAuthentication.login, orderController.walletPage)
+router.post('/finish-payment', orderController.finishPayment);
 
 router.post('/apply-coupon', couponController.applyCoupon)
 router.post('/remove-coupon', couponController.removeCoupon);

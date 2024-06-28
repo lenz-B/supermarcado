@@ -9,41 +9,67 @@ const orderDB = require('../models/orders')
 
 //__________________________________________________functions_________________________________________________
 
-const fetchTopSellingProducts = async () => {
+const fetchTopSellingProducts = async (timeRange) => {
   try {
-    const allOrders = await orderDB.find();
+    const now = new Date();
+    let startDate;
 
+    switch (timeRange) {
+      case 'week':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+        break;
+      case 'year':
+        startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+        break;
+      default:
+        startDate = new Date(0); // All time
+    }
+
+    const allOrders = await orderDB.find({ date: { $gte: startDate } });
     const allOrderedItems = allOrders.flatMap(order => order.orderedItems);
-
     const productQuantities = allOrderedItems.reduce((acc, item) => {
       acc[item.product_id.toString()] = (acc[item.product_id.toString()] || 0) + item.quantity;
       return acc;
     }, {});
-
     const sortedProducts = Object.keys(productQuantities).sort((a, b) => productQuantities[b] - productQuantities[a]);
-
     const topProducts = sortedProducts.slice(0, 10);
-
     const topProductsDetails = await productDB.find({ _id: { $in: topProducts } });
-
     const productNames = topProductsDetails.map(product => product.name);
     const productQuantitiesSold = topProducts.map(id => productQuantities[id]);
-
     const topTenProducts = {
       topProductsDetails: topProductsDetails,
       productNames: productNames,
       productQuantitiesSold: productQuantitiesSold
     }
-
     return topTenProducts;
   } catch (error) {
     throw new Error('Error fetching top selling products: ' + error.message);
   }
 };
 
-const fetchTopSellingCategories = async () => {
+const fetchTopSellingCategories = async (timeRange) => {
   try {
-    const allOrders = await orderDB.find().populate({
+    const now = new Date();
+    let startDate;
+
+    switch (timeRange) {
+      case 'week':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+        break;
+      case 'year':
+        startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+        break;
+      default:
+        startDate = new Date(0); // All time
+    }
+
+    const allOrders = await orderDB.find({ date: { $gte: startDate } }).populate({
       path: 'orderedItems.product_id',
       populate: {
         path: 'category_id',
@@ -54,31 +80,9 @@ const fetchTopSellingCategories = async () => {
 
     const allOrderedItems = allOrders.flatMap(order => order.orderedItems);
 
-    const categoryQuantitiesFromOrders = allOrderedItems.reduce((acc, item) => {
+    const categoryQuantities = allOrderedItems.reduce((acc, item) => {
       const categoryId = item.product_id.category_id._id.toString();
       acc[categoryId] = (acc[categoryId] || 0) + item.quantity;
-      return acc;
-    }, {});
-
-    const allCarts = await cartDB.find().populate({
-      path: 'products.product_id',
-      populate: {
-        path: 'category_id',
-        select: 'name'
-      },
-      select: 'product_id'
-    });
-
-    const allCartProducts = allCarts.flatMap(cart => cart.products);
-
-    const categoryQuantitiesFromCarts = allCartProducts.reduce((acc, item) => {
-      const categoryId = item.product_id.category_id._id.toString();
-      acc[categoryId] = (acc[categoryId] || 0) + item.quantity;
-      return acc;
-    }, {});
-
-    const categoryQuantities = Object.keys(categoryQuantitiesFromOrders).reduce((acc, categoryId) => {
-      acc[categoryId] = (categoryQuantitiesFromOrders[categoryId] || 0) + (categoryQuantitiesFromCarts[categoryId] || 0);
       return acc;
     }, {});
 
@@ -97,13 +101,11 @@ const fetchTopSellingCategories = async () => {
       categoryQuantitiesSold: categoryQuantitiesSold
     };
 
-    return { topTenCategories };
+    return topTenCategories;
   } catch (error) {
     throw new Error('Error fetching top selling categories: ' + error.message);
   }
 };
-
-
 
 //_________________________________________________admin side_________________________________________________
 
@@ -121,6 +123,8 @@ const adminDash = async (req, res) => {
         },
         select: 'name price'
       });
+
+      orderData = orderData.filter(order => order.user_id);
 
       const filteredOrderData = await orderDB.find({ orderStatus: { $ne: 'Cancelled' } });
 
@@ -160,13 +164,26 @@ const adminDash = async (req, res) => {
 
     const categoryData = await categoryDB.find().select('name'); 
 
-    const topTenProducts = await fetchTopSellingProducts();
-    const topTenCategories = await fetchTopSellingCategories();
+    const topTenProductsWeek = await fetchTopSellingProducts('week');
+    const topTenProductsMonth = await fetchTopSellingProducts('month');
+    const topTenProductsYear = await fetchTopSellingProducts('year');
+    const topTenProductsAllTime = await fetchTopSellingProducts();
+
+    const topTenCategoriesWeek = await fetchTopSellingCategories('week');
+    const topTenCategoriesMonth = await fetchTopSellingCategories('month');
+    const topTenCategoriesYear = await fetchTopSellingCategories('year');
+    const topTenCategoriesAllTime = await fetchTopSellingCategories();
 
     res.render('admin/dashboard', {
       orderData: formattedData, categoryData, overallOrderAmount, overallSalesCount, monthlyEarnings,
-      topTenProducts: JSON.stringify(topTenProducts),
-      topTenCategories: JSON.stringify(topTenCategories)
+      topTenProductsWeek: JSON.stringify(topTenProductsWeek),
+      topTenProductsMonth: JSON.stringify(topTenProductsMonth),
+      topTenProductsYear: JSON.stringify(topTenProductsYear),
+      topTenProductsAllTime: JSON.stringify(topTenProductsAllTime),
+      topTenCategoriesWeek: JSON.stringify(topTenCategoriesWeek),
+      topTenCategoriesMonth: JSON.stringify(topTenCategoriesMonth),
+      topTenCategoriesYear: JSON.stringify(topTenCategoriesYear),
+      topTenCategoriesAllTime: JSON.stringify(topTenCategoriesAllTime)
     })
       
   } catch (error) {
@@ -234,63 +251,6 @@ const salesReport = async (req, res) => {
   }
 }
 
-
-// filter
-const salesFilter = async (req, res) => {
-  try {
-      console.log('sales filter ;;;;;;;;;;;;;;;;;;;');
-      console.log('req body: ', req.body);
-      const { selectedValue, startDateValue, endDateValue } = req.body;
-
-      let filter = {};
-
-      switch (selectedValue) {
-          case 'Daily':
-              filter.date = {
-                  $gte: moment().startOf('day').toDate(),
-                  $lt: moment().endOf('day').toDate()
-              };
-              break;
-          case 'Weekly':
-              filter.date = {
-                  $gte: moment().startOf('week').toDate(),
-                  $lt: moment().endOf('week').toDate()
-              };
-              break;
-          case 'Monthly':
-              filter.date = {
-                  $gte: moment().startOf('month').toDate(),
-                  $lt: moment().endOf('month').toDate()
-              };
-              break;
-          case 'Yearly':
-              filter.date = {
-                  $gte: moment().startOf('year').toDate(),
-                  $lt: moment().endOf('year').toDate()
-              };
-              break;
-          case 'Custom':
-            if (!startDateValue || !endDateValue) {
-                return res.status(400).json({ error: 'Start and end dates are required for custom filter' });
-            }
-            filter.date = {
-                $gte: new Date(startDateValue),
-                $lt: new Date(endDateValue)
-            };
-            break;
-          default:
-            break;
-      }
-
-      const orders = await orderDB.find(filter).populate('user_id').populate('orderedItems.product_id');
-      res.json({ filter: orders });
-  } catch (error) {
-      console.error('Error in sales filter:', error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
-}
-
-
 //login
 const login = async (req, res) => {
   res.render('admin/login')
@@ -355,6 +315,6 @@ const userStatus = async (req, res) => {
   }
 }
 
-module.exports = {adminDash, salesFilter, salesReport,
+module.exports = {adminDash, salesReport,
   login, logingin, logout, user, userStatus
 }

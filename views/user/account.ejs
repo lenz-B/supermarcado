@@ -462,6 +462,7 @@
     <script src="js/plugins.js"></script>
     <!-- Main JS -->
     <script src="js/main.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
         function data(event){
@@ -964,6 +965,95 @@
                 alert("An error occurred while deleting the address.");
             });
         }
+    </script>
+
+    // finish Payment
+    <script>
+        function finishPayment(orderId) {
+            fetch('/finish-payment', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                const options = {
+                    key: data.key_id,
+                    amount: data.amount,
+                    currency: 'INR',
+                    name: 'Supermarcado',
+                    description: 'Order Payment',
+                    order_id: data.razorpay_id,
+                    handler: async function (response) {
+                    const captureResponse = await fetch('/capture-payment', {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                        placed_order_id: data.order_id
+                        }),
+                    });
+
+                    const captureResult = await captureResponse.json();
+
+                    if (captureResult.status) {
+                        Swal.fire({
+                        title: 'Payment Successful!',
+                        text: 'Your payment has been processed successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#9fb500',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                        });
+                    } else {
+                        Swal.fire({
+                        title: 'Payment Verification Failed!',
+                        text: 'Payment verification failed. Please contact support.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        });
+                    }
+                    },
+                    prefill: {
+                    name: data.user_address?.name || '',
+                    email: data.user_address?.email || '',
+                    contact: data.user_address?.mobile || '',
+                    },
+                    theme: {
+                    color: '#3399cc',
+                    },
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+                } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#d33'
+                });
+            });
+            }    
     </script>
     
 

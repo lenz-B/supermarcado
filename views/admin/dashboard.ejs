@@ -1,5 +1,29 @@
 <%- include('../layout/adminHeadder.ejs') %>
 
+<style>
+    .controls {
+      margin-bottom: 20px;
+    }
+    .controls select {
+      margin-right: 10px;
+    }
+    #topSellingTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #topSellingTable th, #topSellingTable td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    #topSellingTable th {
+      background-color: #f2f2f2;
+    }
+    #topSellingTable tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+
        
 <section class="content-main">
     <div class="content-header">
@@ -72,133 +96,217 @@
             <div class="card mb-4">
                 <article class="card-body">
                     <h5 class="card-title">Top Selling Products</h5>
+                    <select id="timeRangeSelect">
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                        <option value="allTime">All Time</option>
+                    </select>
                     <canvas id="topProductsChart" width="400" height="200px"></canvas>
-                    <div id="topTenProductsData" style="display: none;"><%= topTenProducts %></div>
-                    <canvas id="myChart" height="120px"></canvas>
+
+                    <div id="topTenProductsWeekData" style="display: none;"><%= topTenProductsWeek %></div>
+                    <div id="topTenProductsMonthData" style="display: none;"><%= topTenProductsMonth %></div>
+                    <div id="topTenProductsYearData" style="display: none;"><%= topTenProductsYear %></div>
+                    <div id="topTenProductsAllTimeData" style="display: none;"><%= topTenProductsAllTime %></div>
                 </article>
-                <!-- <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                      const topTenProductsData = document.getElementById('topTenProductsData').textContent;
-                      try {
-                        const topTenProducts = JSON.parse(topTenProductsData);
-                
-                        const renderTopProductsChart = (productNames, productQuantitiesSold) => {
-                          const ctx = document.getElementById('topProductsChart').getContext('2d');
-                          const topProductsChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                              labels: productNames,
-                              datasets: [{
-                                label: 'Quantity Sold',
-                                data: productQuantitiesSold,
-                                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color with transparency
-                                borderColor: 'rgba(54, 162, 235, 1)', // Blue color
-                                borderWidth: 1
-                              }]
-                            },
-                            options: {
-                              scales: {
-                                y: {
-                                  beginAtZero: true
-                                }
-                              }
-                            }
-                          });
-                        };
-                
-                        // Render the chart with the data
-                        renderTopProductsChart(topTenProducts.productNames, topTenProducts.productQuantitiesSold);
-                      } catch (e) {
-                        console.error("Failed to parse top ten products data:", e);
-                      }
-                    });
-                  </script> -->
+                <article class="card-body">
+                    <h5 class="card-title">Top Selling Products</h5>
+                    <select id="categoryTimeRangeSelect">
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                        <option value="allTime">All Time</option>
+                    </select>
+
+                    <canvas id="topCategoriesChart" width="400" height="200px"></canvas>
+
+                    <div id="topTenCategoriesWeekData" style="display: none;"><%= topTenCategoriesWeek %></div>
+                    <div id="topTenCategoriesMonthData" style="display: none;"><%= topTenCategoriesMonth %></div>
+                    <div id="topTenCategoriesYearData" style="display: none;"><%= topTenCategoriesYear %></div>
+                    <div id="topTenCategoriesAllTimeData" style="display: none;"><%= topTenCategoriesAllTime %></div>
+                </article>
             </div>
         </div>
         <div class="col-xl-4 col-lg-12">
             <div class="card mb-4">
                 <article class="card-body">
-                    <h5 class="card-title">Revenue Base on Area</h5>
-                    <canvas id="topCategoriesChart" width="400" height="400"></canvas>
-                    <div id="topTenCategoriesData" style="display: none;"><%= topTenCategories %></div>
+                    <h5 class="card-title">Top Selling</h5>
+
+                    <div class="controls">
+                        <select id="dataTypeSelect">
+                            <option value="products">Products</option>
+                            <option value="categories">Categories</option>
+                        </select>
+                        <select id="timeRangeSelect">
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="year">Year</option>
+                            <option value="allTime">All Time</option>
+                        </select>
+                    </div>                      
+                    <table id="topSellingTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th id="nameHeader">Name</th>
+                                <th>Quantity Sold</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topSellingTableBody">
+                        </tbody>
+                    </table>
+                      
+                    <!-- Keep the existing chart canvases and data divs -->
+                      
+                    <!-- <canvas id="myChart" height="120px"></canvas> -->
                     <!-- <canvas id="myChart2" height="217"></canvas> -->
                 </article>
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
-                      const topTenProductsData = document.getElementById('topTenProductsData').textContent;
-                      const topTenCategoriesData = document.getElementById('topTenCategoriesData').textContent;
-                
-                      let topProductsChart, topCategoriesChart;
-                
-                      try {
-                        const topTenProducts = JSON.parse(topTenProductsData);
-                        const topTenCategories = JSON.parse(topTenCategoriesData);
-                
-                        const renderTopProductsChart = (productNames, productQuantitiesSold) => {
-                          if (topProductsChart) {
-                            topProductsChart.destroy(); 
-                          }
-                          console.log('product: ', productQuantitiesSold);
-                          const ctx = document.getElementById('topProductsChart').getContext('2d');
-                          topProductsChart = new Chart(ctx, {
+                        const topTenProductsWeekData = JSON.parse(document.getElementById('topTenProductsWeekData').textContent);
+                        const topTenProductsMonthData = JSON.parse(document.getElementById('topTenProductsMonthData').textContent);
+                        const topTenProductsYearData = JSON.parse(document.getElementById('topTenProductsYearData').textContent);
+                        const topTenProductsAllTimeData = JSON.parse(document.getElementById('topTenProductsAllTimeData').textContent);
+
+                        const topTenCategoriesWeekData = JSON.parse(document.getElementById('topTenCategoriesWeekData').textContent);
+                        const topTenCategoriesMonthData = JSON.parse(document.getElementById('topTenCategoriesMonthData').textContent);
+                        const topTenCategoriesYearData = JSON.parse(document.getElementById('topTenCategoriesYearData').textContent);
+                        const topTenCategoriesAllTimeData = JSON.parse(document.getElementById('topTenCategoriesAllTimeData').textContent);
+                      
+                        let topProductsChart, topCategoriesChart;
+                    
+                        const renderChart = (chartId, labels, data, label, timeRange) => {
+                            const ctx = document.getElementById(chartId).getContext('2d');
+                            return new Chart(ctx, {
                             type: 'bar',
                             data: {
-                              labels: productNames,
-                              datasets: [{
-                                label: 'Quantity Sold',
-                                data: productQuantitiesSold,
-                                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Blue color with transparency
-                                borderColor: 'rgba(54, 162, 235, 1)', // Blue color
+                                labels: labels,
+                                datasets: [{
+                                label: `${label} (${timeRange})`,
+                                data: data,
+                                backgroundColor: chartId === 'topProductsChart' ? 'rgba(54, 162, 235, 0.5)' : 'rgba(75, 192, 192, 0.5)',
+                                borderColor: chartId === 'topProductsChart' ? 'rgba(54, 162, 235, 1)' : 'rgba(75, 192, 192, 1)',
                                 borderWidth: 1
-                              }]
+                                }]
                             },
                             options: {
-                              scales: {
+                                scales: {
                                 y: {
-                                  beginAtZero: true
+                                    beginAtZero: true
                                 }
-                              }
+                                }
                             }
-                          });
+                            });
                         };
-                
-                        const renderTopCategoriesChart = (categoryNames, categoryQuantitiesSold) => {
-                        if (topCategoriesChart) {
-                            topCategoriesChart.destroy(); 
+                    
+                        const updateChart = (chartType, timeRange) => {
+                            let data;
+                            switch (chartType) {
+                            case 'products':
+                                if (topProductsChart) topProductsChart.destroy();
+                                switch (timeRange) {
+                                case 'week': data = topTenProductsWeekData; break;
+                                case 'month': data = topTenProductsMonthData; break;
+                                case 'year': data = topTenProductsYearData; break;
+                                default: data = topTenProductsAllTimeData;
+                                }
+                                topProductsChart = renderChart('topProductsChart', data.productNames, data.productQuantitiesSold, 'Products Sold', timeRange);
+                                break;
+                            case 'categories':
+                                if (topCategoriesChart) topCategoriesChart.destroy();
+                                switch (timeRange) {
+                                case 'week': data = topTenCategoriesWeekData; break;
+                                case 'month': data = topTenCategoriesMonthData; break;
+                                case 'year': data = topTenCategoriesYearData; break;
+                                default: data = topTenCategoriesAllTimeData;
+                                }
+                                topCategoriesChart = renderChart('topCategoriesChart', data.categoryNames, data.categoryQuantitiesSold, 'Categories Sold', timeRange);
+                                break;
+                            }
+                        };
+
+                        const dataTypeSelect = document.getElementById('dataTypeSelect');
+                        const timeRangeSelect = document.getElementById('timeRangeSelect');
+                        const topSellingTableBody = document.getElementById('topSellingTableBody');
+                        const nameHeader = document.getElementById('nameHeader');
+
+                        function getDataForTimeRange(dataType, timeRange) {
+                            switch (dataType) {
+                                case 'products':
+                                switch (timeRange) {
+                                    case 'week': return topTenProductsWeekData;
+                                    case 'month': return topTenProductsMonthData;
+                                    case 'year': return topTenProductsYearData;
+                                    case 'allTime': return topTenProductsAllTimeData;
+                                }
+                                break;
+                                case 'categories':
+                                switch (timeRange) {
+                                    case 'week': return topTenCategoriesWeekData;
+                                    case 'month': return topTenCategoriesMonthData;
+                                    case 'year': return topTenCategoriesYearData;
+                                    case 'allTime': return topTenCategoriesAllTimeData;
+                                }
+                                break;
+                            }
+                            return null;
                         }
+
+                        function updateTable() {
+                            const dataType = dataTypeSelect.value;
+                            const timeRange = timeRangeSelect.value;
+                            const data = getDataForTimeRange(dataType, timeRange);
+
+                            console.log('Updating table with:', { dataType, timeRange, data });
+
+                            if (!data) {
+                                console.error('No data available for', dataType, timeRange);
+                                topSellingTableBody.innerHTML = '<tr><td colspan="3">No data available</td></tr>';
+                                return;
+                            }
+
+                            nameHeader.textContent = dataType === 'products' ? 'Product Name' : 'Category Name';
+
+                            let tableContent = '';
+                            const names = dataType === 'products' ? data.productNames : data.categoryNames;
+                            const quantities = dataType === 'products' ? data.productQuantitiesSold : data.categoryQuantitiesSold;
+
+                            if (!names || !quantities || names.length === 0 || quantities.length === 0) {
+                                console.error('Invalid data structure:', data);
+                                topSellingTableBody.innerHTML = '<tr><td colspan="3">Invalid data structure</td></tr>';
+                                return;
+                            }
+
+                            names.forEach((name, index) => {
+                                tableContent += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${name}</td>
+                                    <td>${quantities[index]}</td>
+                                </tr>
+                                `;
+                            });
+
+                            topSellingTableBody.innerHTML = tableContent;
+                        }
+
+                        dataTypeSelect.addEventListener('change', updateTable);
+                        timeRangeSelect.addEventListener('change', updateTable);
+
+                        updateTable();
                         
-                        console.log('asdfasdf',categoryQuantitiesSold);
-                        const ctx = document.getElementById('topCategoriesChart').getContext('2d');
-                        topCategoriesChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                            labels: categoryNames,
-                            datasets: [{
-                                label: 'Quantity Sold',
-                                data: categoryQuantitiesSold,
-                                backgroundColor: 'rgba(75, 192, 192, 0.5)', // Teal color with transparency
-                                borderColor: 'rgba(75, 192, 192, 1)', // Teal color
-                                borderWidth: 1
-                            }]
-                            },
-                            options: {
-                            scales: {
-                                y: {
-                                beginAtZero: true
-                                }
-                            }
-                            }
+                        updateChart('products', 'month');
+                        updateChart('categories', 'month');
+                    
+                        document.getElementById('productTimeRangeSelect').addEventListener('change', function(e) {
+                        updateChart('products', e.target.value);
                         });
-                        };
-                
-                        // Render the charts with the data
-                        renderTopProductsChart(topTenProducts.productNames, topTenProducts.productQuantitiesSold);
-                        renderTopCategoriesChart(topTenCategories.categoryNames, topTenCategories.categoryQuantitiesSold);
-                    } catch (e) {
-                        console.error("Failed to parse data:", e);
-                      }
+                    
+                        document.getElementById('categoryTimeRangeSelect').addEventListener('change', function(e) {
+                        updateChart('categories', e.target.value);
+                        });
                     });
-                  </script>
+                </script>
             </div>
             <div class="card mb-4">
                 <!-- <article class="card-body">

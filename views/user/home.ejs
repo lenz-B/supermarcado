@@ -156,7 +156,13 @@
                                     <div class="ltn__drop-menu user-menu">
                                         <ul>
                                             <li>
-                                                <a href="#"><i class="icon-user"></i></a>
+                                                <a href="#"><i class="icon-user"></i>
+                                                    <%if(user_id){%>
+                                                        <sup></sup>
+                                                    <% } else { %>
+                                                        <sup>×</sup>
+                                                    <% } %>
+                                                </a>
                                                 <ul>
                                                     <%if(!user_id){%>
 
@@ -179,13 +185,23 @@
                                     <!-- mini-cart 2 -->
                                     <div class="mini-cart-icon mini-cart-icon-2">
                                         <a href="#ltn__utilize-cart-menu" class="ltn__utilize-toggle">
-                                            <span class="mini-cart-icon">
-                                                <i class="icon-shopping-cart"></i>
-                                                <sup>2</sup>
-                                            </span>
-                                            <h6><span>Your Cart</span> <span class="ltn__secondary-color">$89.25</span></h6>
+                                          <span class="mini-cart-icon">
+                                            <i class="icon-shopping-cart"></i>
+                                            <% if (cartTotals && cartTotals.totalItems > 0) { %>
+                                              <sup><%= cartTotals.totalItems %></sup>
+                                            <% } else { %>
+                                              <sup>0</sup>
+                                            <% } %>
+                                          </span>
+                                          <% if (cartTotals && cartTotals.totalItems > 0) { %>
+                                            <h6><span>Your Cart</span> <span class="ltn__secondary-color">$<%= cartTotals.orderTotal.toFixed(2) %></span></h6>
+                                          <% } else { %>
+                                            <h6><span>Your Cart</span> <span class="ltn__secondary-color">Is Empty</span></h6>
+                                          <% } %>
                                         </a>
-                                    </div>
+                                      </div>
+                                      
+                                      
                                 </li>
                             </ul>
                         </div>
@@ -248,56 +264,40 @@
                 <button class="ltn__utilize-close">×</button>
             </div>
             <div class="mini-cart-product-area ltn__scrollbar">
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="img/product/1.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Red Hot Tomato</a></h6>
-                        <span class="mini-cart-quantity">1 x $65.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="img/product/2.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Vegetables Juices</a></h6>
-                        <span class="mini-cart-quantity">1 x $85.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="img/product/3.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Orange Sliced Mix</a></h6>
-                        <span class="mini-cart-quantity">1 x $92.00</span>
-                    </div>
-                </div>
-                <div class="mini-cart-item clearfix">
-                    <div class="mini-cart-img">
-                        <a href="#"><img src="img/product/4.png" alt="Image"></a>
-                        <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
-                    </div>
-                    <div class="mini-cart-info">
-                        <h6><a href="#">Orange Fresh Juice</a></h6>
-                        <span class="mini-cart-quantity">1 x $68.00</span>
-                    </div>
+                <div class="mini-cart">
+                    <% if (cartProducts && cartProducts.length > 0) { %>
+                      <% cartProducts.forEach(product => { %>
+                        <div class="mini-cart-item clearfix">
+                          <div class="mini-cart-img">
+                            <a href="#"><img src="/productImage/<%= product.product_id.img[1] %>" alt="Image"></a>
+                            <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
+                          </div>
+                          <div class="mini-cart-info">
+                            <h6><a href="#"><%= product.product_id.name %></a></h6>
+                            <span class="mini-cart-quantity"><%= product.quantity %> x $<%= product.product_id.price.toFixed(2) %></span>
+                          </div>
+                        </div>
+                      <% }); %>
+                    <% } else { %>
+                      <div class="mini-cart-empty">
+                        <h6>Add products to cart</h6>
+                      </div>
+                    <% } %>
                 </div>
             </div>
             <div class="mini-cart-footer">
                 <div class="mini-cart-sub-total">
-                    <h5>Subtotal: <span>$310.00</span></h5>
+                    <% if (cartTotals && cartTotals.totalItems > 0) { %>
+                    <h5>Subtotal: <span>$<%= cartTotals.orderTotal.toFixed(2) %></span></h5>
+                    <% } else { %>
+                    <h5>Subtotal: <span>$ 0</span></h5>
+                    <% } %>
                 </div>
                 <div class="btn-wrapper">
                     <a href="/cart" class="theme-btn-1 btn btn-effect-1">View Cart</a>
                     <a href="/checkout" class="theme-btn-2 btn btn-effect-2">Checkout</a>
                 </div>
-                <p>Free Shipping on All Orders Over $100!</p>
+                <p>Free Shipping on All Orders Over $1000!</p>
             </div>
 
         </div>

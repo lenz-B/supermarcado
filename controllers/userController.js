@@ -37,7 +37,8 @@ async function calculateCartTotals(userId, session) {
     const cart = await cartDB.findOne({ user_id: userId }).populate('products.product_id');
 
     if (!cart) {
-      return  new Error('Cart not found');
+      session.cartTotals = null;
+      return;
     }
 
     let orderTotal = 0;
@@ -56,14 +57,17 @@ async function calculateCartTotals(userId, session) {
       subTotals: cart.products.map(product => ({
         productId: product.product_id._id,
         subTotal: product.subTotal,
-        quantity: product.quantity 
+        quantity: product.quantity
       })),
       orderTotal: orderTotal,
       shipping: shipping,
-      vat: vat
+      vat: vat,
+      totalItems: cart.products.length
     };
 
-    console.log('Cart totals calculated and stored in session:', session.cartTotals);
+    console.log('Cart totals calculated and stored in session:');
+    // console.log('Cart totals calculated and stored in session:', session.cartTotals);
+
   } catch (error) {
     console.error('Error calculating cart totals:', error);
   }
@@ -99,16 +103,102 @@ const updateAndCachePromoPrices = async (req, products) => {
   return updatedProducts;
 };
 
+// invoice layout
+function createInvoice(order, res) {
+  const doc = new PDFDocument({margin: 50});
+
+  // Helper function for drawing lines
+  function drawLine(x1, y1, x2, y2) {
+    doc.moveTo(x1, y1).lineTo(x2, y2).stroke();
+  }
+
+  // Set up the PDF document
+  doc.fontSize(20).text('INVOICE', {align: 'center'});
+  doc.moveDown();
+
+  // Company details
+  doc.fontSize(12).text('Project Supermarcado', {align: 'left'});
+  doc.text('lenzb productions', {align: 'left'});
+  doc.text('Calicut', {align: 'left'});
+  doc.moveDown();
+
+  // Customer details
+  doc.fontSize(12).text('Bill To:', {align: 'left'});
+  doc.text(order.address.name);
+  doc.text(order.address.email);
+  doc.text(order.address.mobile);
+  doc.text(order.address.address);
+  doc.text(`${order.address.city}, ${order.address.state}, ${order.address.pin}`);
+  doc.moveDown();
+
+  // Invoice details
+  doc.text(`Invoice Date: ${new Date(order.date).toLocaleDateString()}`);
+  doc.text(`Order Status: ${order.orderStatus}`);
+  doc.text(`Payment Method: ${order.paymentMethod}`);
+  doc.moveDown();
+
+  // Table header
+  const invoiceTop = 300;
+  doc.font('Helvetica-Bold');
+  doc.text('Item', 50, invoiceTop);
+  doc.text('Quantity', 200, invoiceTop, {width: 90, align: 'right'});
+  doc.text('Unit Price', 290, invoiceTop, {width: 90, align: 'right'});
+  doc.text('Amount', 400, invoiceTop, {width: 90, align: 'right'});
+  
+  drawLine(50, invoiceTop + 20, 550, invoiceTop + 20);
+
+  // Table rows
+  let position = invoiceTop + 30;
+  doc.font('Helvetica');
+  order.orderedItems.forEach(item => {
+    doc.text(item.product_id.name, 50, position);
+    doc.text(item.quantity.toString(), 200, position, {width: 90, align: 'right'});
+    doc.text(`$${item.product_id.price.toFixed(2)}`, 290, position, {width: 90, align: 'right'});
+    doc.text(`$${(item.product_id.price * item.quantity).toFixed(2)}`, 400, position, {width: 90, align: 'right'});
+    position += 30;
+  });
+
+  drawLine(50, position, 550, position);
+  position += 20;
+
+  // Totals
+  const subtotal = order.totalAmount + order.offerDiscount + order.couponDiscount - 15;
+  doc.text('Subtotal:', 300, position);
+  doc.text(`$${subtotal.toFixed(2)}`, 400, position, {width: 90, align: 'right'});
+  position += 20;
+
+  doc.text('Shipping & Handling:', 300, position);
+  doc.text('$15.00', 400, position, {width: 90, align: 'right'});
+  position += 20;
+
+  doc.text('Discount:', 300, position);
+  doc.text(`$${(order.offerDiscount + order.couponDiscount).toFixed(2)}`, 400, position, {width: 90, align: 'right'});
+  position += 20;
+
+  drawLine(300, position, 550, position);
+  position += 20;
+
+  doc.font('Helvetica-Bold');
+  doc.text('TOTAL:', 300, position);
+  doc.text(`$${order.totalAmount.toFixed(2)}`, 400, position, {width: 90, align: 'right'});
+
+  // Stream the PDF back as the response
+  res.setHeader('Content-type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=invoice-${order._id}.pdf`);
+  doc.pipe(res);
+  doc.end();
+}
+
 
 //__________________________________________________user side__________________________________________________
 
 //home page
 const home = async (req, res) => {
   try {
-  
-    const categories = await categoryDB.find({ status: true }).lean();
-    let products = await productDB.find({ status: true }).populate('category_id offer')
+    const { user_id } = req.session;
 
+    const categories = await categoryDB.find({ status: true }).lean();
+    let products = await productDB.find({ status: true }).populate('category_id offer');
     products = await updateAndCachePromoPrices(req, products);
 
     const categoryData = categories.map(category => {
@@ -118,14 +208,21 @@ const home = async (req, res) => {
       };
     });
 
-    const { user_id } = req.session;
+    const cartData = await cartDB.findOne({ user_id }).populate('products.product_id');
 
-    res.render('user/home', { user_id, categoryData});
+    if (cartData) {
+      await calculateCartTotals(user_id, req.session);
+    }
+
+    console.log('Cart Totals:', req.session.cartTotals);
+
+    res.render('user/home', { user_id, categoryData, cartTotals: req.session.cartTotals, cartProducts: cartData ? cartData.products : [] });
   } catch (error) {
     console.error("Error fetching data from the database:", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 const signup = async (req, res) => {
   const categoryData = await getHeaderData();
@@ -187,7 +284,6 @@ const registration = async (req, res) => {
 }
 
 // Email Sender
-
 const sendOtp = async ( email, otp) => {
   try {
     const emailSender = nodemailer.createTransport({
@@ -368,6 +464,7 @@ async function logingIn (req, res) {
   }
 }
 
+// google sign in
 async function googleSignIn(req, res) {
   try {
     const user = req.user;
@@ -379,7 +476,7 @@ async function googleSignIn(req, res) {
   }
 }
 
-  
+//log out
 const logOut = async (req,res)=>{
   try {
     req.session.destroy()
@@ -390,6 +487,7 @@ const logOut = async (req,res)=>{
   }
 }
 
+//resend otp
 const sendCode = async (req, res) => {
   try {
     const { email } = req.body;
@@ -424,6 +522,7 @@ const sendCode = async (req, res) => {
   }
 }
 
+//forgey password page
 const getForgetPassword = async (req, res) => {
   try {
     console.log('===otp')
@@ -437,6 +536,7 @@ const getForgetPassword = async (req, res) => {
   }
 }
 
+// forget password 
 const forgetPassword = async (req, res) => {
   try {
     console.log('forget password');
@@ -478,6 +578,7 @@ const forgetPassword = async (req, res) => {
   }
 }
 
+// updating password
 const confirmPassword = async (req, res) => {
   try {
     const userData = req.session.userData;
@@ -678,45 +779,7 @@ const invoiceDownload = async (req, res) => {
       return res.status(404).send('Order not found');
     }
 
-    // Create a PDF document
-    const doc = new PDFDocument();
-
-    // Set up the PDF document
-    doc.fontSize(15).text('Invoice', { align: 'center' });
-    doc.moveDown();
-
-    // Header for Product and Price
-    doc.fontSize(12).text('Product', 100).text('Price', { align: 'right' });
-    doc.moveDown();
-
-    // List each ordered item with its price
-    order.orderedItems.forEach(item => {
-      doc.fontSize(10).text(`${item.product_id.name}`, 100).text(`$${(item.product_id.price * item.quantity).toFixed(2)}`, { align: 'center' });
-    });
-
-    doc.moveDown();
-    // Add Shipping and Handling, Vat, Order Total, Status, Payment Method, and Order Address
-    doc.fontSize(10).text(`Shipping and Handling:`, { align: 'left' }).text(`$15.00`, { align: 'center' });
-    doc.moveDown();
-    doc.text(`Vat:`, { align: 'left' }).text(`$0.00`, { align: 'center' });
-    doc.moveDown();
-    doc.text(`Order Total:`, { align: 'left' }).text(`$${order.totalAmount.toFixed(2)}`, { align: 'center' });
-    doc.moveDown();
-    doc.text(`Status: ${order.orderStatus}`, { align: 'left' });
-    doc.moveDown();
-    doc.text(`Payment Method: ${order.paymentMethod}`, { align: 'left' });
-    doc.moveDown();
-    doc.text(`Order Address:`, { align: 'left' });
-    doc.text(`${order.address.name}`);
-    doc.text(`${order.address.mobile}`);
-    doc.text(`${order.address.address}`);
-    doc.text(`${order.address.city}, ${order.address.state}, ${order.address.pin}`);
-
-    // Stream the PDF back as the response
-    res.setHeader('Content-type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=invoice-${orderId}.pdf`);
-    doc.pipe(res);
-    doc.end();
+    createInvoice(order, res)
 
   } catch (error) {
     console.error(error);

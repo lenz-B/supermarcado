@@ -36,34 +36,6 @@ const getHeaderData = async () => {
   return categoryData;
 };
 
-// const updatePromoPrices = async (products) => {
-//   try {
-//     const updatedProducts = await Promise.all(products.map(async (product) => {
-//       const activeOffers = product.offer.filter(offer => offer.status && new Date(offer.expiry_date) > new Date());
-//       if (activeOffers.length > 0) {
-//         const latestOffer = activeOffers[activeOffers.length - 1];
-//         product.promoPrice = product.price - (product.price * latestOffer.discount) / 100;
-//       } else {
-//         product.promoPrice = 0;
-//       }
-//       await product.save();
-//       return product;
-//     }));
-//     return updatedProducts;
-//   } catch (error) {
-//     throw new Error(`Error updating promo prices: ${error.message}`);
-//   }
-// };
-
-// const updateAndCachePromoPrices = async (req, products) => {
-//   const updatedProducts = await updatePromoPrices(products);
-//   req.session.promoPrices = updatedProducts.reduce((acc, product) => {
-//     acc[product._id] = product.promoPrice;
-//     return acc;
-//   }, {});
-//   return updatedProducts;
-// };
-
 //calculation
 async function calculateCartTotals(userId, session) {
   try {
@@ -319,7 +291,6 @@ const placeOrder = async (req, res) => {
   }
 };
 
-
 //razorpay
 const captureRazorpayPayment = async (req, res) => {
   try {
@@ -402,6 +373,43 @@ const razorpayWebhook = async (req, res) => {
   }
 };
 
+const finishPayment = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    const { user_id } = req.session;
+
+    const order = await orderDB.findOne({ _id: orderId, user_id });
+
+    if (!order) {
+      return res.status(404).json({ status: false, message: 'Order not found' });
+    }
+
+    if (order.orderStatus !== 'Pending') {
+      return res.status(400).json({ status: false, message: 'Invalid order status' });
+    }
+
+    const razorDataRes = await razorpayController.createOrder_id({
+      "amount": order.totalAmount * 100,
+      "currency": "INR"
+    });
+
+    const razorData = await razorDataRes.json();
+
+    return res.json({
+      status: true,
+      message: 'Razorpay order created and ready for payment.',
+      order_id: order._id,
+      razorpay_id: razorData.id,
+      amount: order.totalAmount * 100,
+      key_id: process.env.RAZORPAY_ID_KEY,
+      user_address: order.address
+    });
+  } catch (error) {
+    console.error('Error finishing payment:', error);
+    return res.status(500).json({ status: false, message: 'Internal Server Error' });
+  }
+};
+
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
@@ -449,8 +457,21 @@ const cancelOrder = async (req, res) => {
   }
 };
 
+//wallet page
+const walletPage = async (req, res) => {
+  try {
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+    const walletData = await walletDB.findOne({ user_id }).populate('user_id');
 
+    res.render('user/wallet', {user_id, categoryData, walletData})
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+}
 
+//__________________________________________________admin side__________________________________________________
 
 //admin orders
 const orders = async (req, res) => {
@@ -549,23 +570,8 @@ const orderDetails = async (req, res) => {
 };
 
 
-//wallet page
-const walletPage = async (req, res) => {
-  try {
-    const { user_id } = req.session;
-    const categoryData = await getHeaderData();
-    const walletData = await walletDB.findOne({ user_id }).populate('user_id');
-
-    res.render('user/wallet', {user_id, categoryData, walletData})
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error');
-  }
-}
-
-
 
 module.exports = { checkoutPage, placeOrder,
-  captureRazorpayPayment, razorpayWebhook, cancelOrder,
+  captureRazorpayPayment, razorpayWebhook, finishPayment, cancelOrder,
   orders, updateOrderStatus, orderDetails, walletPage,
 }
