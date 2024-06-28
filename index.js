@@ -13,7 +13,10 @@ require('dotenv').config();
 const { PORT } = process.env;
 
 // Connect to MongoDB
-connectDB.connect(process.env.MONGODB_URI);
+connectDB.connect(process.env.MONGODB_URI)
+.then(data=>{
+  console.log("mongoDB connected ");
+})
 
 // Set view engine
 app.set('view engine', 'ejs');
