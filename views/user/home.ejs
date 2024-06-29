@@ -269,11 +269,11 @@
                       <% cartProducts.forEach(product => { %>
                         <div class="mini-cart-item clearfix">
                           <div class="mini-cart-img">
-                            <a href="#"><img src="/productImage/<%= product.product_id.img[1] %>" alt="Image"></a>
+                            <a href="/product-details?proId=<%= product.product_id._id %>"><img src="/productImage/<%= product.product_id.img[1] %>" alt="Image"></a>
                             <span class="mini-cart-item-delete"><i class="icon-cancel"></i></span>
                           </div>
                           <div class="mini-cart-info">
-                            <h6><a href="#"><%= product.product_id.name %></a></h6>
+                            <h6><a href="/product-details?proId=<%= product.product_id._id %>"><%= product.product_id.name %></a></h6>
                             <span class="mini-cart-quantity"><%= product.quantity %> x $<%= product.product_id.price.toFixed(2) %></span>
                           </div>
                         </div>

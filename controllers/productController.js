@@ -259,18 +259,14 @@ async function shop(req, res) {
     }
     if (priceRange) {
       priceRange = priceRange.replace(/[^\d\s-]/g, '');
-
       const [minPrice, maxPrice] = priceRange.split('-').map(price => parseInt(price));
-
       query.price = { $gte: minPrice, $lte: maxPrice };
     }
 
     let productData = await productDB.find(query).populate('offer');
 
-    // Update promo prices
     productData = await updateAndCachePromoPrices(req, productData);
 
-    // Sort products based on the selected option
     productData = await sortProducts(productData, sortOption);
 
     const categoryData = await getHeaderData();
@@ -309,7 +305,6 @@ const productDetails = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 }
-
 
 
 module.exports = {products, addProduct,

@@ -57,19 +57,19 @@
                             <li>
                                 <div class="short-by text-center">
                                     <select class="nice-select" id="sort-options" onchange="applyFilters()">
-                                        <option value="default">Default sorting</option>
-                                        <option value="popularity">Sort by popularity</option>
-                                        <option value="new-arrivals">Sort by new arrivals</option>
-                                        <option value="price-low-high">Sort by price: low to high</option>
-                                        <option value="price-high-low">Sort by price: high to low</option>
+                                      <option value="default" <%= sortOption === 'default' ? 'selected' : '' %>>Default sorting</option>
+                                      <option value="popularity" <%= sortOption === 'popularity' ? 'selected' : '' %>>Sort by popularity</option>
+                                      <option value="new-arrivals" <%= sortOption === 'new-arrivals' ? 'selected' : '' %>>Sort by new arrivals</option>
+                                      <option value="price-low-high" <%= sortOption === 'price-low-high' ? 'selected' : '' %>>Sort by price: low to high</option>
+                                      <option value="price-high-low" <%= sortOption === 'price-high-low' ? 'selected' : '' %>>Sort by price: high to low</option>
                                     </select>
-                                </div>
+                                  </div>
                             </li>                            
-                            <li>
+                            <!-- <li>
                                <div class="showing-product-number text-right text-end">
                                     <span>Showing 9 of 20 results</span>
                                 </div> 
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                     <div class="tab-content">
@@ -575,39 +575,58 @@
                 applyFilters(categoryId);
             });
         });
+
+        
     
         function applyFilters(categoryId = null) {
             const sortOption = document.getElementById('sort-options').value;
             const priceRange = document.getElementById('price-input').value;
-    
             const urlParams = new URLSearchParams(window.location.search);
-    
+
             if (categoryId === "") {
                 urlParams.delete('category');
             } else if (categoryId) {
                 urlParams.set('category', categoryId);
             }
-    
-            urlParams.set('sort', sortOption);
-            urlParams.set('price', priceRange);
+
+            if (sortOption && sortOption !== 'default') {
+                urlParams.set('sort', sortOption);
+            } else {
+                urlParams.delete('sort');
+            }
+
+            if (priceRange) {
+                urlParams.set('price', priceRange);
+            } else {
+                urlParams.delete('price');
+            }
+
             window.location.href = `/products?${urlParams.toString()}`;
         }
-    
+            
         // Preserve selected sort option, category filter, and price range on page reload
         window.addEventListener('load', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const selectedSort = urlParams.get('sort');
+            const sortSelect = document.getElementById('sort-options');
             const selectedCategory = urlParams.get('category');
             const selectedPriceRange = urlParams.get('price');
-    
+
             if (selectedSort) {
-                document.getElementById('sort-options').value = selectedSort;
+                // Check if the option exists before setting it
+                if (Array.from(sortSelect.options).some(option => option.value === selectedSort)) {
+                sortSelect.value = selectedSort;
+                } else {
+                sortSelect.value = 'default';
+                }
+            } else {
+                sortSelect.value = 'default';
             }
     
             if (selectedCategory) {
                 document.querySelectorAll('.category-filter').forEach(item => {
                     if (item.getAttribute('data-category-id') === selectedCategory) {
-                        item.classList.add('active'); // Add a class to highlight the selected category
+                        item.classList.add('active'); 
                     }
                 });
             } else {
