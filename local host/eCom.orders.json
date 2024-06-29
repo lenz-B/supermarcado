@@ -1,0 +1,3223 @@
+[{
+  "_id": {
+    "$oid": "66634e715c98bc4c42c17aaa"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 3,
+      "subTotal": 60,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17aab"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 3,
+      "subTotal": 45,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17aac"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 4,
+      "subTotal": 80,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17aad"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 3,
+      "subTotal": 84,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17aae"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 64,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17aaf"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 348,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-07T18:16:17.917Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666372c12336431f6b71dd6d"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666372c12336431f6b71dd6e"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666372c12336431f6b71dd6f"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 64,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666372c12336431f6b71dd70"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666372c12336431f6b71dd71"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666372c12336431f6b71dd72"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 151,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-07T20:51:13.014Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663d72b4bad571deacf80ae"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 40,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d72b4bad571deacf80af"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 64,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d72b4bad571deacf80b0"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d72b4bad571deacf80b1"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d72b4bad571deacf80b2"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Faslu Rahman pp",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 151,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-08T03:59:39.515Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663d965a3b3eaa2cdb9f53c"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 40,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d965a3b3eaa2cdb9f53d"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 64,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d965a3b3eaa2cdb9f53e"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 8,
+      "subTotal": 96,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d965a3b3eaa2cdb9f53f"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d965a3b3eaa2cdb9f540"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 235,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-08T04:09:09.892Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663d9f4a3b3eaa2cdb9f5d4"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 40,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d9f4a3b3eaa2cdb9f5d5"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663d9f4a3b3eaa2cdb9f5d6"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 75,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-08T04:11:32.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663fd8488cef91e6dfd5aa4"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663fd8488cef91e6dfd5aa5"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663fd8488cef91e6dfd5aa6"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 55,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-08T06:43:16.561Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663fe4888cef91e6dfd5b3a"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 4,
+      "subTotal": 48,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6663fe4888cef91e6dfd5b3b"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "qwwe",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 63,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-08T06:46:32.656Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66640f3b8fb78fd34de3eb18"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66640f3b8fb78fd34de3eb19"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 43,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-08T07:58:51.986Z"
+  },
+  "__v": 0,
+  "updatedAt": {
+    "$date": "2024-06-20T16:15:36.253Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6666be171c1ff8f0bd260244"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6666be171c1ff8f0bd260245"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6666be171c1ff8f0bd260246"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Ashique",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 63,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-10T08:49:27.758Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6666e77aabd5bebd7270aa08"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6666e77aabd5bebd7270aa09"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Ashique",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 35,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-10T11:46:02.245Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6666eec23f7e07bde372f38e"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 3,
+      "subTotal": 45,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6666eec23f7e07bde372f38f"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on Delivery",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 60,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-10T12:17:06.003Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66671cf3261ce287f043dc9c"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "66671cf3261ce287f043dc9d"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Khais Khan",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-10T15:34:11.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667e92de54fe9df99c5e88f"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667e92de54fe9df99c5e890"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "qwwe",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-11T06:05:33.713Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667e97e976142298f65a4b6"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667e97e976142298f65a4b7"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Faslu Rahman pp",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-11T06:06:54.104Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667e9b6688db768ee11de23"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667e9b6688db768ee11de24"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-11T06:07:50.832Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667eb57c56e57c97544a2cd"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667eb57c56e57c97544a2ce"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-11T06:14:47.101Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667ec9ab0357c907d165e99"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667ec9ab0357c907d165e9a"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-11T06:20:10.828Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667ed0c446ee5f56fbe7a30"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 12,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667ed0c446ee5f56fbe7a31"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 27,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-11T06:22:04.149Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6667fdbf617ce37135523063"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 1,
+      "subTotal": 20,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6667fdbf617ce37135523064"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 35,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-11T07:33:19.032Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669bf4083ad210140b29de5"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 1,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669bf4083ad210140b29de6"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669bf4083ad210140b29de7"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Faslu Rahman pp",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 75,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T15:31:12.618Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669c2d1406408ccc29b947a"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 1,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c2d1406408ccc29b947b"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 64,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c2d1406408ccc29b947c"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 109,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T15:46:25.425Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669c4d09a4ffeaaea86a212"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 2,
+      "subTotal": 128,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c4d09a4ffeaaea86a213"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 135.85,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T15:54:56.097Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669c4ea9a4ffeaaea86a281"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 45,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c4ea9a4ffeaaea86a282"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "qwwe",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 52.85,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T15:55:22.353Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669c695d56176f8e2595e9e"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 2,
+      "subTotal": 128,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c695d56176f8e2595e9f"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Faslu Rahman pp",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 128.7,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T16:02:29.442Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6669c6afd56176f8e2595ede"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 2,
+      "subTotal": 128,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6669c6afd56176f8e2595edf"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 143,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-12T16:02:55.313Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666a3c15e3cf6caa9f97ea27"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666a3c15e3cf6caa9f97ea28"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 2,
+      "subTotal": 60,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666a3c15e3cf6caa9f97ea29"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 103,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-13T00:23:49.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666b9a6b30c817ee487ce725"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66596aeb00295704e625102b"
+      },
+      "quantity": 1,
+      "subTotal": 4,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666b9a6b30c817ee487ce726"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "qwwe",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 19,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-14T01:18:35.114Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c2bd2e16989c39204caaa"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 2,
+      "subTotal": 27,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2bd2e16989c39204caab"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2bd2e16989c39204caac"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 66.5,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-14T11:38:58.599Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c2df9e16989c39204cb93"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 57.6,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2df9e16989c39204cb94"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 72.6,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-14T11:48:09.868Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c2e79e16989c39204cbf8"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 1,
+      "subTotal": 15,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2e79e16989c39204cbf9"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 28.5,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-14T11:50:17.516Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c2ee0e16989c39204cc4c"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2ee0e16989c39204cc4d"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 43.5,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T11:52:00.113Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c2fdb497a5e5c9fd8921e"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c2fdb497a5e5c9fd8921f"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T11:56:11.676Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c33315774b58bba6a9555"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c33315774b58bba6a9556"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:10:25.323Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c33365774b58bba6a9560"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c33365774b58bba6a9561"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:10:30.478Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c3404926c85680f123a88"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3404926c85680f123a89"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:13:56.250Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c34ac3113bbe4d7956ecc"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c34ac3113bbe4d7956ecd"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:16:44.309Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c35623113bbe4d7956ee4"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c35623113bbe4d7956ee5"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:19:46.121Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c3718dbe5d44383bd33dd"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3718dbe5d44383bd33de"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:27:04.741Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c37b3e68f160f8cbefb4a"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c37b3e68f160f8cbefb4b"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111111,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:29:39.356Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c3835b47605fd94ee77bd"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3835b47605fd94ee77be"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:31:49.070Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c38a9be5b85e58182920a"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c38a9be5b85e58182920b"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:33:45.060Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c3a08146ee44cf42cc0b2"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3a08146ee44cf42cc0b3"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-14T12:39:36.788Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666c3ab4c563d6687743de5b"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 13.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3ab4c563d6687743de5c"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Friuts",
+    "email": "MLABEEB707@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": true
+  },
+  "totalAmount": 28.5,
+  "payment": 28.5,
+  "orderStatus": "Placed",
+  "date": {
+    "$date": "2024-06-14T12:42:28.847Z"
+  },
+  "__v": 0,
+  "couponDiscount": 0,
+  "offerDiscount": 0,
+  "updatedAt": {
+    "$date": "2024-06-25T06:35:42.305Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "666c3b879d3dfaf6bee50e38"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572a7eff0f6ee9dbe0ebd2"
+      },
+      "quantity": 2,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666c3b879d3dfaf6bee50e39"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Batman",
+    "email": "labeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9447469250"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "adfaf",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 45,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-14T12:45:59.577Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce39a53738c930b193aaf"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 13.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce39a53738c930b193ab0"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "qwwe",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 28.5,
+  "payment": 28.5,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-15T00:43:06.946Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce402fc972e620b9bed3e"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 1,
+      "subTotal": 13.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce402fc972e620b9bed3f"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 28.5,
+  "payment": 28.5,
+  "orderStatus": "Placed",
+  "date": {
+    "$date": "2024-06-15T00:44:50.953Z"
+  },
+  "__v": 0,
+  "couponDiscount": 0,
+  "offerDiscount": 0,
+  "updatedAt": {
+    "$date": "2024-06-25T06:31:16.466Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "666ce7e89b978e2e3a72d74d"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 7,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce7e89b978e2e3a72d74e"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 22,
+  "payment": 22,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T01:01:28.943Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce8569b978e2e3a72d799"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 1,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce8569b978e2e3a72d79a"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T01:03:18.814Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce88d9b978e2e3a72d7d6"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce88d9b978e2e3a72d7d7"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 40.85,
+  "payment": 40.85,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T01:04:13.100Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce98d9b978e2e3a72d81e"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 57.6,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce98d9b978e2e3a72d81f"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 72.6,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-15T01:08:29.187Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666ce9ab9b978e2e3a72d829"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572c9fff0f6ee9dbe0ebe2"
+      },
+      "quantity": 1,
+      "subTotal": 57.6,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666ce9ab9b978e2e3a72d82a"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 72.6,
+  "payment": 0,
+  "orderStatus": "Pending",
+  "date": {
+    "$date": "2024-06-15T01:08:59.042Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666cf1890b8da9af4dd9778d"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 7,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666cf1890b8da9af4dd9778e"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 22,
+  "payment": 22,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T01:42:33.654Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666d1a460b8da9af4dd97807"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 15,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T04:36:22.105Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666d1a770b8da9af4dd97833"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 15,
+  "payment": 15,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-15T04:37:11.013Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666e88f9dece155184ce42da"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 7,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666e88f9dece155184ce42db"
+      }
+    }
+  ],
+  "paymentMethod": "Wallet",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 22,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-16T06:40:57.048Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666e89884bbbbcb062cc7bf6"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665737d7ff0f6ee9dbe0ebf2"
+      },
+      "quantity": 1,
+      "subTotal": 7,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666e89884bbbbcb062cc7bf7"
+      }
+    }
+  ],
+  "paymentMethod": "Wallet",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 22,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-16T06:43:20.649Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666eb3fb9e6e7cc7d5f2501d"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 2,
+      "subTotal": 85.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666eb3fb9e6e7cc7d5f2501e"
+      }
+    }
+  ],
+  "paymentMethod": "Cash on delivery",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 100.5,
+  "payment": 0,
+  "orderStatus": "Processing",
+  "date": {
+    "$date": "2024-06-16T09:44:27.110Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666eb4149e6e7cc7d5f2507d"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 4,
+      "subTotal": 112,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666eb4149e6e7cc7d5f2507e"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address T",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 127,
+  "payment": 127,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-16T09:44:52.585Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666eb51bc7698586e8c7f4f0"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 3,
+      "subTotal": 90,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666eb51bc7698586e8c7f4f1"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 105,
+  "payment": 105,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-16T09:49:15.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666f883433a276d41bcf1f09"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572744ff0f6ee9dbe0eb91"
+      },
+      "quantity": 1,
+      "subTotal": 30,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666f883433a276d41bcf1f0a"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 45,
+  "payment": 45,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T00:49:56.127Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666f88fb66dc2df3084ee4f8"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 42.75,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666f88fb66dc2df3084ee4f9"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Muhammed manaf",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 57.75,
+  "payment": 57.75,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T00:53:15.466Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666f899f6752e53c3d38630d"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 42.75,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666f899f6752e53c3d38630e"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 57.75,
+  "payment": 57.75,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T00:55:59.119Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666f927e65a610bea379ad00"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 42.75,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "666f927e65a610bea379ad01"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 57.75,
+  "payment": 57.75,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T01:33:50.739Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667007578549088eff38a7c5"
+  },
+  "user_id": {
+    "$oid": "667005378549088eff38a711"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "quantity": 4,
+      "subTotal": 54,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "667007578549088eff38a7c6"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 69,
+  "payment": 69,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T09:52:23.866Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667007c28549088eff38a837"
+  },
+  "user_id": {
+    "$oid": "667005378549088eff38a711"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "667007c28549088eff38a838"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "totalAmount": 43,
+  "payment": 43,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-17T09:54:10.510Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6674570830f1afebc5b89ca1"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6674570830f1afebc5b89ca2"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 42.75,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6674570830f1afebc5b89ca3"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 85.75,
+  "payment": 85.75,
+  "orderStatus": "Delivered",
+  "date": {
+    "$date": "2024-06-20T16:21:28.751Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-20T16:21:28.761Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-25T06:23:09.731Z"
+  },
+  "__v": 0,
+  "couponDiscount": 0,
+  "offerDiscount": 0
+},
+{
+  "_id": {
+    "$oid": "6674599630f1afebc5b89d1f"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "6657295dff0f6ee9dbe0ebbe"
+      },
+      "quantity": 1,
+      "subTotal": 28,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6674599630f1afebc5b89d20"
+      }
+    },
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "quantity": 1,
+      "subTotal": 42.75,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6674599630f1afebc5b89d21"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Boss",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 111112,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": true,
+    "is_Work": false
+  },
+  "totalAmount": 85.75,
+  "payment": 85.75,
+  "orderStatus": "Delivered",
+  "date": {
+    "$date": "2024-06-20T16:32:22.518Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-20T16:32:22.521Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-24T10:29:59.734Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6676823c1f1d86c2ba9290e1"
+  },
+  "user_id": {
+    "$oid": "66542797c44ae9e09d4a0319"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "price": 38.25,
+      "quantity": 2,
+      "subTotal": 76.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "6676823c1f1d86c2ba9290e2"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "offerDiscount": 6.75,
+  "couponDiscount": 0,
+  "totalAmount": 91.5,
+  "payment": 0,
+  "orderStatus": "Cancelled",
+  "date": {
+    "$date": "2024-06-22T07:50:20.924Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-22T07:50:20.940Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-22T08:00:08.685Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667684a61123df1153475c99"
+  },
+  "user_id": {
+    "$oid": "66542797c44ae9e09d4a0319"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "66572bd9ff0f6ee9dbe0ebdb"
+      },
+      "price": 38.25,
+      "quantity": 2,
+      "subTotal": 76.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "667684a61123df1153475c9a"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Demo Address",
+    "email": "demoadress@gmail.com",
+    "mobile": {
+      "$numberLong": "9770570707"
+    },
+    "pin": 705707,
+    "address": "Dream House, Fantasy world",
+    "city": "Big City",
+    "state": "Wonderful",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "offerDiscount": 6.75,
+  "couponDiscount": 0,
+  "totalAmount": 91.5,
+  "payment": 91.5,
+  "orderStatus": "Delivered",
+  "date": {
+    "$date": "2024-06-22T08:00:38.302Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-22T08:00:38.309Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-25T06:22:50.147Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667a648e956244c30d35b0c6"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "orderedItems": [
+    {
+      "product_id": {
+        "$oid": "665729daff0f6ee9dbe0ebc3"
+      },
+      "price": 13.5,
+      "quantity": 1,
+      "subTotal": 13.5,
+      "productStatus": "Pending",
+      "_id": {
+        "$oid": "667a648e956244c30d35b0c7"
+      }
+    }
+  ],
+  "paymentMethod": "Razorpay",
+  "address": {
+    "name": "Shakir",
+    "email": "muhammedlabeeb07@gmail.com",
+    "mobile": {
+      "$numberLong": "9037705707"
+    },
+    "pin": 673508,
+    "address": "KOODATHIL HOUSE, PALERI PO",
+    "city": "PALERI, KUTTIADY",
+    "state": "Kerala",
+    "is_Home": false,
+    "is_Work": false
+  },
+  "offerDiscount": 13.5,
+  "couponDiscount": 0,
+  "totalAmount": 28.5,
+  "payment": 28.5,
+  "orderStatus": "Placed",
+  "date": {
+    "$date": "2024-06-25T06:32:46.849Z"
+  },
+  "createdAt": {
+    "$date": "2024-06-25T06:32:46.862Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-25T06:34:34.193Z"
+  },
+  "__v": 0
+}]

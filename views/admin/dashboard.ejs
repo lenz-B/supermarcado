@@ -22,6 +22,12 @@
     #topSellingTable tr:nth-child(even) {
       background-color: #f9f9f9;
     }
+    .radio-group {
+        margin-bottom: 10px;
+    }
+    .radio-group label {
+        margin-right: 10px;
+    }
   </style>
 
        
@@ -96,30 +102,27 @@
             <div class="card mb-4">
                 <article class="card-body">
                     <h5 class="card-title">Top Selling Products</h5>
-                    <select id="timeRangeSelect">
-                        <option value="week">Week</option>
-                        <option value="month">Month</option>
-                        <option value="year">Year</option>
-                        <option value="allTime">All Time</option>
-                    </select>
+                    <div class="radio-group">
+                        <label><input type="radio" name="productTimeRange" value="week" checked> Week</label>
+                        <label><input type="radio" name="productTimeRange" value="month"> Month</label>
+                        <label><input type="radio" name="productTimeRange" value="year"> Year</label>
+                        <label><input type="radio" name="productTimeRange" value="allTime"> All Time</label>
+                    </div>
                     <canvas id="topProductsChart" width="400" height="200px"></canvas>
-
                     <div id="topTenProductsWeekData" style="display: none;"><%= topTenProductsWeek %></div>
                     <div id="topTenProductsMonthData" style="display: none;"><%= topTenProductsMonth %></div>
                     <div id="topTenProductsYearData" style="display: none;"><%= topTenProductsYear %></div>
                     <div id="topTenProductsAllTimeData" style="display: none;"><%= topTenProductsAllTime %></div>
                 </article>
                 <article class="card-body">
-                    <h5 class="card-title">Top Selling Products</h5>
-                    <select id="categoryTimeRangeSelect">
-                        <option value="week">Week</option>
-                        <option value="month">Month</option>
-                        <option value="year">Year</option>
-                        <option value="allTime">All Time</option>
-                    </select>
-
+                    <h5 class="card-title">Top Selling Categories</h5>
+                    <div class="radio-group">
+                        <label><input type="radio" name="categoryTimeRange" value="week" checked> Week</label>
+                        <label><input type="radio" name="categoryTimeRange" value="month"> Month</label>
+                        <label><input type="radio" name="categoryTimeRange" value="year"> Year</label>
+                        <label><input type="radio" name="categoryTimeRange" value="allTime"> All Time</label>
+                    </div>
                     <canvas id="topCategoriesChart" width="400" height="200px"></canvas>
-
                     <div id="topTenCategoriesWeekData" style="display: none;"><%= topTenCategoriesWeek %></div>
                     <div id="topTenCategoriesMonthData" style="display: none;"><%= topTenCategoriesMonth %></div>
                     <div id="topTenCategoriesYearData" style="display: none;"><%= topTenCategoriesYear %></div>
@@ -154,10 +157,7 @@
                         </thead>
                         <tbody id="topSellingTableBody">
                         </tbody>
-                    </table>
-                      
-                    <!-- Keep the existing chart canvases and data divs -->
-                      
+                    </table>                      
                     <!-- <canvas id="myChart" height="120px"></canvas> -->
                     <!-- <canvas id="myChart2" height="217"></canvas> -->
                 </article>
@@ -224,6 +224,15 @@
                                 break;
                             }
                         };
+
+                        const handleChartRadioChange = (event) => {
+                            const chartType = event.target.name === 'productTimeRange' ? 'products' : 'categories';
+                            updateChart(chartType, event.target.value);
+                        };
+
+                        document.querySelectorAll('input[type=radio][name=productTimeRange], input[type=radio][name=categoryTimeRange]').forEach(radio => {
+                            radio.addEventListener('change', handleChartRadioChange);
+                        });
 
                         const dataTypeSelect = document.getElementById('dataTypeSelect');
                         const timeRangeSelect = document.getElementById('timeRangeSelect');

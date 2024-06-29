@@ -1,0 +1,297 @@
+[{
+  "_id": {
+    "$oid": "666005a0801a870312c6a2f4"
+  },
+  "user_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Friuts",
+      "email": "MLABEEB707@gmail.com",
+      "mobile": {
+        "$numberLong": "9447469250"
+      },
+      "pin": 111111,
+      "locality": "121qasq",
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "landmark": "",
+      "alternatePhone": "",
+      "is_Home": false,
+      "is_Work": true,
+      "_id": {
+        "$oid": "666005a0ce39b8ac12784bf3"
+      }
+    },
+    {
+      "name": "Batman",
+      "email": "labeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9447469250"
+      },
+      "pin": 673508,
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "adfaf",
+      "state": "Kerala",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "666c2dcee16989c39204cb78"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6660087a801a870312c6a55f"
+  },
+  "user_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "__v": 27,
+  "user_address": [
+    {
+      "name": "Faslu Rahman pp",
+      "email": "muhammedlabeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9037705707"
+      },
+      "pin": 111111,
+      "locality": "121qasq",
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "landmark": "",
+      "alternatePhone": "",
+      "is_Home": true,
+      "is_Work": false,
+      "_id": {
+        "$oid": "6660087ac0f5f8056ce8d77b"
+      }
+    },
+    {
+      "name": "Boss",
+      "email": "muhammedlabeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9037705707"
+      },
+      "pin": 111112,
+      "locality": "qwer",
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "landmark": "",
+      "alternatePhone": "",
+      "is_Home": true,
+      "is_Work": false,
+      "_id": {
+        "$oid": "6661ca4558a8eff56f4435c0"
+      }
+    },
+    {
+      "name": "Friuts",
+      "email": "MLABEEB707@gmail.com",
+      "mobile": {
+        "$numberLong": "9447469250"
+      },
+      "pin": 111112,
+      "locality": "qwer",
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "landmark": "",
+      "alternatePhone": "",
+      "is_Home": false,
+      "is_Work": true,
+      "_id": {
+        "$oid": "6661ca6158a8eff56f4435cb"
+      }
+    },
+    {
+      "name": "Muhammed manaf",
+      "email": "muhammedlabeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9037705707"
+      },
+      "pin": 673508,
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "66633650e3600185772d2c09"
+      }
+    },
+    {
+      "name": "Shakir",
+      "email": "muhammedlabeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9037705707"
+      },
+      "pin": 673508,
+      "address": "KOODATHIL HOUSE, PALERI PO",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "66634e715c98bc4c42c17a98"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "666a42b4c20a3b0cf13c0623"
+  },
+  "user_id": {
+    "$oid": "666a3e4205423f9b22a02531"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Muhammed Khaise",
+      "email": "muhammedlabeeb07@gmail.com",
+      "mobile": {
+        "$numberLong": "9037705707"
+      },
+      "pin": 673508,
+      "address": "eurfdn, asdfjkh",
+      "city": "PALERI, KUTTIADY",
+      "state": "Kerala",
+      "is_Home": false,
+      "is_Work": true,
+      "_id": {
+        "$oid": "666a42b49bfae8106385d34b"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "666ce7df1b792dac06618c9b"
+  },
+  "user_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Demo Address",
+      "email": "demoadress@gmail.com",
+      "mobile": {
+        "$numberLong": "9770570707"
+      },
+      "pin": 705707,
+      "address": "Dream House, Fantasy world",
+      "city": "Big City",
+      "state": "Wonderful",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "666ce7df9b978e2e3a72d737"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "666cf1811b792dac066193d3"
+  },
+  "user_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Demo Address",
+      "email": "demoadress@gmail.com",
+      "mobile": {
+        "$numberLong": "9770570707"
+      },
+      "pin": 705707,
+      "address": "Dream House, Fantasy world",
+      "city": "Big City",
+      "state": "Wonderful",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "666cf1810b8da9af4dd97777"
+      }
+    },
+    {
+      "name": "Demo Address T",
+      "email": "demoadress@gmail.com",
+      "mobile": {
+        "$numberLong": "9770570707"
+      },
+      "pin": 705707,
+      "address": "Dream House, Fantasy world",
+      "city": "Big City",
+      "state": "Wonderful",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "666d19fc0b8da9af4dd977a7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "667007261b792dac06620d74"
+  },
+  "user_id": {
+    "$oid": "667005378549088eff38a711"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Demo Address",
+      "email": "demoadress@gmail.com",
+      "mobile": {
+        "$numberLong": "9770570707"
+      },
+      "pin": 705707,
+      "address": "Dream House, Fantasy world",
+      "city": "Big City",
+      "state": "Wonderful",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "667007268549088eff38a799"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "667681aa1b792dac0662be2b"
+  },
+  "user_id": {
+    "$oid": "66542797c44ae9e09d4a0319"
+  },
+  "__v": 0,
+  "user_address": [
+    {
+      "name": "Demo Address",
+      "email": "demoadress@gmail.com",
+      "mobile": {
+        "$numberLong": "9770570707"
+      },
+      "pin": 705707,
+      "address": "Dream House, Fantasy world",
+      "city": "Big City",
+      "state": "Wonderful",
+      "is_Home": false,
+      "is_Work": false,
+      "_id": {
+        "$oid": "667681aaa14e69fd5c4e1ead"
+      }
+    }
+  ]
+}]

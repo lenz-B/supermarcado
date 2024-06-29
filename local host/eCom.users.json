@@ -1,0 +1,279 @@
+[{
+  "_id": {
+    "$oid": "66542797c44ae9e09d4a0319"
+  },
+  "fname": "Ashiq",
+  "lname": "Usman",
+  "username": "ashiq_mon",
+  "email": "ashiq@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$Bu.IXB1wrQxtiksHvgsBAupRmLS62VknTHFGLTx.fdyH2DQbHf0vy",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-27T06:26:31.516Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66581be0112dae0137687ece"
+  },
+  "fname": "Faslu",
+  "lname": "Rahman",
+  "username": "fasluRocks",
+  "email": "faslu@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$tfsLBWaTercRmP8zDWufb.dPcN.rafIb4VBDfDe8WX/nk30faU5Ba",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-30T06:25:36.503Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665820d0112dae0137687f25"
+  },
+  "fname": "Shakir",
+  "lname": "km",
+  "username": "shakir",
+  "email": "shakir@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$dy.vRE8MBGE.ibJHPUbHmO/d3J1y/aELb44Eqi0kiHA3xGGqjADU6",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-30T06:46:40.038Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6658262612b1ad244ee2bb1b"
+  },
+  "fname": "Faheem",
+  "lname": "Sha",
+  "username": "Ranga",
+  "email": "faheem@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$UEm0Xl1QM0ozG8SJA8MSr.jxeEpysXK4uGz02wYKXepOOWomdHLy2",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-30T07:09:26.439Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6658273512b1ad244ee2bb42"
+  },
+  "fname": "Jasim",
+  "lname": "CK",
+  "username": "jasi_gift",
+  "email": "jasim@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$J2W5Jsr56keWqlUJkWoItu5B/WTqtF8AVenVQ8In3JO343or3bTCW",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-30T07:13:57.900Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6659330403d63cae9ac9585a"
+  },
+  "fname": "Vaseem",
+  "lname": "Jahfer",
+  "username": "korean_boy",
+  "email": "vaseem4u@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$ZmcxInnKF6GcJHp7Rit31.jwZ0drxw9ecJjoCvkXSRDt59F8bLloK",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-31T02:16:36.447Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6659350739a2c0d9b5f7f785"
+  },
+  "fname": "Shree",
+  "lname": "Dev",
+  "username": "shreekuttan",
+  "email": "shree@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$38QniE2AFd1CyDlsxOGFkO4kA6rNMMQw0yXk7v/ymG/az.cVNw.oa",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-31T02:25:11.011Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66595c818886ee9c4a2a82ee"
+  },
+  "fname": "Mi",
+  "lname": "Experiments",
+  "username": "100422205801430304759",
+  "email": "lenzbepxr@gmail.com",
+  "phone": "0123456789",
+  "password": "100422205801430304759",
+  "is_admin": false,
+  "is_verified": false,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-31T05:13:37.722Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665969ea00295704e6250fda"
+  },
+  "fname": "User",
+  "lname": "One",
+  "username": "user_one",
+  "email": "userone@gmail.com",
+  "phone": "1234567890",
+  "password": "$2b$10$/dyuLpucbOEFer9pyHs71Oo7VEc12BT3OYM8.INNwA9yRCqK6T3Xq",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-05-31T06:10:50.615Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665de0b8a25550e047518fb9"
+  },
+  "fname": "Muhammed",
+  "lname": "Labeeb",
+  "username": "m_labeeb_7",
+  "email": "muhammedlabeeb07@gmail.com",
+  "phone": "9037705707",
+  "password": "$2b$10$WXcuqe4XCKIvn/GfcwH6geoGAa6132LFkX1JZ2FuzyE2Joz.Vp7Xm",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-03T15:26:48.461Z"
+  },
+  "__v": 0,
+  "updatedAt": {
+    "$date": "2024-06-25T06:19:53.206Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66640bfc71ae224c8a0c2265"
+  },
+  "fname": "Muhammed",
+  "lname": "Labeeb",
+  "username": "user_one1",
+  "email": "muhammedlabeeb7@gmail.com",
+  "phone": "9037705707",
+  "password": "$2b$10$DyVQKFpdkL7zfMVMLxpSy.9QZ3.4i0Ph2KvKz9obb6RUuYFCrJ1Ky",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-08T07:45:00.223Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666a3e4205423f9b22a02531"
+  },
+  "fname": "Khais",
+  "lname": "Khan",
+  "username": "Khais",
+  "email": "Khais@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$NiYiZaj3mEj.GOD/z.qrlOEQAMls8d9z9sRV8PlzkQy1Q0oSsh9Em",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-13T00:33:06.504Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "667005378549088eff38a711"
+  },
+  "fname": "User",
+  "lname": "Five",
+  "username": "user_five",
+  "email": "userfive@gmail.com",
+  "phone": "0123456789",
+  "password": "$2b$10$Pp2cVxuFHTB71Hm4FfYER.WzSAZFQpckSiYuUT.KThCAUQjJ8Sk4.",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-17T09:43:19.671Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66741202b5dec4125c96d84e"
+  },
+  "fname": "Demo",
+  "lname": "Address",
+  "username": "demo_address",
+  "email": "demoadress@gmail.com",
+  "phone": "9770570707",
+  "password": "$2b$10$QphS2Ksr11wieJ/DK0YeCODb4Nbg7eDMB4jvnYAWSUcIGqmi1uthm",
+  "is_admin": false,
+  "is_verified": true,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-20T11:27:07.764Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-20T11:27:07.764Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66540e77722eace85661a8a0"
+  },
+  "fname": "Muhammed",
+  "lname": "Labeeb",
+  "username": "115620838511148003658",
+  "email": "mlabeeb707@gmail.com",
+  "phone": "0123456789",
+  "password": "115620838511148003658",
+  "is_admin": false,
+  "is_verified": false,
+  "is_block": false,
+  "createdAt": {
+    "$date": "2024-06-25T06:44:32.511Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-25T06:44:32.511Z"
+  },
+  "__v": 0
+}]
