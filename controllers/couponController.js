@@ -4,9 +4,16 @@ const categoryDB = require('../models/category')
 const productDB = require('../models/products')
 
 
-//_____________________________________________________function_____________________________________________________
+//_____________________________________________________functions_____________________________________________________
 
-
+//generating coupon code
+function generateCouponCode(couponName, discountPercentage) {
+  const formattedName = couponName.replace(/\s+/g, '').toUpperCase();
+  // Take the first 10 characters (or less if the name is shorter)
+  const namePrefix = formattedName.slice(0, 10);
+  // Add the discount percentage
+  return `${namePrefix}${discountPercentage}`;
+}
 
 
 //____________________________________________________admin side____________________________________________________
@@ -36,25 +43,35 @@ const addingCoupon = async (req, res) => {
   try {
     console.log('Add coupon');
     console.log('req: ', req.body);
-    const { coupon_code, discount_percentage, expiry_date, min_purchase_amount, max_redeemable_amount } = req.body;
-
-    if (!coupon_code || !discount_percentage || !expiry_date || !min_purchase_amount || !max_redeemable_amount) {
+    const { coupon_name, discount_percentage, expiry_date, min_purchase_amount, max_redeemable_amount } = req.body;
+    if (!coupon_name || !discount_percentage || !expiry_date || !min_purchase_amount || !max_redeemable_amount) {
       return res.status(400).json({ status: false, message: 'All fields are required' });
     }
 
-    const existingCoupon = await couponDB.findOne({ coupon_code });
-    if (existingCoupon) {
-      return res.status(400).json({ status: false, message: 'Coupon code already exists' });
+    // Generate coupon code
+    let couponCode = generateCouponCode(coupon_name, discount_percentage);
+
+    //checking coupon code already exists
+    let existingCoupon = await couponDB.findOne({ coupon_code: couponCode });
+    let counter = 1;
+    while (existingCoupon) {
+      const newCouponCode = `${couponCode}${counter}`;
+      existingCoupon = await couponDB.findOne({ coupon_code: newCouponCode });
+      if (!existingCoupon) {
+        couponCode = newCouponCode;
+        break;
+      }
+      counter++;
     }
 
     const newCoupon = new couponDB({
-      coupon_code,
+      coupon_name,
+      coupon_code: couponCode,
       discount_percentage,
       expiry_date,
       min_purchase_amount,
       max_redeemable_amount
     });
-
     await newCoupon.save();
     res.status(201).json({ status: true, message: 'Coupon added successfully' });
   } catch (error) {

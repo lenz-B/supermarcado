@@ -14,8 +14,8 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <label for="coupon_code" class="form-label">Coupon Code</label>
-                        <input type="text" placeholder="Enter Coupon Code" class="form-control" id="coupon_code" name="coupon_code" />
+                        <label for="coupon_name" class="form-label">Coupon Name</label>
+                        <input type="text" placeholder="Enter Coupon Name" class="form-control" id="coupon_name" name="coupon_name" />
                     </div>
                     <div class="row gx-3">
                         <div class="col-md-4 mb-3">
@@ -47,44 +47,36 @@
 <script>
     document.getElementById('saveButton').addEventListener('click', function(event) {
         event.preventDefault();
-
-        const couponCode = document.getElementById('coupon_code').value;
+        const couponName = document.getElementById('coupon_name').value;
         const discountPercentage = document.getElementById('discountPercentage').value;
         const minPurchaseAmount = document.getElementById('minPurchaseAmount').value;
         const maxRedeemableAmount = document.getElementById('maxRedeemableAmount').value;
         const expiryDate = document.getElementById('expiryDate').value;
-
-        const couponCodeRegex = /^[a-zA-Z0-9]+$/;
-
+        const couponNameRegex = /^[a-zA-Z0-9\s]+$/;
         const isValidDate = dateString => {
             const currentDate = new Date();
             const inputDate = new Date(dateString);
             return !isNaN(inputDate) && inputDate > currentDate;
         };
-
-        if (!couponCode || !discountPercentage || !minPurchaseAmount || !maxRedeemableAmount || !expiryDate ) {
+        if (!couponName || !discountPercentage || !minPurchaseAmount || !maxRedeemableAmount || !expiryDate ) {
             showMessage('All fields are required', false);
             return;
         }
-
-        if (!couponCodeRegex.test(couponCode)) {
-            showMessage('Coupon code should contain only alphabets and numbers', false);
+        if (!couponNameRegex.test(couponName)) {
+            showMessage('Coupon name should contain only alphabets, numbers, and spaces', false);
             return;
         }
-
         if (!isValidDate(expiryDate)) {
             showMessage('Expiry date should be at least one day ahead from the current time', false);
             return;
         }
-
         const data = {
-            coupon_code: couponCode,
+            coupon_name: couponName,
             discount_percentage: discountPercentage,
             min_purchase_amount: minPurchaseAmount,
             max_redeemable_amount: maxRedeemableAmount,
             expiry_date: expiryDate
         };
-
         // Send data to backend using fetch
         fetch('add-coupon', {
             method: 'POST',
