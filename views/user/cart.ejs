@@ -64,9 +64,12 @@
                                               <% } %>
                                             </td>
                                             <td class="cart-product-quantity">
-                                              <div class="cart-plus-minus">
-                                                <input type="number" value="<%= product.quantity %>" class="cart-plus-minus-box quantity-input" data-product-id="<%= product.product_id._id %>">
-                                              </div>
+                                                <div class="quantity-controls">
+                                                    <button type="button" class="quantity-btn minus" data-product-id="<%= product.product_id._id %>">-</button>
+                                                    <input value="<%= product.quantity %>" class="cart-plus-minus-box quantity-input" data-product-id="<%= product.product_id._id %>">
+                                                    <button type="button" class="quantity-btn plus" data-product-id="<%= product.product_id._id %>">+</button>
+                                                </div>
+                                                
                                             </td>
                                             <td class="cart-product-subtotal">
                                               <% if (product.product_id.promoPrice > 0) { %>
@@ -84,12 +87,6 @@
                                       <% } %>
                                       
                                     <tr class="cart-coupon-row">
-                                        <!-- <td colspan="6">
-                                            <div class="cart-coupon">
-                                                <input type="text" name="cart-coupon" placeholder="Coupon code">
-                                                <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
-                                            </div>
-                                        </td> -->
                                         <td>
                                             <button type="submit" id="submitButton" class="btn theme-btn-2 btn-effect-2 btn-update-cart">Update Cart</button>
                                         </td>
@@ -219,7 +216,8 @@
             const quantityInputs = document.querySelectorAll('.quantity-input');
             const updateCartButton = document.querySelector('.btn-update-cart');
             const removeProductButtons = document.querySelectorAll('.remove-product-btn');
-
+            const quantityButtons = document.querySelectorAll('.quantity-btn');
+    
             quantityInputs.forEach(input => {
                 input.addEventListener('change', function() {
                     const product_id = this.getAttribute('data-product-id');
@@ -227,14 +225,29 @@
                     updateCart(product_id, quantity);
                 });
             });
-
+    
             removeProductButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const product_id = this.getAttribute('data-product-id');
                     confirmRemoveProduct(product_id);
                 });
             });
-
+    
+            quantityButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.parentNode.querySelector('.quantity-input');
+                    const product_id = input.getAttribute('data-product-id');
+                    let quantity = parseInt(input.value);
+                    if (this.classList.contains('plus')) {
+                        quantity++;
+                    } else if (this.classList.contains('minus') && quantity > 1) {
+                        quantity--;
+                    }
+                    input.value = quantity;
+                    updateCart(product_id, quantity);
+                });
+            });
+    
             async function updateCart(product_id, quantity) {
                 try {
                     const response = await fetch('/update-cart', {
@@ -244,7 +257,7 @@
                         },
                         body: JSON.stringify({ product_id, quantity })
                     });
-
+    
                     if (response.ok) {
                         try {
                             const cartData = await response.json();
@@ -253,15 +266,6 @@
                             subtotalCell.textContent = `$${cartData.subtotal}`;
                             updateCartButton.removeAttribute('disabled');
                             updateCartButton.classList.remove('disabled');
-                            // Swal.fire({
-                            //     title: 'Updated!',
-                            //     text: 'Cart updated successfully',
-                            //     icon: 'success',
-                            //     timer: 3000,
-                            //     showConfirmButton: false,
-                            //     timerProgressBar: true,
-                            //     confirmButtonColor: '#28a745'
-                            // })
                         } catch (error) {
                             console.error('Failed to parse response:', error);
                             Swal.fire({
@@ -284,16 +288,15 @@
                             showConfirmButton: false,
                             timerProgressBar: true,
                             confirmButtonColor: '#dc3545'
-                        })
-                        .then(() => {
+                        }).then(() => {
                             window.location.reload();
-                        })
+                        });
                     }
                 } catch (error) {
                     console.error('Error updating cart:', error);
                 }
             }
-
+    
             async function removeProduct(product_id) {
                 try {
                     const response = await fetch('/remove-product', {
@@ -303,7 +306,7 @@
                         },
                         body: JSON.stringify({ product_id, wishlist: false })
                     });
-
+    
                     if (response.ok) {
                         const productRow = document.querySelector(`tr[data-product-id="${product_id}"]`);
                         productRow.remove();
@@ -325,16 +328,7 @@
                     console.error('Error removing product:', error);
                 }
             }
-
-            removeProductButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const product_id = this.getAttribute('data-product-id');
-                    removeProduct(product_id);
-                    location.reload();
-                });
-            });
-
-
+    
             function confirmRemoveProduct(product_id) {
                 Swal.fire({
                     title: 'Are you sure?',
@@ -352,6 +346,8 @@
             }
         });
     </script>
+    
+    
     <!-- reload page -->
     <script>
         function reloadPage() {
