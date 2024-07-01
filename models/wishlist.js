@@ -9,7 +9,6 @@ const wishlistSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true, ref: 'Product'
       }]
-
 })
 
 module.exports = mongoose.model('Wishlist', wishlistSchema)
