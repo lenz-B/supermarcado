@@ -52,9 +52,8 @@ async function calculateCartTotals(userId, session) {
     }
 
     let orderTotal = 0;
-    const shipping = 15;
-    const vat = 0;
     let offerDiscount = 0;
+    const vat = 0;
 
     for (const product of cart.products) {
       let promoPrice = product.product_id.price;
@@ -73,6 +72,16 @@ async function calculateCartTotals(userId, session) {
       const subTotal = promoPrice * product.quantity;
       product.subTotal = subTotal;
       orderTotal += subTotal;
+    }
+
+    // Calculate shipping based on the new system
+    let shipping;
+    if (orderTotal < 200) {
+      shipping = 30;
+    } else if (orderTotal < 500) {
+      shipping = 15;
+    } else {
+      shipping = 0;
     }
 
     orderTotal += shipping + vat;
@@ -118,18 +127,18 @@ const checkoutPage = async (req, res) => {
     if (!cartData) {
       console.log('ayyoo cart illaaa........');
       const userWithoutCart = true
+
       res.render('user/checkout', {user, user_id, categoryData, 
         addressData, userWithoutCart})
     }
     await calculateCartTotals(user_id, req.session);
     console.log(req.session.cartTotals);
-    const {orderTotal, subTotals} = req.session.cartTotals
-    // console.log('ooooooooooooorder total: ', orderTotal);
+    const {orderTotal, subTotals, shipping} = req.session.cartTotals
 
+    // console.log('ooooooooooooorder total: ', orderTotal);
     console.log('subtotals: ',subTotals);
 
-
-    res.render('user/checkout', {user, user_id, categoryData, 
+    res.render('user/checkout', {user, user_id, categoryData, shipping,
       addressData, cartData, orderTotal, subTotals, walletData, couponData})
   } catch (error) {
     console.log(error);
@@ -572,6 +581,7 @@ const orderDetails = async (req, res) => {
 
 
 module.exports = { checkoutPage, placeOrder,
-  captureRazorpayPayment, razorpayWebhook, finishPayment, cancelOrder,
-  orders, updateOrderStatus, orderDetails, walletPage,
+  captureRazorpayPayment, razorpayWebhook, finishPayment,
+  cancelOrder, orders, updateOrderStatus, orderDetails,
+  walletPage,
 }

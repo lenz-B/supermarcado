@@ -179,20 +179,20 @@ const updateCart = async (req, res) => {
     const { product_id, quantity } = req.body;
 
     if (!product_id) {
-        return res.status(400).json({ error: 'Product ID is required' });
+        return res.status(400).json({ message: 'Product ID is required' });
     }
 
     if (!quantity || quantity <= 0) {
-        return res.status(400).json({ error: 'Invalid quantity' });
+        return res.status(400).json({ message: 'Invalid quantity' });
     }
 
     const product = await productDB.findById(product_id).populate('offer');
     if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
+        return res.status(404).json({ message: 'Product not found' });
     }
 
     if (quantity > product.stock) {
-      return res.status(400).json({ error: 'Quantity exceeds available stock' });
+      return res.status(400).json({ message: 'Quantity exceeds available stock' });
     }
 
     console.log('Product:', product);

@@ -9,7 +9,7 @@ const productDB = require('../models/products')
 //generating coupon code
 function generateCouponCode(couponName, discountPercentage) {
   const formattedName = couponName.replace(/\s+/g, '').toUpperCase();
-  // Take the first 10 characters (or less if the name is shorter)
+  // Take the first 10 characters
   const namePrefix = formattedName.slice(0, 10);
   // Add the discount percentage
   return `${namePrefix}${discountPercentage}`;
