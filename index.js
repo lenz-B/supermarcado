@@ -51,11 +51,11 @@ app.use(cartMiddleware);
 require('./config/cron-jobs');
 
 // Load routes
-const userRouter = require('./routes/userRouter');
-app.use('/', userRouter);
-
 const adminRouter = require('./routes/adminRouter');
 app.use('/admin', adminRouter);
+
+const userRouter = require('./routes/userRouter');
+app.use('/', userRouter);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

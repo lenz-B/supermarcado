@@ -45,4 +45,5 @@ router.post('/offers/:id/toggle-status', couponController.updateOfferStatus)
 router.get('/add-offer', adminAuthentication.logIn, couponController.addOffer)
 router.post('/add-offer', couponController.addingOffer)
 
+router.get('*', adminController.page404 )
 module.exports = router

@@ -787,7 +787,26 @@ const invoiceDownload = async (req, res) => {
   }
 };
 
+//contact
+const contact = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 
+//404 page
+const page404 = async (req, res) => {
+  try {
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+
+    res.render('user/page-404', {user_id, categoryData})
+  } catch (error) {
+    
+  }
+}
 
 
 module.exports = {home, signup, registration, 
@@ -796,5 +815,5 @@ module.exports = {home, signup, registration,
   logOut, sendCode, getForgetPassword,
   forgetPassword, confirmPassword, myAccount,
   profileUpdate, addAddress, deleteAddress,
-  invoiceDownload
+  invoiceDownload,contact, page404
 }

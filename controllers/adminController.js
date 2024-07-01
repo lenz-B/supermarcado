@@ -315,6 +315,15 @@ const userStatus = async (req, res) => {
   }
 }
 
+//Error page 404
+const page404 = async (req, res) => {
+  try {
+    res.render('admin/page-error-404')
+  } catch (error) {
+    
+  }
+}
 module.exports = {adminDash, salesReport,
-  login, logingin, logout, user, userStatus
+  login, logingin, logout, user, userStatus,
+  page404
 }

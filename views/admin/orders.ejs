@@ -1,162 +1,161 @@
 <%- include('../layout/adminHeadder.ejs') %>
 
-            <section class="content-main">
-                <div class="content-header">
-                    <div>
-                        <h2 class="content-title card-title">Order List</h2>
-                        <p>Lorem ipsum dolor sit amet.</p>
-                    </div>
-                    <div>
-                        <input type="text" placeholder="Search order ID" class="form-control bg-white" />
-                    </div>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order List</h2>
+        </div>
+        <div>
+            <!-- <input type="text" placeholder="Search order ID" class="form-control bg-white" /> -->
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control" />
                 </div>
-                <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row gx-3">
-                            <div class="col-lg-4 col-md-6 me-auto">
-                                <input type="text" placeholder="Search..." class="form-control" />
-                            </div>
-                            <div class="col-lg-2 col-6 col-md-3">
-                                <select class="form-select">
-                                    <option>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-6 col-md-3">
-                                <select class="form-select">
-                                    <option>Show 20</option>
-                                    <option>Show 30</option>
-                                    <option>Show 40</option>
-                                </select>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- card-header end// -->
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% orderData.forEach(order => { %>
-                                    <tr>
-                                        <td data-order-id="<%= order.id %>"><%= order.id %></td>
-                                        <td><b><%= order.Name %></b></td>
-                                        <td><%= order.Email %></td>
-                                        <td>$<%= order.Total.toFixed(2) %></td>
-                                        <td>
-                                            <% if(order.Status === 'Pending') { %>
-                                            <span class="badge rounded-pill alert-warning"><%= order.Status %></span>
-                                            <% } else if(order.Status === 'Cancelled') { %>
-                                            <span class="badge rounded-pill alert-danger"><%= order.Status %></span>
-                                            <% } else { %>
-                                            <span class="badge rounded-pill alert-success"><%= order.Status %></span>
-                                            <% } %>
-                                        </td>
-                                        <td><%= order.Date %></td>
-                                        <td class="text-end">
-                                            <a href="/admin/order-details?order_id=<%= order.id %>" class="btn btn-md rounded font-sm">Detail</a>
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown" class=""></a>
-                                                <select class="form-select status-select" onchange="updateOrderStatus(this)" <% if (order.Status === 'Pending') { %> disabled <% } %>>
-                                                    <% const statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Placed', 'Cancelled']; %>
-                                                    <% statuses.forEach(status => { %>
-                                                        <option value="<%= status %>" <% if (status === order.Status) { %> selected <% } %> <% if (status === 'Pending') { %> disabled <% } %>><%= status %></option>
-                                                    <% }); %>
-                                                </select>
-                                                
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- table-responsive //end -->
-                    </div>
-                    <!-- card-body end// -->
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
                 </div>
-                <!-- card end// -->
-                <div class="pagination-area mt-15 mb-50">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-start">
-                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                            <li class="page-item"><a class="page-link" href="#">02</a></li>
-                            <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#">16</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                            </li>
-                        </ul>
-                    </nav>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
                 </div>
-            </section>
-            <!-- content-main end// -->
-            
-            <!-- status change -->
-            <script>
-                // Function to handle status change
-                const handleStatusChange = (selectElement) => {
-                    const orderId = selectElement.closest('tr').querySelector('td[data-order-id]').dataset.orderId;
-                    const newStatus = selectElement.value;
-                    updateOrderStatus(orderId, newStatus);
-                };
-                
-                // Add event listeners to status select elements
-                document.querySelectorAll('.status-select').forEach(select => {
-                    select.addEventListener('change', function() {
-                        handleStatusChange(this);
-                    });
-                });
-                // Function to update order status
-                const updateOrderStatus = async (orderId, newStatus) => {
-                    fetch('/admin/update-order-status', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ orderId, newStatus })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Order status updated successfully',
-                            showConfirmButton: false,
-                            timer: 1200
-                        }).then((result) => {
-                            location.reload(); 
-                        });
-                    } else {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'error',
-                            title: 'Failed to update order status',
-                            showConfirmButton: true  
-                        });
-                    }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                };
-                
-                
-            </script>
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orderData.forEach(order => { %>
+                        <tr>
+                            <td data-order-id="<%= order.id %>"><%= order.id %></td>
+                            <td><b><%= order.Name %></b></td>
+                            <td><%= order.Email %></td>
+                            <td>$<%= order.Total.toFixed(2) %></td>
+                            <td>
+                                <% if(order.Status === 'Pending') { %>
+                                <span class="badge rounded-pill alert-warning"><%= order.Status %></span>
+                                <% } else if(order.Status === 'Cancelled') { %>
+                                <span class="badge rounded-pill alert-danger"><%= order.Status %></span>
+                                <% } else { %>
+                                <span class="badge rounded-pill alert-success"><%= order.Status %></span>
+                                <% } %>
+                            </td>
+                            <td><%= order.Date %></td>
+                            <td class="text-end">
+                                <a href="/admin/order-details?order_id=<%= order.id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                <div class="dropdown">
+                                    <a href="#" data-bs-toggle="dropdown" class=""></a>
+                                    <select class="form-select status-select" onchange="updateOrderStatus(this)" <% if (order.Status === 'Pending') { %> disabled <% } %>>
+                                        <% const statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Placed', 'Cancelled']; %>
+                                        <% statuses.forEach(status => { %>
+                                            <option value="<%= status %>" <% if (status === order.Status) { %> selected <% } %> <% if (status === 'Pending') { %> disabled <% } %>><%= status %></option>
+                                        <% }); %>
+                                    </select>
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <!-- table-responsive //end -->
+        </div>
+        <!-- card-body end// -->
+    </div>
+    <!-- card end// -->
+    <!-- <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div> -->
+</section>
+<!-- content-main end// -->
+
+<!-- status change -->
+<script>
+    // Function to handle status change
+    const handleStatusChange = (selectElement) => {
+        const orderId = selectElement.closest('tr').querySelector('td[data-order-id]').dataset.orderId;
+        const newStatus = selectElement.value;
+        updateOrderStatus(orderId, newStatus);
+    };
+    
+    // Add event listeners to status select elements
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            handleStatusChange(this);
+        });
+    });
+    // Function to update order status
+    const updateOrderStatus = async (orderId, newStatus) => {
+        fetch('/admin/update-order-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId, newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+        if (data.success) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Order status updated successfully',
+                showConfirmButton: false,
+                timer: 1200
+            }).then((result) => {
+                location.reload(); 
+            });
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Failed to update order status',
+                showConfirmButton: true  
+            });
+        }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    };
+    
+    
+</script>
              
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>

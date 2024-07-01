@@ -39,6 +39,8 @@ router.get('/downloadInvoice/:orderId', userController.invoiceDownload)
 router.post('/add-address', userController.addAddress)
 router.post('/delete-address', userController.deleteAddress)
 
+router.get('/contact', userController.contact)
+
 router.get('/products', productController.shop)
 router.get('/product-details', productController.productDetails)
 
@@ -60,5 +62,6 @@ router.post('/finish-payment', orderController.finishPayment);
 router.post('/apply-coupon', couponController.applyCoupon)
 router.post('/remove-coupon', couponController.removeCoupon);
 
+router.get('*', userController.page404 )
 
 module.exports = router;
