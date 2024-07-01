@@ -1,8 +1,0 @@
-# Ignore node_modules directory
-node_modules/
-
-# Ignore .env file
-.env
-
-# Ignore my-kp.pem file
-my-kp.pem
