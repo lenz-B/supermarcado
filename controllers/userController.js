@@ -790,7 +790,10 @@ const invoiceDownload = async (req, res) => {
 //contact
 const contact = async (req, res) => {
   try {
-    
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+
+    res.render('user/contact', {user_id, categoryData})
   } catch (error) {
     
   }
@@ -815,5 +818,5 @@ module.exports = {home, signup, registration,
   logOut, sendCode, getForgetPassword,
   forgetPassword, confirmPassword, myAccount,
   profileUpdate, addAddress, deleteAddress,
-  invoiceDownload,contact, page404
+  invoiceDownload,contact, page404, 
 }
