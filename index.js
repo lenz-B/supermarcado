@@ -47,6 +47,9 @@ app.use(cartMiddleware);
 // Morgan
 // app.use(morgan('dev'));
 
+// Load cron jobs
+require('./config/cron-jobs');
+
 // Load routes
 const userRouter = require('./routes/userRouter');
 app.use('/', userRouter);

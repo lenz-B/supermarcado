@@ -3,6 +3,14 @@ const offerDB = require('../models/offer')
 const categoryDB = require('../models/category')
 const productDB = require('../models/products')
 
+
+//_____________________________________________________function_____________________________________________________
+
+
+
+
+//____________________________________________________admin side____________________________________________________
+
 //coupon list
 const coupons = async (req, res) => {
   try {
