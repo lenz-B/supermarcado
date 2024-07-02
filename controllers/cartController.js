@@ -272,7 +272,12 @@ const wishlist = async (req, res) => {
     const { user_id } = req.session;
     const categoryData = await getHeaderData();
     const allProducts = await productDB.find();
-    const wishlistData = await wishlistDB.findOne({ user_id: user_id }).populate('products');
+    let wishlistData = await wishlistDB.findOne({ user_id }).populate('products');
+
+    if (!wishlistData) {
+      const newWishlist = new wishlistDB({ user_id, products: [] });
+      wishlistData = await newWishlist.save();
+    }
 
     res.render('user/wishlist', { user_id, categoryData, allProducts, wishlistData });
   } catch (error) {
