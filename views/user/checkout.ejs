@@ -266,7 +266,7 @@
                                 <div id="faq-item-2-4" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
                                         <% if (walletData) {%>
-                                        <p>Your wallet balance is <strong>$<%= walletData.wallet_amount %></strong>. </p>
+                                        <p>Your wallet balance is <strong>₹<%= walletData.wallet_amount %></strong>. </p>
                                         <% } else {%>
                                         <p>Your Wallet is empty.</p>
                                         <% } %>
@@ -290,29 +290,29 @@
                                     <% cartData.products.forEach(cart => { %>
                                         <tr>
                                             <td><%= cart.product_id.name %> <strong>× <%= cart.quantity %></strong></td>
-                                            <td>$<%= cart.product_id.promoPrice && cart.product_id.promoPrice > 0 ? cart.product_id.promoPrice * cart.quantity : cart.product_id.price * cart.quantity %></td>
+                                            <td>₹<%= cart.product_id.promoPrice && cart.product_id.promoPrice > 0 ? cart.product_id.promoPrice * cart.quantity : cart.product_id.price * cart.quantity %></td>
                                         </tr>
                                     <% }); %>
                                 <% } %>
                                 <tr>
                                     <td>Shipping and Handing</td>
-                                    <td>$<%= shipping %></td>
+                                    <td>₹<%= shipping %></td>
                                 </tr>
                                 <tr>
                                     <td>Vat</td>
-                                    <td>$00.00</td>
+                                    <td>₹00.00</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Order Total</strong></td>
-                                    <td><strong>$<%= orderTotal %></strong></td>
+                                    <td><strong>₹<%= orderTotal %></strong></td>
                                 </tr>
                                 <tr id="discount-row" style="display: none;">
                                     <td>Discount</td>
-                                    <td id="discount-amount">-$0.00</td>
+                                    <td id="discount-amount">-₹0.00</td>
                                 </tr>
                                 <tr id="total-after-discount-row" style="display: none;">
                                     <td><strong>Total After Discount</strong></td>
-                                    <td id="total-after-discount"><strong>$0.00</strong></td>
+                                    <td id="total-after-discount"><strong>₹0.00</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -337,7 +337,7 @@
                                     <div class="ltn__feature-info">
                                         <h4>Curated Products</h4>
                                         <p>Provide Curated Products for
-                                            all product over $100</p>
+                                            all product over ₹1000</p>
                                     </div>
                                 </div>
                             </div>

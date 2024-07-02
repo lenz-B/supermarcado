@@ -34,7 +34,7 @@
                         <h2>Wallet</h2>
                         <% if (walletData) { %>
                             <p>Username: <%= walletData.user_id.username %></p>
-                            <h3>Wallet Amount: $<%= walletData.wallet_amount.toFixed(2) %></h3>
+                            <h3>Wallet Amount: ₹<%= walletData.wallet_amount.toFixed(2) %></h3>
                             <h4>Transaction History</h4>
                             <% if (walletData.transaction_history.length > 0) { %>
                                 <table>
@@ -48,7 +48,7 @@
                                     <tbody>
                                         <% walletData.transaction_history.forEach(transaction => { %>
                                             <tr>
-                                                <td>$<%= transaction.amount.toFixed(2) %></td>
+                                                <td>₹<%= transaction.amount.toFixed(2) %></td>
                                                 <td><%= transaction.Payment_type %></td>
                                                 <td><%= new Date(transaction.date).toLocaleDateString() %></td>
                                             </tr>
@@ -83,7 +83,7 @@
                                     <div class="ltn__feature-info">
                                         <h4>Curated Products</h4>
                                         <p>Provide Curated Products for
-                                            all product over $100</p>
+                                            all product over ₹1000</p>
                                     </div>
                                 </div>
                             </div>

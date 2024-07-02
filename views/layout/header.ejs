@@ -232,7 +232,7 @@
                                   </div>
                                   <div class="mini-cart-info">
                                     <h6><a href="/product-details?proId=<%= product.product_id._id %>"><%= product.product_id.name %></a></h6>
-                                    <span class="mini-cart-quantity"><%= product.quantity %> x $<%= product.product_id.price.toFixed(2) %></span>
+                                    <span class="mini-cart-quantity"><%= product.quantity %> x ₹<%= product.product_id.price.toFixed(2) %></span>
                                   </div>
                                 </div>
                               <% }); %>
@@ -247,15 +247,15 @@
                 <div class="mini-cart-footer">
                     <div class="mini-cart-sub-total">
                         <% if (cartTotals && cartTotals.totalItems > 0) { %>
-                            <h5>Subtotal: <span>$<%= cartTotals.orderTotal.toFixed(2) %></span></h5>
+                            <h5>Subtotal: <span>₹<%= cartTotals.orderTotal.toFixed(2) %></span></h5>
                         <% } else { %>
-                            <h5>Subtotal: <span>$ 0</span></h5>
+                            <h5>Subtotal: <span>₹ 0</span></h5>
                         <% } %>                    </div>
                     <div class="btn-wrapper">
                         <a href="/cart" class="theme-btn-1 btn btn-effect-1">View Cart</a>
                         <a href="/checkout" class="theme-btn-2 btn btn-effect-2">Checkout</a>
                     </div>
-                    <p>Free Shipping on All Orders Over $100!</p>
+                    <p>Free Shipping on All Orders Over ₹1000!</p>
                 </div>
     
             </div>

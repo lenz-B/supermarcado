@@ -107,9 +107,9 @@
                                             <div class="info"><%= product.productName %></div>
                                         </a>
                                     </td>
-                                    <td>$<%= product.productPrice.toFixed(2) %></td>
+                                    <td>₹<%= product.productPrice.toFixed(2) %></td>
                                     <td><%= product.quantity %></td>
-                                    <td class="text-end">$<%= (product.productPrice * product.quantity).toFixed(2) %></td>
+                                    <td class="text-end">₹<%= (product.productPrice * product.quantity).toFixed(2) %></td>
                                 </tr>
                                 <% }); %>
                                 <tr>
@@ -117,15 +117,15 @@
                                         <article class="float-end">
                                             <dl class="dlist">
                                                 <dt>Subtotal:</dt>
-                                                <dd>$<%= (order.Total - 15).toFixed(2) %></dd>
+                                                <dd>₹<%= (order.Total - 15).toFixed(2) %></dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Shipping cost:</dt>
-                                                <dd>$15.00</dd>
+                                                <dd>₹ 15.00</dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Grand total:</dt>
-                                                <dd><b class="h5">$<%= order.Total.toFixed(2) %></b></dd>
+                                                <dd><b class="h5">₹<%= order.Total.toFixed(2) %></b></dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt class="text-muted">Status:</dt>

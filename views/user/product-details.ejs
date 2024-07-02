@@ -67,10 +67,10 @@
                                     <h3><%= productData.name %></h3>
                                     <div class="product-price">
                                         <% if (productData.promoPrice > 0) { %>
-                                          <span>$<%= productData.promoPrice %></span>
-                                          <del>$<%= productData.price %></del>
+                                          <span>₹<%= productData.promoPrice %></span>
+                                          <del>₹<%= productData.price %></del>
                                         <% } else { %>
-                                          <span>$<%= productData.price %></span>
+                                          <span>₹<%= productData.price %></span>
                                         <% } %>
                                     </div>
                                     <% const latestOffer = productData.offer.reduce((latest, offer) => {
@@ -346,10 +346,10 @@
                                     <h2 class="product-title"><a href="/product-details?proId=<%= product._id %>"><%= product.name %></a></h2>
                                     <div class="product-price">
                                         <% if (product.promoPrice > 0) { %>
-                                            <span>$<%= product.promoPrice %></span>
-                                            <del>$<%= product.price %></del>
+                                            <span>₹<%= product.promoPrice %></span>
+                                            <del>₹<%= product.price %></del>
                                         <% } else { %>
-                                            <span>$<%= product.price %></span>
+                                            <span>₹<%= product.price %></span>
                                         <% } %>
                                     </div>
                                 </div>
@@ -378,7 +378,7 @@
                                     <div class="ltn__feature-info">
                                         <h4>Curated Products</h4>
                                         <p>Provide Curated Products for
-                                            all product over $100</p>
+                                            all product over ₹1000</p>
                                     </div>
                                 </div>
                             </div>
@@ -463,8 +463,8 @@
                                             </div>
                                             <h3>Vegetables Juices</h3>
                                             <div class="product-price">
-                                                <span>$149.00</span>
-                                                <del>$165.00</del>
+                                                <span>₹149.00</span>
+                                                <del>₹165.00</del>
                                             </div>
                                             <div class="modal-product-meta ltn__product-details-menu-1">
                                                 <ul>

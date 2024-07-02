@@ -102,7 +102,7 @@
                                                                 <td><%= index + 1 %></td>
                                                                 <td><%= new Date(order.date).toLocaleDateString() %></td>
                                                                 <td><%= order.orderStatus %></td>
-                                                                <td>$<%= order.totalAmount.toFixed(2) %></td>
+                                                                <td>₹<%= order.totalAmount.toFixed(2) %></td>
                                                                 <td><a href="javascript:void(0);" onclick="showOrderDetails('<%= order._id %>')">View</a></td>
                                                             </tr>
                                                             <tr id="order-details-<%= order._id %>" style="display: none;">
@@ -113,20 +113,20 @@
                                                                                 <% order.orderedItems.forEach(item => { %>
                                                                                 <tr>
                                                                                     <td><%= item.product_id.name %> <strong>× <%= item.quantity %></strong></td>
-                                                                                    <td>$<%= (item.product_id.price * item.quantity).toFixed(2) %></td>
+                                                                                    <td>₹<%= (item.product_id.price * item.quantity).toFixed(2) %></td>
                                                                                 </tr>
                                                                                 <% }); %>
                                                                                 <tr>
                                                                                     <td>Shipping and Handling</td>
-                                                                                    <td>$15.00</td>
+                                                                                    <td>₹15.00</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>Vat</td>
-                                                                                    <td>$0.00</td>
+                                                                                    <td>₹0.00</td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td><strong>Order Total</strong></td>
-                                                                                    <td><strong>$<%= order.totalAmount.toFixed(2) %></strong></td>
+                                                                                    <td><strong>₹<%= order.totalAmount.toFixed(2) %></strong></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td><strong>Status</strong></td>
@@ -405,7 +405,7 @@
                                     <div class="ltn__feature-info">
                                         <h4>Curated Products</h4>
                                         <p>Provide Curated Products for
-                                            all product over $100</p>
+                                            all product over ₹100</p>
                                     </div>
                                 </div>
                             </div>
@@ -967,7 +967,6 @@
         }
     </script>
 
-    // finish Payment
     <script>
         function finishPayment(orderId) {
             fetch('/finish-payment', {

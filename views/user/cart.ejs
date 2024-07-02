@@ -58,9 +58,9 @@
                                             </td>
                                             <td class="cart-product-price">
                                               <% if (product.product_id.promoPrice > 0) { %>
-                                                $<%= product.product_id.promoPrice %>
+                                                ₹<%= product.product_id.promoPrice %>
                                               <% } else { %>
-                                                $<%= product.product_id.price %>
+                                                ₹<%= product.product_id.price %>
                                               <% } %>
                                             </td>
                                             <td class="cart-product-quantity">
@@ -73,9 +73,9 @@
                                             </td>
                                             <td class="cart-product-subtotal">
                                               <% if (product.product_id.promoPrice > 0) { %>
-                                                <span class="cart-subtotal">$<%= product.product_id.promoPrice * product.quantity %></span>
+                                                <span class="cart-subtotal">₹<%= product.product_id.promoPrice * product.quantity %></span>
                                               <% } else { %>
-                                                <span class="cart-subtotal">$<%= product.product_id.price * product.quantity %></span>
+                                                <span class="cart-subtotal">₹<%= product.product_id.price * product.quantity %></span>
                                               <% } %>
                                             </td>
                                           </tr>
@@ -116,19 +116,19 @@
                                 
                                     <tr>
                                         <td>Cart Subtotal</td>
-                                        <td>$<%= cartSubtotal.toFixed(2) %></td>    
+                                        <td>₹<%= cartSubtotal.toFixed(2) %></td>    
                                     </tr>
                                     <tr>
                                         <td>Shipping and Handling</td>
-                                        <td>$<%= shippingCharge.toFixed(2) %></td>
+                                        <td>₹<%= shippingCharge.toFixed(2) %></td>
                                     </tr>
                                     <tr>
                                         <td>VAT</td>
-                                        <td>$00.00</td>
+                                        <td>₹00.00</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Order Total</strong></td>
-                                        <td><strong>$<%= (cartSubtotal + shippingCharge).toFixed(2) %></strong></td>
+                                        <td><strong>₹<%= (cartSubtotal + shippingCharge).toFixed(2) %></strong></td>
                                     </tr>
                                 </tbody>
                                 
@@ -159,7 +159,7 @@
                                     <div class="ltn__feature-info">
                                         <h4>Curated Products</h4>
                                         <p>Provide Curated Products for
-                                            all product over $100</p>
+                                            all product over ₹1000</p>
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +269,7 @@
                             const cartData = await response.json();
                             const productRow = document.querySelector(`.quantity-input[data-product-id="${product_id}"]`).closest('tr');
                             const subtotalCell = productRow.querySelector('.cart-subtotal');
-                            subtotalCell.textContent = `$${cartData.subtotal}`;
+                            subtotalCell.textContent = `₹${cartData.subtotal}`;
                             updateCartButton.removeAttribute('disabled');
                             updateCartButton.classList.remove('disabled');
                         } catch (error) {
@@ -365,47 +365,6 @@
             document.getElementById('submitButton').addEventListener('click', reloadPage);
         });
     </script>
-
-
-    <!-- quantity update -->
-        <!-- <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const quantityInputs = document.querySelectorAll('.cart-quantity-input');
-        
-                quantityInputs.forEach(input => {
-                    input.addEventListener('change', async function (event) {
-                        const productId = event.target.dataset.productId;
-                        const newQuantity = event.target.value;
-        
-                        try {
-                            const response = await fetch(`/update-quantity/${productId}`, {
-                                method: 'PATCH',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ quantity: newQuantity })
-                            });
-        
-                            const data = await response.json();
-                            if (data.success) {
-                                const subtotalElement = document.querySelector(`.cart-product-subtotal[data-product-id="${productId}"] .subtotal`);
-                                subtotalElement.textContent = `$${data.subtotal}`;
-                            } else {
-                                console.error(data.error);
-                            }
-                        } catch (error) {
-                            console.error('Error updating quantity:', error);
-                        }
-                    });
-                });
-            });
-        </script> -->
-    
-    
-    
-
-    
-    
         
 </body>
 </html>

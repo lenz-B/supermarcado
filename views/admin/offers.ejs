@@ -129,7 +129,7 @@
                         <% } %>
                         <p>Discount: <%= offer.discount %>%</p>
                         <p>Expiry Date: <%= new Date(offer.expiry_date).toLocaleDateString() %></p>
-                        <p>Max Redeemable: $<%= offer.max_redeemable_amount %></p>
+                        <p>Max Redeemable: ₹<%= offer.max_redeemable_amount %></p>
                     </div>
                     <div class="card-footer">
                         <form action="/admin/offers/<%= offer._id %>/toggle-status" method="POST">

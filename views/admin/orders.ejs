@@ -53,7 +53,7 @@
                             <td data-order-id="<%= order.id %>"><%= order.id %></td>
                             <td><b><%= order.Name %></b></td>
                             <td><%= order.Email %></td>
-                            <td>$<%= order.Total.toFixed(2) %></td>
+                            <td>₹<%= order.Total.toFixed(2) %></td>
                             <td>
                                 <% if(order.Status === 'Pending') { %>
                                 <span class="badge rounded-pill alert-warning"><%= order.Status %></span>
