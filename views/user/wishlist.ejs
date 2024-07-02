@@ -42,7 +42,8 @@
                                     <th class="cart-product-subtotal">Subtotal</th>
                                 </thead> -->
                                 <tbody>
-                                    <% if (wishlistData.products.length > 0 && wishlistData.products) {%>
+                                    <% if (wishlistData) {%>
+                                    <% if (wishlistData.products && wishlistData.products.length > 0) {%>
                                         <% wishlistData.products.forEach(product => { %>
                                         <tr>
                                             <td class="cart-product-remove">
@@ -68,6 +69,8 @@
                                             </td>
                                         </tr>
                                         <% }); %>
+                                        <% } %>
+
                                     <% } else {%>
                                         <p>No products in the wishlist.</p>
                                     <% } %>

@@ -278,6 +278,7 @@ const wishlist = async (req, res) => {
       const newWishlist = new wishlistDB({ user_id, products: [] });
       wishlistData = await newWishlist.save();
     }
+    console.log('wishlist: ',wishlistData);
 
     res.render('user/wishlist', { user_id, categoryData, allProducts, wishlistData });
   } catch (error) {
