@@ -208,6 +208,13 @@ const home = async (req, res) => {
     });
 
     const cartData = await cartDB.findOne({ user_id }).populate('products.product_id');
+    const wishlistData = await wishlistDB.findOne({user_id})
+    let wishlistCount
+    if (wishlistData) {
+      wishlistCount = wishlistData.products.length;
+    } else {
+      wishlistCount = 0;
+    }
 
     if (cartData) {
       await calculateCartTotals(user_id, req.session);
@@ -216,7 +223,7 @@ const home = async (req, res) => {
     console.log('Cart Totals:', req.session.cartTotals);
 
     res.render('user/home', { user_id, categoryData, cartTotals: req.session.cartTotals, 
-      cartProducts: cartData ? cartData.products : []});
+      cartProducts: cartData ? cartData.products : [], wishlistCount});
   } catch (error) {
     console.error("Error fetching data from the database:", error);
     res.status(500).send("Internal Server Error");

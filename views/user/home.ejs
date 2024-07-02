@@ -320,7 +320,11 @@
                         <a href="/wishlist" title="Wishlist">
                             <span class="utilize-btn-icon">
                                 <i class="far fa-heart"></i>
-                                <sup></sup>
+                                <% if (wishlistCount) {%>
+                                    <sup><%= wishlistCount %></sup>
+                                <% } else {%>
+                                    <sup></sup>
+                                <% } %>
                             </span>
                             Wishlist
                         </a>
