@@ -1467,13 +1467,23 @@
         }
 
         function fetchProductDetails(productId) {
-            // Make an AJAX call to your server to get the product details
+            console.log('Fetching product details for ID:', productId);
             fetch(`/api/product-details?id=${productId}`)
-                .then(response => response.json())
-                .then(product => {
-                    updateQuickViewModal(product);
-                })
-                .catch(error => console.error('Error:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(product => {
+                console.log('Received product details:', product);
+                updateQuickViewModal(product);
+            })
+            .catch(error => {
+                console.error('Error fetching product details:', error);
+                // Display an error message to the user
+                alert('Failed to load product details. Please try again later.');
+            });
         }
 
         function updateQuickViewModal(product) {

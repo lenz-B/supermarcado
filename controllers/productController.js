@@ -309,10 +309,20 @@ const productDetails = async (req, res) => {
 const quickView = async (req, res) => {
   try {
     const productId = req.query.id;
-    const product = await productDB.findById(productId);
+    console.log('Fetching product details for ID:', productId);
+    
+    const product = await productDB.findById(productId).populate('category_id offer');
+    console.log('Product details:', product);
+    
+    if (!product) {
+      console.log('Product not found');
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred' });
+    console.error('Error fetching product details:', error);
+    res.status(500).json({ error: 'An error occurred', details: error.message });
   }
 }
 
