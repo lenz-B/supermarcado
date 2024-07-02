@@ -283,6 +283,7 @@ const productDetails = async (req, res) => {
   try {
     const { user_id } = req.session;
     const productData = await productDB.findById(req.query.proId).populate('offer');
+    const relatedProducts = await productDB.find({ category_id: productData.category_id, _id: { $ne: productData._id }, status: true });
 
     let promoPrice = req.session.promoPrices ? req.session.promoPrices[productData._id] : null;
 
@@ -298,7 +299,7 @@ const productDetails = async (req, res) => {
     const stockOut = productData.stock < 1;
 
     res.render('user/product-details', { 
-      user_id, productData, categoryData, stockLeft, stockOut
+      user_id, productData, relatedProducts, categoryData, stockLeft, stockOut
     });
   } catch (error) {
     console.log(error.message);

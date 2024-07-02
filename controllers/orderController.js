@@ -127,9 +127,10 @@ const checkoutPage = async (req, res) => {
     if (!cartData) {
       console.log('ayyoo cart illaaa........');
       const userWithoutCart = true
+      const orderTotal = 0
 
       res.render('user/checkout', {user, user_id, categoryData, 
-        addressData, userWithoutCart})
+        addressData, orderTotal, userWithoutCart})
     }
     await calculateCartTotals(user_id, req.session);
     console.log(req.session.cartTotals);
