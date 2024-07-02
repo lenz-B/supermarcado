@@ -42,31 +42,35 @@
                                     <th class="cart-product-subtotal">Subtotal</th>
                                 </thead> -->
                                 <tbody>
-                                    <% wishlistData.products.forEach(product => { %>
-                                    <tr>
-                                        <td class="cart-product-remove">
-                                            <button class="remove-product-btn" data-product-id="<%= product._id %>">x</button>
-                                        </td>
-                                        <td class="cart-product-image">
-                                            <a href="/product-details?proId=<%= product._id %>"><img src="/productImage/<%= product.img[0] %>" alt="#"></a>
-                                        </td>
-                                        <td class="cart-product-info">
-                                            <h4><a href="/product-details?proId=<%= product._id %>"><%= product.name %></a></h4>
-                                        </td>
-                                        <td class="cart-product-price">$<%= product.price %></td>
-                                        <td class="cart-product-stock">In Stock</td>
-                                        <td class="cart-product-add-cart">
-                                            <a class="submit-button-1 add-to-cart-btn-wishlist" href="#" title="Add to Cart"
-                                                data-bs-toggle="modal" data-bs-target="#add_to_cart_modal"
-                                                data-product-id="<%= product._id %>"
-                                                data-product-name="<%= product.name %>"
-                                                data-product-price="<%= product.price %>"
-                                                data-product-img="/productImage/<%= product.img[0] %>">
-                                                Add to Cart
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
+                                    <% if (wishlist.products) {%>
+                                        <% wishlistData.products.forEach(product => { %>
+                                        <tr>
+                                            <td class="cart-product-remove">
+                                                <button class="remove-product-btn" data-product-id="<%= product._id %>">x</button>
+                                            </td>
+                                            <td class="cart-product-image">
+                                                <a href="/product-details?proId=<%= product._id %>"><img src="/productImage/<%= product.img[0] %>" alt="#"></a>
+                                            </td>
+                                            <td class="cart-product-info">
+                                                <h4><a href="/product-details?proId=<%= product._id %>"><%= product.name %></a></h4>
+                                            </td>
+                                            <td class="cart-product-price">$<%= product.price %></td>
+                                            <td class="cart-product-stock">In Stock</td>
+                                            <td class="cart-product-add-cart">
+                                                <a class="submit-button-1 add-to-cart-btn-wishlist" href="#" title="Add to Cart"
+                                                    data-bs-toggle="modal" data-bs-target="#add_to_cart_modal"
+                                                    data-product-id="<%= product._id %>"
+                                                    data-product-name="<%= product.name %>"
+                                                    data-product-price="<%= product.price %>"
+                                                    data-product-img="/productImage/<%= product.img[0] %>">
+                                                    Add to Cart
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else {%>
+                                        <p>No products in the wishlist.</p>
+                                    <% } %>
                                 </tbody>
                             </table>
                         </div>

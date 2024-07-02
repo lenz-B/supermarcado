@@ -308,6 +308,7 @@ const productDetails = async (req, res) => {
 
 const quickView = async (req, res) => {
   try {
+    console.log('Quick viewww');
     const productId = req.query.id;
     console.log('Fetching product details for ID:', productId);
     
