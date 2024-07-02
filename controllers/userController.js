@@ -223,7 +223,7 @@ const home = async (req, res) => {
   }
 };
 
-
+//sign up page load
 const signup = async (req, res) => {
   const categoryData = await getHeaderData();
 
@@ -237,9 +237,13 @@ const registration = async (req, res) => {
   try {
     console.log('req.body:' + req.body);
     const { error } = joiRegSchema.validate(req.body, { allowUnknown: true });
+    // if (error) {
+    //   return res.status(400).json({ message: error.details[0].message });
+    // }
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
+      req.flash('error', error.details[0].message);
+      return res.redirect('/signup');
+  }
     const validationResult = await joiRegSchema.validateAsync(req.body);
 
     console.log('validationResult:' +validationResult);
