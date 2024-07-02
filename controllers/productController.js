@@ -306,8 +306,19 @@ const productDetails = async (req, res) => {
   }
 }
 
+const quickView = async (req, res) => {
+  try {
+    const productId = req.query.id;
+    const product = await productDB.findById(productId);
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred' });
+  }
+}
+
 
 module.exports = {products, addProduct,
   addingProduct, editProduct, editingProduct,
-  updateProStatus, shop, productDetails, 
+  updateProStatus, shop, productDetails,
+  quickView,
 }

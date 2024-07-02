@@ -43,6 +43,7 @@ router.get('/contact', userController.contact)
 
 router.get('/products', productController.shop)
 router.get('/product-details', productController.productDetails)
+router.get('/api/product-details', productController.quickView)
 
 router.get('/cart',userAuthentication.login, cartController.cart)
 router.post('/add-to-cart',userAuthentication.login, cartController.addToCart)
