@@ -423,7 +423,7 @@ const finishPayment = async (req, res) => {
 //cancel order
 const cancelOrder = async (req, res) => {
   try {
-    console.log('cancel order');
+    console.log('cancel order..................');
     const { orderId } = req.body;
     const order = await orderDB.findById(orderId);
 
@@ -433,7 +433,7 @@ const cancelOrder = async (req, res) => {
 
     const cancellableStatuses = ['Pending', 'Processing', 'Shipped', 'Placed'];
     if (!cancellableStatuses.includes(order.orderStatus)) {
-      return res.send({ success: false });
+      return res.send({ success: false, message: 'Order cannot be cancelled at this stage' });
     }
 
     order.orderStatus = 'Cancelled';
@@ -447,25 +447,46 @@ const cancelOrder = async (req, res) => {
       }
     }
 
-    if (order.paymentMethod === 'wallet' || order.paymentMethod === 'razorpay') {
+    // Handle wallet update
+    if (order.paymentMethod === 'Wallet' || order.paymentMethod === 'Razorpay') {
       let wallet = await walletDB.findOne({ user_id: order.user_id });
 
       if (!wallet) {
         wallet = await walletDB.create({ user_id: order.user_id });
       }
 
-      wallet.wallet_amount += order.totalAmount;
+      console.log('Current wallet amount:', wallet.wallet_amount);
+      console.log('Order total amount:', order.totalAmount);
+
+      await walletDB.findOneAndUpdate(
+        { user_id: order.user_id },
+        {
+          $inc: { wallet_amount: order.totalAmount },
+          $push: {
+            transaction_history: {
+              amount: order.totalAmount,
+              Payment_type: 'Credit',
+              date: new Date()
+            }
+          }
+        },
+        { new: true, upsert: true }
+      );
+
+      console.log('New wallet amount:', wallet.wallet_amount);
+
       await wallet.save();
     }
 
     await order.save();
 
-    res.send({ success: true });
+    res.send({ success: true, message: 'Order cancelled successfully' });
   } catch (error) {
     console.error('Error cancelling order:', error);
     res.status(500).send('Internal Server Error');
   }
 };
+
 
 //wallet page
 const walletPage = async (req, res) => {
