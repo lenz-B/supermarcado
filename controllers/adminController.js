@@ -284,11 +284,16 @@ const logout = async (req, res) => {
 
 const user = async (req, res) => {
   try {
-    const userData = await User.find()
+    let limit = 10
+    let page = req.query.page || 1
+    let skip = (page - 1) * limit
+    const userData = await User.find().skip(skip).limit(limit);
+    let userCount = await User.countDocuments();
+    let pageCount = Math.ceil(userCount / limit);
     
-    res.render('admin/user', {userData })
+    res.render('admin/user', { userData, page, pageCount })
   } catch (error) {
-    
+    console.log(error);
   }
 }
 

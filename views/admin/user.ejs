@@ -85,10 +85,11 @@
     <div class="pagination-area mt-15 mb-50">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-start">
-                <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <% for(let i = 1; i <= pageCount; i++){ %>
+                <li class="page-item <%= page == i ? 'active': '' %>"><a class="page-link" href="/admin/user?page=<%= i %>"><%= i %></a></li>
+                <% } %>
                 <li class="page-item">
-                    <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                    <a class="page-link" href="/admin/user?page=<%= Number(page) + Number(1) %>"><i class="material-icons md-chevron_right"></i></a>
                 </li>
             </ul>
         </nav>
