@@ -173,13 +173,13 @@ const addingProduct = async (req, res) => {
 //edit product
 const editProduct = async (req, res) => {
   try {
-    const productData = await productDB.findById(req.query.proId)
-    const category =await categoryDB.find()  
-  
-    res.render('admin/edit-product', {productData, category})
-    
+    const productData = await productDB.findById(req.query.proId).populate('category_id');
+    const categories = await categoryDB.find()
+
+    res.render('admin/edit-product', { productData, categories });
   } catch (error) {
     console.log(error);
+    res.status(500).send("Internal Server Error");
   }
 }
 

@@ -33,6 +33,7 @@ router.get('/google-auth', passport.authenticate('google', {scope: ['profile', '
 router.get('/google-auth/callback', passport.authenticate('google', {failureRedirect: '/login'}), userController.googleSignIn)
 
 router.get('/my-account',userAuthentication.login , userController.myAccount)
+router.get('/order-details', userController.orderDetails)
 router.post('/user-profile-update', userController.profileUpdate)
 router.get('/downloadInvoice/:orderId', userController.invoiceDownload)
 

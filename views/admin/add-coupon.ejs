@@ -66,6 +66,10 @@
             showMessage('Coupon name should contain only alphabets, numbers, and spaces', false);
             return;
         }
+        if (discountPercentage < 1 || discountPercentage > 99) {
+            showMessage('Enter a valid discount percentage', false);
+            return;
+        }
         if (!isValidDate(expiryDate)) {
             showMessage('Expiry date should be at least one day ahead from the current time', false);
             return;

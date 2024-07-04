@@ -643,6 +643,19 @@ const myAccount = async (req, res) => {
   }
 }
 
+//order details
+const orderDetails = async (req, res) => {
+  try {
+    console.log('user order details');
+    const { user_id } = req.session;
+    const categoryData = await getHeaderData();
+
+    res.render('user/order-details', { user_id, categoryData })
+  } catch (error) {
+    
+  }
+}
+
 //edit user profile
 const profileUpdate = async (req, res) => {
   try {
@@ -821,6 +834,7 @@ module.exports = {home, signup, registration,
   resendOTP, login, logingIn, googleSignIn,
   logOut, sendCode, getForgetPassword,
   forgetPassword, confirmPassword, myAccount,
-  profileUpdate, addAddress, deleteAddress,
-  invoiceDownload,contact, page404, 
+  orderDetails, profileUpdate, addAddress,
+  deleteAddress, invoiceDownload,contact,
+  page404, 
 }
