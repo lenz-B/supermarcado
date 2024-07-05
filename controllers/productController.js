@@ -128,30 +128,28 @@ const addProduct = async (req, res) => {
 const addingProduct = async (req, res) => {
   try {
     console.log('adding product');
-    console.log(req.body);
+    console.log('req.body:', req.body);
+    console.log('req.files:', req.files);
 
     const { error } = productSchema.validate(req.body, { allowUnknown: true });
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
     
-    const {name, description, price, promoPrice, stock, category_id} = req.body
-    console.log('files: ', req.files);
+    const {name, description, price, promoPrice, stock, category_id} = req.body;
     console.log('category_id:', category_id);
 
     const existingProduct = await productDB.findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } });
     if (existingProduct) {
-      return res.status(400).json({ message: 'Product name already exist' });
+      return res.status(400).json({ message: 'Product name already exists' });
     }
 
-    if(!req.files || !req.files.length === 4) {
-      req.flash('error', 'Media not selected')
-      return res.redirect('add-product')
+    if (!req.files || req.files.length < 2) {
+      return res.status(400).json({ message: 'Please upload at least 2 images.' });
     }
 
     const imageFilenames = req.files.map(file => file.filename);  
-    console.log('suiiii: ', imageFilenames);
-
+    console.log('imageFilenames:', imageFilenames);
 
     await productDB.create({
       name,
@@ -165,10 +163,11 @@ const addingProduct = async (req, res) => {
 
     return res.json({ save: true, message: 'Product added successfully' });
   } catch (error) {
-    console.log(error); 
+    console.error(error); 
     return res.status(500).json({ message: 'An error occurred while adding the product' });
   }
 }
+
 
 //edit product
 const editProduct = async (req, res) => {

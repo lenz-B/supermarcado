@@ -83,8 +83,14 @@
                             <h4>Media</h4>
                         </div>
                         <div class="card-body">
-                            <div id="image-preview"></div>
-                            <input accept="image/*" name="img" id="img" class="form-control" type="file" multiple onchange="previewImages(event)" />
+                            <div id="image-preview1"></div>
+                            <input accept="image/*" name="img1" id="img1" class="form-control" type="file" />
+                            <div id="image-preview2"></div>
+                            <input accept="image/*" name="img2" id="img2" class="form-control" type="file" />
+                            <div id="image-preview3"></div>
+                            <input accept="image/*" name="img3" id="img3" class="form-control" type="file" />
+                            <div id="image-preview4"></div>
+                            <input accept="image/*" name="img4" id="img4" class="form-control" type="file" />
                         </div>
                     </div>
                 </div>
@@ -119,25 +125,63 @@
         <option>Chevrolet</option>
     </select>
 </div> -->
-
 <script>
+    let cropper1, cropper2, cropper3, cropper4;
+
+    function initializeCropper(input, preview, cropperInstance) {
+        input.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    preview.innerHTML = `<img src="${event.target.result}" id="crop-image-${input.id}">`;
+                    const image = document.getElementById(`crop-image-${input.id}`);
+                    cropperInstance.instance = new Cropper(image, {
+                        aspectRatio: 1 / 1,
+                        viewMode: 1
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const img1 = document.getElementById('img1');
+        const img2 = document.getElementById('img2');
+        const img3 = document.getElementById('img3');
+        const img4 = document.getElementById('img4');
+        const preview1 = document.getElementById('image-preview1');
+        const preview2 = document.getElementById('image-preview2');
+        const preview3 = document.getElementById('image-preview3');
+        const preview4 = document.getElementById('image-preview4');
+
+        cropper1 = { instance: null };
+        cropper2 = { instance: null };
+        cropper3 = { instance: null };
+        cropper4 = { instance: null };
+
+        initializeCropper(img1, preview1, cropper1);
+        initializeCropper(img2, preview2, cropper2);
+        initializeCropper(img3, preview3, cropper3);
+        initializeCropper(img4, preview4, cropper4);
+    });
+
     function validateForm(event) {
         const messageContainer = document.getElementById('message-container');
         messageContainer.innerHTML = '';
-        
+
         event.preventDefault();
         const form = document.getElementById('productForm');
-        
+
         const nameInput = document.getElementById('name');
         const descriptionInput = document.getElementById('description');
-        const priceInput = document.getElementById('price')
-        const promoPriceInput = document.getElementById('promoPrice')
-        const stockInput = document.getElementById('stock')
-        const imgInput = document.getElementById('img');
-        const categoryInput = document.getElementById('category_id')
+        const priceInput = document.getElementById('price');
+        const promoPriceInput = document.getElementById('promoPrice');
+        const stockInput = document.getElementById('stock');
+        const categoryInput = document.getElementById('category_id');
 
-
-        //frontend validation
+        // frontend validation
         if (nameInput.value.trim().length < 3) {
             showMessage('Name should be at least 3 characters long.', 'danger');
             return;
@@ -166,18 +210,10 @@
             return;
         }
 
-        const images = imgInput.files;
+        const images = [img1, img2, img3, img4].map(input => input.files[0]).filter(file => file);
         if (images.length < 2) {
             showMessage('Please upload at least 2 images.', 'danger');
             return;
-        }
-        for (let i = 0; i < images.length; i++) {
-            const img = images[i];
-            const imgType = img.type.split('/')[0];
-            if (imgType !== 'image') {
-                showMessage('Only image files are allowed.', 'danger');
-                return;
-            }
         }
 
         if (!categoryInput.value) {
@@ -192,45 +228,52 @@
         formData.append('promoPrice', parseFloat(promoPriceInput.value));
         formData.append('stock', parseFloat(stockInput.value));
         formData.append('category_id', categoryInput.value);
-        const img = imgInput.files;
-        for (let i = 0; i < img.length; i++) {
-            formData.append('img', img[i]);
-        }
 
-        //fetch
-        fetch('/admin/add-product', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                if (data.save) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: data.message,
-                        icon: 'success',
-                        timer: 3000,
-                        showConfirmButton: true,
-                        confirmButtonColor: '#28a745' // green
-                    }).then((result) => {
-                        window.location.href = '/admin/products';
+        const cropperInstances = [cropper1, cropper2, cropper3, cropper4];
+        const imgInputs = [img1, img2, img3, img4];
+
+        Promise.all(cropperInstances.map((cropper, index) => {
+            if (cropper.instance) {
+                return new Promise((resolve) => {
+                    cropper.instance.getCroppedCanvas().toBlob(blob => {
+                        formData.append('img', blob, `img${index + 1}.jpeg`);
+                        resolve();
                     });
-
-                    setTimeout(() => {
-                        window.location.href = '/admin/products';
-                    }, 3000);
-                } else {
-                    showMessage(data.message, 'error');
-                }
+                });
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showMessage('An error occurred while adding the product', 'error');
-        });
+        })).then(() => {
+            fetch('/admin/add-product', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    if (data.save) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            timer: 3000,
+                            showConfirmButton: true,
+                            confirmButtonColor: '#28a745' // green
+                        }).then((result) => {
+                            window.location.href = '/admin/products';
+                        });
 
-        
+                        setTimeout(() => {
+                            window.location.href = '/admin/products';
+                        }, 2000);
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('An error occurred while adding the product', 'error');
+            });
+        });
 
         function showMessage(message, type) {
             const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
@@ -239,29 +282,6 @@
     }
 </script>
 
-<!-- image preview -->
-<script>
-    function previewImages(event) {
-        const preview = document.getElementById('image-preview');
-        preview.innerHTML = '';
-
-        const files = event.target.files;
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const image = document.createElement('img');
-                image.src = event.target.result;
-                image.classList.add('preview-image');
-                preview.appendChild(image);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
 
 <!-- footer -->
 <%- include('../layout/adminFooter.ejs') %>
