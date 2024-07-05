@@ -185,23 +185,44 @@ const editProduct = async (req, res) => {
 // get edited data
 const editingProduct = async (req, res) => {
   try {
-    console.log('edting product...');
+    console.log('editing product...');
     console.log("Request query:", req.query);
     console.log("Request files:", req.files);
-
-    const { name, description, price, promoPrice, stock, category_id } = req.body;
+    const { name, description, price, promoPrice, stock, category_id, removedImages, existingImages } = req.body;
     const { proId } = req.query;
-    const img = req.files;
+    const newImages = req.files;
 
     if (!proId) {
       return res.status(400).json({ success: false, message: 'Product ID is required' });
     }
 
+    const product = await productDB.findById(proId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
     const updateData = { name, description, price, promoPrice, stock, category_id };
 
-    if (img && img.length > 0) {
-      updateData.img = img.map(file => file.filename);
+    //checking existing img
+    let updatedImages = existingImages ? (Array.isArray(existingImages) ? existingImages : [existingImages]) : [];
+
+    //remove image
+    if (removedImages) {
+      const removedImagesArray = Array.isArray(removedImages) ? removedImages : [removedImages];
+      updatedImages = updatedImages.filter(img => !removedImagesArray.includes(img));
     }
+
+    //new images
+    if (newImages && newImages.length > 0) {
+      const newImageFilenames = newImages.map(file => file.filename);
+      updatedImages = [...updatedImages, ...newImageFilenames].slice(0, 4); // Ensure max 4 images
+    }
+
+    if (updatedImages.length < 2) {
+      return res.status(400).json({ success: false, message: 'Please provide at least 2 images for the product.' });
+    }
+
+    updateData.img = updatedImages;
 
     const update = await productDB.findByIdAndUpdate(
       proId,
