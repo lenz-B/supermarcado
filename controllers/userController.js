@@ -647,14 +647,36 @@ const myAccount = async (req, res) => {
 const orderDetails = async (req, res) => {
   try {
     console.log('user order details');
+
+    let limit = 10;
+    let page = parseInt(req.query.page) || 1;
+    let skip = (page - 1) * limit;
+
     const { user_id } = req.session;
     const categoryData = await getHeaderData();
-
-    res.render('user/order-details', { user_id, categoryData })
-  } catch (error) {
     
+    const orderData = await orderDB
+      .find({ user_id: user_id })
+      .populate('orderedItems.product_id')
+      .skip(skip)
+      .limit(limit);
+
+    if (!orderData || orderData.length === 0) {
+      console.log('Order data not found for user:', user_id);
+      return res.render('user/order-details', { user_id, categoryData, orderData: [], page, pageCount: 0, limit });
+    }
+
+    let orderCount = await orderDB.countDocuments({ user_id: user_id });
+    let pageCount = Math.ceil(orderCount / limit);
+
+    res.render('user/order-details', { user_id, categoryData, orderData, page, pageCount, limit });
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).send('Internal Server Error');
   }
-}
+};
+
+
 
 //edit user profile
 const profileUpdate = async (req, res) => {

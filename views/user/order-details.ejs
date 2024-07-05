@@ -25,6 +25,177 @@
     </div>
     <!-- BREADCRUMB AREA END -->
 
+    <div class="container">
+        <div class="col-lg-12 ">
+            <div class="tab-pane" id="liton_tab_1_2">
+                <div class="ltn__myaccount-tab-content-inner">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% 
+                                const sortedOrders = orderData.sort((a, b) => new Date(b.date) - new Date(a.date)); 
+                                sortedOrders.forEach((order, index) => { 
+                                %>
+                                <tr>
+                                    <td><%= ((page - 1) * limit) + index + 1 %></td>
+                                    <td><%= new Date(order.date).toLocaleDateString() %></td>
+                                    <td><%= order.orderStatus %></td>
+                                    <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                                    <td><a href="javascript:void(0);" onclick="showOrderDetails('<%= order._id %>')">View</a></td>
+                                </tr>
+                                <tr id="order-details-<%= order._id %>" style="display: none;">
+                                    <td colspan="6">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tbody>
+                                                    <% order.orderedItems.forEach(item => { %>
+                                                    <tr>
+                                                        <td><%= item.product_id.name %> <strong>× <%= item.quantity %></strong></td>
+                                                        <td>₹<%= (item.product_id.price * item.quantity).toFixed(2) %></td>
+                                                    </tr>
+                                                    <% }); %>
+                                                    <tr>
+                                                        <td>Shipping and Handling</td>
+                                                        <td>₹15.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Vat</td>
+                                                        <td>₹0.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Order Total</strong></td>
+                                                        <td><strong>₹<%= order.totalAmount.toFixed(2) %></strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Status</strong></td>
+                                                        <td><%= order.orderStatus %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Payment Method</strong></td>
+                                                        <td><%= order.paymentMethod %></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Order Address</strong></td>
+                                                        <td><%= order.address.name %><br>
+                                                            <%= order.address.mobile %><br>
+                                                            <%= order.address.address %> <br>
+                                                            <%= order.address.city %>, <%= order.address.state %>, <%= order.address.pin %> </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <% if (order.orderStatus === 'Pending') { %>
+                                                                <button onclick="finishPayment('<%= order._id %>')" id="finishPaymentBtn">Finish Payment</button>
+                                                                <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                            <% } else if (order.orderStatus === 'Delivered') { %>
+                                                                <a href="/downloadInvoice/<%= order._id %>" id="downloadInvoiceLink">Download Invoice <i class="fas fa-arrow-down"></i></a>
+                                                            <% } else if (order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Delivered') { %>
+                                                                <button onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                                            <% } else { %>
+                                                                <strong>Order Cancelled</strong>
+                                                            <% } %>
+    
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                            </tbody>                                                     
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ltn__pagination-area text-center">
+        <div class="ltn__pagination">
+            <ul>
+                <li><a href="/order-details?page=<%= Number(page) - 1 %>"><i class="fas fa-angle-double-left"></i></a></li>
+                <% for(let i = 1; i <= pageCount; i++){ %>
+                <li class="<%= page == i ? 'active': '' %>"><a href="/order-details?page=<%= i %>"><%= i %></a></li>
+                <% } %>
+                <li><a href="/order-details?page=<%= Number(page) + 1 %>"><i class="fas fa-angle-double-right"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    
+
+
+    <script>
+        function showOrderDetails(orderId) {
+            var detailsRow = document.getElementById('order-details-' + orderId);
+            if (detailsRow.style.display === 'none') {
+            detailsRow.style.display = '';
+            } else {
+            detailsRow.style.display = 'none';
+            }
+        }
+        
+        function cancelOrder(orderId) {
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/cancel-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: orderId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                    title: 'Cancelled!',
+                    text: 'Your order has been cancelled.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745'
+                    }).then(() => {
+                    location.reload(); // Reload the page to reflect changes
+                    });
+                } else {
+                    Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to cancel the order.',
+                    icon: 'error',
+                    confirmButtonColor: '#28a745'
+                    });
+                }
+                })
+                .catch(error => {
+                console.error('Error cancelling order:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to cancel the order.',
+                    icon: 'error',
+                    confirmButtonColor: '#28a745'
+                });
+                });
+            }
+            });
+        }
+    </script>
+
+
+
  <!-- footer -->
  <%- include('../layout/footer.ejs') %>
 </div>
