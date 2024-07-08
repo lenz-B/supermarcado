@@ -491,16 +491,39 @@ const cancelOrder = async (req, res) => {
 //wallet page
 const walletPage = async (req, res) => {
   try {
+    console.log('wallet page');
+
+    let limit = 5;
+    let page = parseInt(req.query.page) || 1;
+    let skip = (page - 1) * limit;
+
     const { user_id } = req.session;
     const categoryData = await getHeaderData();
-    const walletData = await walletDB.findOne({ user_id }).populate('user_id');
 
-    res.render('user/wallet', {user_id, categoryData, walletData})
+    let walletData = await walletDB
+      .findOne({ user_id })
+      .populate('user_id');
+
+    if (!walletData) {
+      console.log('Wallet not found for user:', user_id);
+      return res.render('user/wallet', { user_id, categoryData, walletData: null, paginatedTransactions: [], page, pageCount: 0, limit });
+    }
+
+    walletData.transaction_history.sort((a, b) => b.date - a.date);
+
+    let transactionCount = walletData.transaction_history.length;
+    let pageCount = Math.ceil(transactionCount / limit);
+
+    let paginatedTransactions = walletData.transaction_history.slice(skip, skip + limit);
+
+    res.render('user/wallet', { user_id, categoryData, walletData, paginatedTransactions, page, pageCount, limit });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
-}
+};
+
+
 
 //__________________________________________________admin side__________________________________________________
 
